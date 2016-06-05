@@ -6,16 +6,18 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>HandlerThread, Handler, Thread, Runnable | AzerOz&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Handler会关联一个单独的线程和消息队列。Handler默认关联主线程，虽然要提供Runnable参数 ，但默认是直接调用Runnable中的run()方法。也就是默认下会在主线程执行，如果在这里面的操作会有阻塞，界面也会卡住。如果要在其他线程执行，可以使用HandlerThread。HandlerThread继承于Thread，所以它本质就是个Thread。与普通Thread的差别就在于，主">
+  <meta name="description" content="Handler会关联一个单独的线程和消息队列。Handler默认关联主线程，虽然要提供Runnable参数 ，但默认是直接调用Runnable中的run()方法。也就是默认下会在主线程执行，如果在这里面的操作会有阻塞，界面也会卡住。如果要在其他线程执行，可以使用HandlerThread。HandlerThread继承于Thread，所以它本质就是个Thread。与普通Thread的差别就在于，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HandlerThread, Handler, Thread, Runnable">
 <meta property="og:url" content="http://yoursite.com/2016/06/05/HandlerThread-Handler-Thread/index.html">
 <meta property="og:site_name" content="AzerOz's blog">
-<meta property="og:description" content="Handler会关联一个单独的线程和消息队列。Handler默认关联主线程，虽然要提供Runnable参数 ，但默认是直接调用Runnable中的run()方法。也就是默认下会在主线程执行，如果在这里面的操作会有阻塞，界面也会卡住。如果要在其他线程执行，可以使用HandlerThread。HandlerThread继承于Thread，所以它本质就是个Thread。与普通Thread的差别就在于，主">
-<meta property="og:updated_time" content="2016-06-05T13:08:14.158Z">
+<meta property="og:description" content="Handler会关联一个单独的线程和消息队列。Handler默认关联主线程，虽然要提供Runnable参数 ，但默认是直接调用Runnable中的run()方法。也就是默认下会在主线程执行，如果在这里面的操作会有阻塞，界面也会卡住。如果要在其他线程执行，可以使用HandlerThread。HandlerThread继承于Thread，所以它本质就是个Thread。与普通Thread的差别就在于，">
+<meta property="og:image" content="http://yoursite.com/../images/ckxt0.jpg">
+<meta property="og:updated_time" content="2016-06-05T13:19:35.103Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HandlerThread, Handler, Thread, Runnable">
-<meta name="twitter:description" content="Handler会关联一个单独的线程和消息队列。Handler默认关联主线程，虽然要提供Runnable参数 ，但默认是直接调用Runnable中的run()方法。也就是默认下会在主线程执行，如果在这里面的操作会有阻塞，界面也会卡住。如果要在其他线程执行，可以使用HandlerThread。HandlerThread继承于Thread，所以它本质就是个Thread。与普通Thread的差别就在于，主">
+<meta name="twitter:description" content="Handler会关联一个单独的线程和消息队列。Handler默认关联主线程，虽然要提供Runnable参数 ，但默认是直接调用Runnable中的run()方法。也就是默认下会在主线程执行，如果在这里面的操作会有阻塞，界面也会卡住。如果要在其他线程执行，可以使用HandlerThread。HandlerThread继承于Thread，所以它本质就是个Thread。与普通Thread的差别就在于，">
+<meta name="twitter:image" content="http://yoursite.com/../images/ckxt0.jpg">
   
     <link rel="alternative" href="/atom.xml" title="AzerOz&#39;s blog" type="application/atom+xml">
   
@@ -226,7 +228,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Handler会关联一个单独的线程和消息队列。<br>Handler默认关联主线程，虽然要提供Runnable参数 ，但默认是直接调用Runnable中的run()方法。也就是默认下会在主线程执行，如果在这里面的操作会有阻塞，界面也会卡住。<br>如果要在其他线程执行，可以使用HandlerThread。<br>HandlerThread继承于Thread，所以它本质就是个Thread。与普通Thread的差别就在于，主要的作用是建立了一个线程，并且创立了消息队列，有来自己的looper,可以让我们在自己的线程中分发和处理消息。</p>
+        <p><img src="../images/ckxt0.jpg" alt="img"></p>
+<p>Handler会关联一个单独的线程和消息队列。<br>Handler默认关联主线程，虽然要提供Runnable参数 ，但默认是直接调用Runnable中的run()方法。也就是默认下会在主线程执行，如果在这里面的操作会有阻塞，界面也会卡住。<br>如果要在其他线程执行，可以使用HandlerThread。<br>HandlerThread继承于Thread，所以它本质就是个Thread。与普通Thread的差别就在于，主要的作用是建立了一个线程，并且创立了消息队列，有来自己的looper,可以让我们在自己的线程中分发和处理消息。</p>
 <a id="more"></a>
 <h1 id="HandlerThread的使用"><a href="#HandlerThread的使用" class="headerlink" title="HandlerThread的使用"></a>HandlerThread的使用</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Handler handler = new Handler() &#123;</span></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="comment">//&#125;</span></span><br><span class="line">HandlerThread uIhandlerThread = <span class="keyword">new</span> HandlerThread(<span class="string">"update"</span>);</span><br><span class="line">uIhandlerThread.start();</span><br><span class="line"><span class="comment">//Handler UIhandler = new Handler(uIhandlerThread.getLooper());</span></span><br><span class="line">Handler uIhandler = <span class="keyword">new</span> Handler(uIhandlerThread.getLooper(), <span class="keyword">new</span> Callback() &#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</span><br><span class="line">	Bundle b = msg.getData();</span><br><span class="line">	<span class="keyword">int</span> age = b.getInt(<span class="string">"age"</span>);</span><br><span class="line">	String name = b.getString(<span class="string">"name"</span>);</span><br><span class="line">	System.out.println(<span class="string">"age is "</span> + age + <span class="string">", name is"</span> + name);</span><br><span class="line">	System.out.println(<span class="string">"Handler---&gt;"</span> + Thread.currentThread().getId());</span><br><span class="line">	System.out.println(<span class="string">"handlerMessage"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>当要停止uIhandlerThread执行时用：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (uIhandlerThread != <span class="keyword">null</span>) &#123;</span><br><span class="line">	pointThread.quit();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
