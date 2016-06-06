@@ -33,10 +33,10 @@ open_in_new: false
 
 # Miscellaneous
 google_analytics: ''
-favicon: /favicon.png
+favicon: /images/favicon.ico
 
 #你的头像url
-avatar: /images/12523455622.jpg
+avatar: /images/avatar.jpg
 #是否开启分享
 share_jia: true
 share_addthis: false
