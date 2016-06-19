@@ -3,6 +3,7 @@ title: 首次安装在安装界面打开应用，退到后台再从桌面launche
 date: 2016-06-10 15:24:15
 categories: Android
 tags:
+toc: true
 ---
 
 # 问题描述

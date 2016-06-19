@@ -3,6 +3,7 @@ title: 'HandlerThread, Handler, Thread, Runnable'
 date: 2016-06-05 14:53:52
 categories: Android
 tags:
+toc: true
 ---
 
 ![](/images/ckxt0.jpg)

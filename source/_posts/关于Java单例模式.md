@@ -3,6 +3,7 @@ title: 关于Java单例模式
 date: 2016-06-16 22:20:20
 categories: Android
 tags:
+toc: true
 ---
 
 单例模式其实是最容易理解的一种设计模式。
