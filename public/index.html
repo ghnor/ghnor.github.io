@@ -19,7 +19,7 @@
     <link rel="alternative" href="/atom.xml" title="AzerOz&#39;s blog" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
+    <link rel="icon" href="/images/favicon.ico">
   
   <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -32,7 +32,7 @@
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			
-			<img lazy-src="/images/12523455622.jpg" class="js-avatar">
+			<img lazy-src="/images/avatar.jpg" class="js-avatar">
 			
 		</a>
 
@@ -158,7 +158,7 @@
 		<header id="header" class="inner">
 			<div class="profilepic">
 			
-				<img lazy-src="/images/12523455622.jpg" class="js-avatar">
+				<img lazy-src="/images/avatar.jpg" class="js-avatar">
 			
 			</div>
 			<hgroup>
@@ -189,6 +189,252 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-Broadcast广播" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/19/Broadcast广播/" class="article-date">
+  	<time datetime="2016-06-19T04:52:38.000Z" itemprop="datePublished">2016-06-19</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/19/Broadcast广播/">Broadcast广播</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/images/6948382.jpg" alt=""></p>
+<p>Broadcast包括两个概念，广播发送者和广播接收者(Receiver)，这里的广播实际就是指 Intent，程序可以自己发送广播自己接收，也可以接受系统或其他应用的广播或是发送广播给其他应用程序。<br>发送者可以通过类似<a href="http://developer.android.com/reference/android/content/Context.html#sendBroadcast(android.content.Intent">Context.sendBroadcast()</a>接口发送广播，接收者通过<a href="http://developer.android.com/reference/android/content/Context.html#registerReceiver(android.content.BroadcastReceiver,%20android.content.IntentFilter">Context.registerReceiver()</a>)动态注册或在 AndroidManifest.xml 文件中通过 <receiver> 标签静态注册。注册完成后，当发送者发送某个广播时系统会将发送的广播(Intent)与系统中所有注册的符合条件的接收者(Receiver)的 IntentFilter 进行匹配，若匹配成功则执行相应接收者的 onReceive 函数。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/Android/">Android</a>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/06/19/Broadcast广播/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-关于Java单例模式" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/16/关于Java单例模式/" class="article-date">
+  	<time datetime="2016-06-16T14:20:20.000Z" itemprop="datePublished">2016-06-16</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/16/关于Java单例模式/">关于Java单例模式</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>单例模式其实是最容易理解的一种设计模式。<br>单例模式应该保证在任何时候都只有一个实例，所以个人认为不能提供线程安全的单例模式其实根本不能算单例，很遗憾，甚至在教科书中你看到的都是这种非安全的单例。<br>网上总结的单例应该有五种，懒汉，恶汉，双重校验锁，枚举和静态内部类。想了解更多请浏览<strong>扩展阅读</strong><br>这里只说明这两种，<strong>静态内部类</strong>和<strong>枚举</strong>。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/Android/">Android</a>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/06/16/关于Java单例模式/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-DatePickerDialog-TimePickerDialog在某些机型上会连续返回两次结果" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/10/DatePickerDialog-TimePickerDialog在某些机型上会连续返回两次结果/" class="article-date">
+  	<time datetime="2016-06-10T08:46:55.000Z" itemprop="datePublished">2016-06-10</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/10/DatePickerDialog-TimePickerDialog在某些机型上会连续返回两次结果/">DatePickerDialog, TimePickerDialog在某些机型上会连续返回两次结果</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>继承系统的dialog，重写onStop方法</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/Android/">Android</a>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/06/10/DatePickerDialog-TimePickerDialog在某些机型上会连续返回两次结果/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-首次安装在安装界面打开应用，退到后台再从桌面launcher打开应用，会打开两个应用" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/10/首次安装在安装界面打开应用，退到后台再从桌面launcher打开应用，会打开两个应用/" class="article-date">
+  	<time datetime="2016-06-10T07:24:15.000Z" itemprop="datePublished">2016-06-10</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/10/首次安装在安装界面打开应用，退到后台再从桌面launcher打开应用，会打开两个应用/">首次安装在安装界面打开应用，退到后台再从桌面launcher打开应用，会打开两个应用</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><ol>
+<li>在 package installers 安装界面安装完一个应用后，直接打开app，然后进入了 Activity_1, 此时再通过此activity用startActivity(intent)的方法打开 Activity_2.</li>
+<li>然后按home键返回桌面，在桌面点击app图标进入，你觉得应该进入的是 Activity_2，实际上却是Activity_1.</li>
+<li>然而还没完，这时候你按 back 返回键，会发现返回到了之前打开的 Activity_2，再按返回，又出现 launcherActivity_1. 也就是说系统重复实例化了Activity_1.</li>
+<li>退出app后再次点击桌面图标进入，反复试验，没有再出现这个问题。也就是说，这个问题（bug ？）只出现在操作步骤（1）后才会产生.</li>
+</ol>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/Android/">Android</a>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/06/10/首次安装在安装界面打开应用，退到后台再从桌面launcher打开应用，会打开两个应用/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-HandlerThread-Handler-Thread" class="article article-type-post" itemscope itemprop="blogPost">
   

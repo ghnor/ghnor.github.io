@@ -48,7 +48,7 @@ if (uIhandlerThread != null) {
 目前常使用的有两种用法，
 一种是自定义Handler，在handleMessage进行事件的处理， 这个Message可以是在其他线程中send的，或者在主线程中send。
 在线程中发送信息到主进程：
-## 1.定义handler
+## 1. 定义handler
 
 ```java
 public class MyHandler extends Handler {
@@ -76,7 +76,7 @@ Handler myHandler = new Handler(new Callback() {
 });
 ```
 
-## 2.新建一个线程
+## 2. 新建一个线程
 
 ```java
 Thread sender = new Thread(){
@@ -123,7 +123,6 @@ myHandler.post(r);
 
 # 关于Thread和Runnable的区别
 
-参考网址：http://www.360doc.com/content/10/1219/22/573136_79607619.shtml
 Thread和Runnable是实现java多线程的两种方式，Thread是类，Runnable为接口，建议使用Runnable来实现多线程。
 如果让一个线程实现Runnable接口，那么当调用这个线程的对象开启多个线程时，可以让这些线程调用同一个变量；
 若这个线程是由继承Thread类而来，则要通过内部类来实现上述的功能，利用的就是内部类可任意访问外部类变量这个特性。（精辟！！）
