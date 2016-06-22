@@ -10,7 +10,7 @@ TextView官方标准字体;Button Material Design标准样式;Ripple水波纹效
 
 # TextView官方标准字体
 
-![](/images/Material-Design标准样式/TextView.png)
+![](/assets/images/Material-Design标准样式/TextView.png)
 
 ```java
 style="@style/TextAppearance.AppCompat.Display4"
@@ -28,7 +28,7 @@ style="@style/TextAppearance.AppCompat.Button"
 
 # Button Material Design标准样式
 
-![](/images/Material-Design标准样式/Button.jpg)
+![](/assets/images/Material-Design标准样式/Button.jpg)
 
 ```java
 style="@style/Widget.AppCompat.Button"
@@ -47,7 +47,7 @@ android:background="?android:attr/selectableItemBackground"
 android:background="?android:attr/selectableItemBackgroundBorderless"
 ```
 
-![无界波纹](/images/Material-Design标准样式/no-border.jpg) ![有界波纹](/images/Material-Design标准样式/yes-border.jpg)
+![无界波纹](/assets/images/Material-Design标准样式/no-border.jpg) ![有界波纹](/assets/images/Material-Design标准样式/yes-border.jpg)
 
 也可以再XML文件中直接来创建一个具有Ripple效果的XML文件
 ```java
