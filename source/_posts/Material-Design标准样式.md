@@ -10,7 +10,7 @@ TextView官方标准字体;Button Material Design标准样式;Ripple水波纹效
 
 # TextView官方标准字体
 
-![](/assets/images/Material-Design标准样式/TextView.png)
+![](/assets/images/Material-Design标准样式/TextView.jpg)
 
 ```java
 style="@style/TextAppearance.AppCompat.Display4"
