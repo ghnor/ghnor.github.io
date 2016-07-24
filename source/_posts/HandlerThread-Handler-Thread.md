@@ -6,8 +6,6 @@ tags:
 toc: true
 ---
 
-![](/assets/images/ckxt0.jpg)
-
 Handler会关联一个单独的线程和消息队列。
 Handler默认关联主线程，虽然要提供Runnable参数 ，但默认是直接调用Runnable中的run()方法。也就是默认下会在主线程执行，如果在这里面的操作会有阻塞，界面也会卡住。
 如果要在其他线程执行，可以使用HandlerThread。
