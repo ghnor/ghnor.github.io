@@ -42,106 +42,117 @@ if (uIhandlerThread != null) {
 }
 ```
 
-# Handler的使用
+# Handler的应用
 
-目前常使用的有两种用法，
-一种是自定义Handler，在handleMessage进行事件的处理， 这个Message可以是在其他线程中send的，或者在主线程中send。
-在线程中发送信息到主进程：
-## 1. 定义handler
+## 定义handler
+在主线程使用handler只需要实例化即可。
+在主线程中使用时，需要先实例化一个子线程的Looper对象。
+
+### 在主线程定义Handler
 
 ```java
 public class MyHandler extends Handler {
 	@Override
 	public boolean handleMessage(Message msg) {
-		switch (msg.what){
-		case 1 :
-		....
-		}
+		......
 	}
 }
 MyHandler myHandler = new MyHandler();
 ```
 
-或者
+OR
 
 ```java
 Handler myHandler = new Handler(new Callback() {
-	// 参数也可以为（this.getMainLooper()，new Callback(){}）不写则默认为主进程的Looper
+	// 参数也可以为(this.getMainLooper(), new Callback(){})不写则默认为主进程的Looper
 	@Override
 	public boolean handleMessage(Message msg) {
-		// TODO Auto-generated method stub
+		......
 		return false;
 	}
 });
 ```
 
-## 2. 新建一个线程
+OR
 
 ```java
-Thread sender = new Thread(){
+Handler myHandler = new Handler() {
 	@Override
-	public void run() {
-		....
-		//Message msg = new Message();
-		Message msg = myHandler.obtainMessage(); //可以从handler中拿出message，省去了重新实例化的内存开销
-		//myHandler.sendMessage(msg);
-		msg.sendToTarget();
-		//myHandler.sendEmptyMessage(intWhat);
+	public void handleMessage(Message msg) {
+		super.handleMessage(msg);
 	}
-}
-sender.start();
+};
 ```
 
-在主线程中发信息到handler
-直接在主进程，不在线程中mHandler.sendMessage(msg);
-另一种为post一个线程进去，执行线程。直到线程退出或者是handler被removeCallbacks。
-定义一个线程Tread名为sender（不重复了）。
-然后执行，myHandler.post(sender);
-这样线程就在handler中执行。如果要停止线程的话：
+### 在非主线程定义Handler
+
 ```java
-if(myHandler!=null) {
+new Thread(new Runnable() {
+	@Override
+	public void run() {
+		Looper.prepare();
+		handler = new Handler() {
+			public void handleMessage(Message msg) {
+				// process incoming messages here
+			}
+		};
+		Looper.loop();
+	}
+});
+```
+
+## Handler启动Runnable
+```java
+if (myHandler != null) {
+	myHandler.post(runnable);
+}
+```
+**使用post方法时，直接调用Thread或Runnable的run方法，所有处理都在主线程中进行，并没有开启定义的Thread或Runnable新的线程！**
+
+## Handler发送Message
+```java
+//Message msg = new Message();
+//myHandler.sendMessage(msg);
+////myHandler.sendEmptyMessage(intWhat);
+Message msg = myHandler.obtainMessage(); //可以从handler中拿出message，省去了重新实例化的内存开销
+msg.sendToTarget();
+```
+
+## Handler停止运行
+```java
+if(myHandler != null) {
 	myHandler.removeCallbacks(senderObj);
 }
 ```
 
-也可用一个Runnable来代替Thread
+# 线程的应用
 
-```java
-Runnable r = new Runnable() {
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-	}
-};
-myHandler.post(r);
-```
-
-以上两种，是否使用handler的post来启动，差别在与是否开启新线程来执行处理。
-**使用post方法时，直接调用Thread或Runnable的run方法，所有处理都在主线程中进行，并没有开启定义的Thread或Runnable新的线程！！**
-
-# 关于Thread和Runnable的区别
+## 关于Thread和Runnable的区别
 
 Thread和Runnable是实现java多线程的两种方式，Thread是类，Runnable为接口，建议使用Runnable来实现多线程。
 如果让一个线程实现Runnable接口，那么当调用这个线程的对象开启多个线程时，可以让这些线程调用同一个变量；
-若这个线程是由继承Thread类而来，则要通过内部类来实现上述的功能，利用的就是内部类可任意访问外部类变量这个特性。（精辟！！）
+若这个线程是由继承Thread类而来，则要通过内部类来实现上述的功能，利用的就是内部类可任意访问外部类变量这个特性。
 
 ## 实现Runnable接口
 
 ```java
 public class ThreadTest {
-	public static void main(String[] args) {
-		MyThread mt=new MyThread();
+	public void main() {
+		MyRunnable mt = new MyRunnable();
 		new Thread(mt).start(); //通过实现Runnable的类的对象来开辟第一个线程
 		new Thread(mt).start(); //通过实现Runnable的类的对象来开辟第二个线程
 		new Thread(mt).start(); //通过实现Runnable的类的对象来开辟第三个线程
 		//由于这三个线程是通过同一个对象mt开辟的，所以run()里方法访问的是同一个index
+		/**
+		  * 上面说到也可以用handler.post()启动这个runnable
+		  * 差别在于是否开启新线程来执行处理。
+		  */
 	}
 }
 ```
 ```java
 //实现Runnable接口
-class MyThread implements Runnable {
+public class MyRunnable implements Runnable {
 	int index=0;
 	public void run() {
 		for(;index<=200;)
@@ -164,7 +175,7 @@ public class ThreadTest {
 }
 ```
 ```java
-class MyThread {
+public class MyThread {
 	int index=0;
 	//定义一个内部类，继承Thread
 	private class InnerClass extends Thread {
@@ -178,25 +189,47 @@ class MyThread {
 		return new InnerClass();
 	}
 }
-// 这里有一个问题：如果内部类要访问一个外部变量或方法，那么这个变量或方法必须定义为final，但为什么这里的变量index不用定义为final就可以被内部类访问？
 ```
 
-# Thread的使用
+## 实例化Thread
 
 ```java
-Thread sender = new Thread(){
+Thread thread = new Thread() {
+	@Override
+	public void run() {
+		super.run();
+		....
+	}
+};
+thread.start();
+```
+
+OR
+
+```java
+Thread thread = new Thread(new Runnable() {
 	@Override
 	public void run() {
 		....
 	}
-}
-sender.start();
+});
+thread.start();
 ```
 
-线程的停止
+## 实例化Runnable
+
 ```java
-if (sender != null) {
-	//sender.quit();
-	sender.join(); // 执行完毕当前处理后停止线程
-}
+Runnable r = new Runnable() {
+
+	@Override
+	public void run() {
+		....
+	}
+};
+new Thread(r).start();
 ```
+
+# 扩展阅读
+[Android异步消息处理机制完全解析，带你从源码的角度彻底理解](http://blog.csdn.net/guolin_blog/article/details/9991569)
+[Android 异步消息处理机制 让你深入理解 Looper、Handler、Message三者关系](http://blog.csdn.net/lmj623565791/article/details/38377229)
+[Android HandlerThread 完全解析](http://blog.csdn.net/lmj623565791/article/details/47079737)
