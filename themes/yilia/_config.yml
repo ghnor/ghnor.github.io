@@ -3,7 +3,7 @@ menu:
   主页: /
   所有文章: /archives
   Android: /categories/Android
-#  随笔: /tags/随笔
+  # 随笔: /tags/随笔
 
 # SubNav
 subnav:
@@ -19,6 +19,11 @@ subnav:
   #linkedin: "#"
 
 rss: /atom.xml
+
+# 是否需要修改 root 路径
+# 如果您的网站存放在子目录中，例如 http://yoursite.com/blog，
+# 请将您的 url 设为 http://yoursite.com/blog 并把 root 设为 /blog/。
+root: 
 
 # Content
 excerpt_link: more
@@ -62,4 +67,4 @@ friends:
 #不开启——
 #aboutme: false
 #开启——
-aboutme: 我就是我，是颜色不一样的烟火
+aboutme: 我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…

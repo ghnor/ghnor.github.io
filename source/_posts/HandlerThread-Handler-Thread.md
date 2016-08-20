@@ -46,7 +46,7 @@ if (uIhandlerThread != null) {
 
 ## 定义handler
 在主线程使用handler只需要实例化即可。
-在主线程中使用时，需要先实例化一个子线程的Looper对象。
+在非主线程中使用时，需要先实例化一个子线程的Looper对象。
 
 ### 在主线程定义Handler
 
