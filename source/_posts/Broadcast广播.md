@@ -11,13 +11,13 @@ Broadcast包括两个概念，广播发送者和广播接收者(Receiver)，这�
 
 <!--more-->
 
-## 广播的接收
+# 1. 广播的接收
 自定义广播接收器需要继承基类`BroadcastReceiver`或`WakefulBroadcastReceiver`，并实现抽象方法`onReceive(Context context, Intent intent)`。广播接收器接收到相应广播后，会自动回到onReceive(..)方法。默认情况下，广播接收器也是运行在 UI 线程，因此，`onReceive()`方法中不能执行太耗时的操作。否则将因此 ANR。
 > **BroadcastReceiver**：不会保证CPU的持续工作。当你执行长时间的操作时，CPU可能会在中途陷入休眠。
 >**WakefulBroadcastReceiver**：保证CPU持续工作直到操作完成。
 [BroadcastReceiver Vs WakefulBroadcastReceiver](http://stackoverflow.com/questions/26380534/broadcastreceiver-vs-wakefulbroadcastreceiver)
 
-* 继承 BroadcastReceiver
+## 1.1. 继承 BroadcastReceiver
 ```java
 public class CustomBroadcastReceiver extends BroadcastReceiver {
 
@@ -30,7 +30,7 @@ public class CustomBroadcastReceiver extends BroadcastReceiver {
     }
 }
 ```
-* 继承 WakefulBroadcastReceiver
+## 1.2. 继承 WakefulBroadcastReceiver
 ```java
 public class CustomBroadcastReceiver extends WakefulBroadcastReceiver {
 
@@ -44,7 +44,7 @@ public class CustomBroadcastReceiver extends WakefulBroadcastReceiver {
 }
 ```
 
-## 广播的注册
+# 2. 广播的注册
 广播的注册分为**动态注册**和**静态注册**。
 * **对bindService的调用**，<receiver>注册的广播，在onReceive结束后广播即不存在，所以不能在其中给自己异步传递结果，如bindService而只能使用startService，如果想跟service交互可使用peekService。
 * **手动控制**。registerReceiver为动态注册，自己可以手动注册或是取消注册；<receiver>标签为静态注册，由系统开机时自动扫描注册，所以无法手动控制，开机一直运行中。
@@ -70,7 +70,7 @@ intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
 sendBroadcast(intent);
 ```
 
-### 动态注册
+## 2.1. 动态注册
 代码中调用 Context.registerReceiver() 方法动态注册 BroadcastReceiver。
 在 Context 的实例被销毁时，调用 Context.unregisterReceiver() 解除注册的 BroadcastReceiver。
 ```java
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 ```
-### 静态注册
+## 2.2. 静态注册
 在 AndroidManifest.xml 文件中进行注册。
 ```java
 <receiver android:enabled=["true" | "false"]
@@ -123,7 +123,7 @@ android:process  —— broadcastReceiver运行所处的进程。默认为app�
 intent-filter —— 指定此广播接收器将用于接收特定的广播类型。
 广播的类型既可以是系统广播，比如`<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />`表示网络变化；也可以是自定义广播`<action android:name="com.test.action" />`。
 
-## 广播的发送 
+# 3. 广播的发送 
 广播根据发送方式的不同，可以分为**普通广播**,**有序广播**和**粘性广播**。
 
 广播实际发送的是意图（Intent），通过Action属性与Receiver匹配。
@@ -133,7 +133,7 @@ setAction(...)对应BroadcastReceiver中的intent-Filter中的action。
 Intent intent = new Intent();
 intent.setAction(BROADCAST_ACTION);
 ```
-* 普通广播
+## 3.1. 普通广播
 普通的广播是不在意顺序的，最简单的理解是同时可以收到这个广播。如果应用是动态注册这个广播的，且广播发送时这个进程还活着，那么当然可以并发的把广播尽快地传送出去是最好的。
 但是，如果是通过AndroidManifest.xml静态注册的情况，也就是说这个广播首先要把一个进程启动起来，这时并发启动很多进程就是个问题了。Android目前的做法是，对这种静态的广播接收者，自动按有序广播的方式来串行处理。但是这对应用是透明的，应用不能假设系统已经把静态的无序广播当成有序广播来处理。
 ```java
@@ -145,7 +145,7 @@ Context.sendBroadcast(Intent intent, String receiverPermission);
 Context.sendBroadcastAsUser(Intent intent, UserHandle user);
 Context.sendBroadcastAsUser(Intent intent, UserHandle user, String receiverPermission);
 ```
-* 有序广播
+## 3.2. 有序广播
 有序广播的有序广播中的“有序”是针对广播接收者而言的，指的是发送出去的广播被BroadcastReceiver按照先后循序接收。有序广播的定义过程与普通广播无异，只是其的主要发送方式变为：sendOrderedBroadcast(intent, receiverPermission, ...)。
 对于有序广播，其主要特点总结如下：
 
@@ -168,7 +168,7 @@ sendOrderedBroadcastAsUser(Intent intent, UserHandle user, String receiverPermis
                 BroadcastReceiver resultReceiver, Handler scheduler, int initialCode, 
                 String initialData, Bundle initialExtras);
 ```
-* 粘性广播
+## 3.3. 粘性广播
 从Android 5.0(API 21)开始，因为安全性的问题，官方已经正式废弃了粘性广播。
 在这里还是稍作介绍：
 广播已经发出，但是没有接收器与广播匹配。或者在广播发出之后，广播接收器才注册。此时，广播接收器就无法接收广播。
@@ -177,7 +177,7 @@ Android引入了StickyBroadcast，在广播发送结束后会保存刚刚发送�
 粘性广播通过Context的[sendStickyBroadcast(Intent)](http://developer.android.com/reference/android/content/Context.html#sendStickyBroadcast(android.content.Intent))接口发送，需要添加权限`<uses-permission android:name="android.permission.BROADCAST_STICKY"/>`
 也可以通过Context的[removeStickyBroadcast](http://developer.android.com/reference/android/content/Context.html#removeStickyBroadcast(android.content.Intent))([Intent](http://developer.android.com/reference/android/content/Intent.html))接口移除缓存的粘性广播。
 
-## 本地广播LocalBroadcastManager
+# 4. 本地广播LocalBroadcastManager
 
 LocalBroadcastManager除了能解决BroadcastReceiver进程间安全性问题外，相对Context操作的BroadcastReceiver而言还具有更高的运行效率。
 * 发送广播
@@ -194,11 +194,11 @@ LocalBroadcastManager.getInstance(context).unregisterReceiver(BroadcastReceiver)
 ```
 其他同普通广播。
 
-## 生命周期
+# 5. 生命周期
 BroadcastReceiver**在onReceive函数执行结束后即表示生命周期结束**，所以不适合在onReceive中做绑定服务操作，结束后若某个进程只含有该BroadcastReceiver，则优先级将降低可能被系统回收，所以**BroadcastReceiver中不适合做一些异步操作**，如新建线程下载数据，BroadcastReceiver结束后可能在异步操作完成前进程已经被系统kill。
 同时由于ANR限制BroadcastReceiver的onReceive函数必须在10秒内完成，而且onReceive默认会在主线程中执行，所以**BroadcastReceiver中不适合做一些耗时操作**，对于耗时操作需要交给service处理，比如网络或数据库耗时操作、对话框的显示(因为现实时间可能超时，用Notification代替)。
 
-## 安全性
+# 6. 安全性
 BroadcastReceiver的设计初衷就是从全局考虑的，可以方便应用程序和系统、应用程序之间、应用程序内的通信，所以对单个应用程序而言BroadcastReceiver是存在安全性问题的，相应问题及解决如下：
 * 当应用程序发送某个广播时系统会将发送的Intent与系统中所有注册的BroadcastReceiver的IntentFilter进行匹配，若匹配成功则执行相应的onReceive函数。可以通过类似sendBroadcast(Intent, String)的接口**在发送广播时指定接收者必须具备的permission**。或通过Intent.setPackage设置广播仅对某个程序有效。
  
@@ -206,7 +206,7 @@ BroadcastReceiver的设计初衷就是从全局考虑的，可以方便应用程
  
 * 上面两个问题其实都可以通过LocalBroadcastManager来解决，LocalBroadcastManager只会将广播限定在当前应用程序中
 
-## 参考
+# 7. 参考
 [Android BroadcastReceiver介绍](http://www.cnblogs.com/trinea/archive/2012/11/09/2763182.html)
 [Android总结篇系列：Android广播机制](http://www.cnblogs.com/lwbqqyumidi/p/4168017.html)
 [说说Android的广播(1) - 普通广播,有序广播和粘性广播](https://yq.aliyun.com/articles/53919)
