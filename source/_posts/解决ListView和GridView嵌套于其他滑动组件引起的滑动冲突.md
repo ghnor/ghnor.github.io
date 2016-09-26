@@ -6,7 +6,9 @@ tags:
 toc: true
 ---
 当我们将ListView和GridView相互嵌套，或者嵌套于其他滑动组件时，会造成不能滑动、数据显示不全等问题。
-原因在于滑动组件的高度计算出现问题
+
+<!--more-->
+
 解决方案不止一个。个人觉得比较方便的就是重写`onMeasure()`方法：
 ```java
 @Override
@@ -18,8 +20,6 @@ protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     super.onMeasure(widthMeasureSpec, expandSpec);
 }
 ```
-
-<!--more-->
 
 ## StaticListView
 ```java
