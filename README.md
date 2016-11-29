@@ -1,2 +1,2 @@
-# azeroz.github.io
+# ghnor.github.io
 个人博客
