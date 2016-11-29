@@ -3,10 +3,10 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: AzerOz's Blog
+title: ghnor's Blog
 subtitle: 生命吻我以痛，却要我报之以歌
-description:
-author: AzerOz
+description: 生命吻我以痛，却要我报之以歌
+author: ghnor
 language: zh-Hans
 timezone:
 
@@ -14,7 +14,7 @@ timezone:
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: http://yoursite.com
 root: /
-permalink: :category/:title-:year-:month-:day.html
+permalink: :category/:title.html
 permalink_defaults:
 
 # Directory
@@ -63,11 +63,13 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: yilia
+theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: git@github.com:AzerOz/azeroz.github.io.git
+  repo: git@github.com:ghnor/ghnor.github.io.git
+  branch: master
+  repo git@git.coding.net:ghnor/ghnor.coding.io.git
   branch: master
