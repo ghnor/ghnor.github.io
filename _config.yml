@@ -69,7 +69,6 @@ theme: next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: git@github.com:ghnor/ghnor.github.io.git
-  branch: master
-  repo git@git.coding.net:ghnor/ghnor.coding.io.git
-  branch: master
+  repo: 
+    git@github.com:ghnor/ghnor.github.io.git,master
+    git@git.coding.net:ghnor/ghnor.coding.io.git,master
