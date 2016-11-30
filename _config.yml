@@ -71,4 +71,4 @@ deploy:
   type: git
   repo: 
     git@github.com:ghnor/ghnor.github.io.git,master
-    #git@git.coding.net:ghnor/ghnor.coding.io.git,master
+    git@git.coding.net:ghnor/ghnor.coding.io.git,master
