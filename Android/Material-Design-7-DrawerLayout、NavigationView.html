@@ -1,0 +1,716 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,Material Design," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="用以实现Android中的抽屉样式，在Google自己推出BottomNavigation之前，抽屉样式的交互可谓Material Design的标杆。
+添加内容布局作为DrawerLayout的首个子view，并设置宽高为match_parent，不能设置layout_gravity。
+在内容布局之下添加抽屉布局，设置layout_gravity，控制其在屏幕的左或右出现。一般设置高度match">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Material Design ( 7 ) - DrawerLayout、NavigationView">
+<meta property="og:url" content="http://yoursite.com/Android/Material-Design-7-DrawerLayout、NavigationView.html">
+<meta property="og:site_name" content="ghnor's Blog">
+<meta property="og:description" content="用以实现Android中的抽屉样式，在Google自己推出BottomNavigation之前，抽屉样式的交互可谓Material Design的标杆。
+添加内容布局作为DrawerLayout的首个子view，并设置宽高为match_parent，不能设置layout_gravity。
+在内容布局之下添加抽屉布局，设置layout_gravity，控制其在屏幕的左或右出现。一般设置高度match">
+<meta property="og:updated_time" content="2016-12-04T05:25:24.511Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Material Design ( 7 ) - DrawerLayout、NavigationView">
+<meta name="twitter:description" content="用以实现Android中的抽屉样式，在Google自己推出BottomNavigation之前，抽屉样式的交互可谓Material Design的标杆。
+添加内容布局作为DrawerLayout的首个子view，并设置宽高为match_parent，不能设置layout_gravity。
+在内容布局之下添加抽屉布局，设置layout_gravity，控制其在屏幕的左或右出现。一般设置高度match">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/Android/Material-Design-7-DrawerLayout、NavigationView.html"/>
+
+
+
+
+
+  <title> Material Design ( 7 ) - DrawerLayout、NavigationView | ghnor's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ghnor's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/Android/Material-Design-7-DrawerLayout、NavigationView.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="ghnor">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/assets/images/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="ghnor's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="ghnor's Blog" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Material Design ( 7 ) - DrawerLayout、NavigationView
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-03T14:43:15+08:00">
+                2016-12-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/Android/Material-Design-7-DrawerLayout、NavigationView.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="Android/Material-Design-7-DrawerLayout、NavigationView.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>用以实现Android中的抽屉样式，在Google自己推出BottomNavigation之前，抽屉样式的交互可谓Material Design的标杆。</p>
+<p>添加内容布局作为DrawerLayout的首个子view，并设置宽高为<code>match_parent</code>，不能设置<code>layout_gravity</code>。</p>
+<p>在内容布局之下添加抽屉布局，设置<code>layout_gravity</code>，控制其在屏幕的左或右出现。一般设置高度<code>match_parent</code>，宽度<code>wrap_content</code>。不能设置多个抽屉布局，会报错。</p>
+<p>抽屉布局呢，其实任意view都可以，但是Material Design中推荐使用NavigationView。</p>
+<a id="more"></a>
+<h1 id="定义Style"><a href="#定义Style" class="headerlink" title="定义Style"></a>定义Style</h1><p>首先修改下我们之前的styles.xml文件，设置状态栏为透明。</p>
+<p>在《Material Design ( 1 ) - 主题样式》的基础上，再添加如下：<br>在res/values/styles.xml中添加：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"AppTheme.Fit"</span> <span class="attr">parent</span>=<span class="string">"AppTheme.NoActionBar"</span>/&gt;</span><span class="undefined"></span></div></pre></td></tr></table></figure></p>
+<p>在res/values-v21/styles.xml中添加：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"AppTheme.Fit"</span> <span class="attr">parent</span>=<span class="string">"AppTheme.NoActionBar"</span>&gt;</span><span class="xml"></span></div><div class="line">	<span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:statusBarColor"</span>&gt;</span>@android:color/transparent<span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h1 id="NavigationView"><a href="#NavigationView" class="headerlink" title="NavigationView"></a>NavigationView</h1><p>完整的NavigationView由头部自定义布局，下部分的menu布局组成。<br><code>app:headerLayout</code>设置头部布局。<br><code>app:menu</code>设置menu布局。  </p>
+<h2 id="定义NavigationView头部布局"><a href="#定义NavigationView头部布局" class="headerlink" title="定义NavigationView头部布局"></a>定义NavigationView头部布局</h2><p>在res/layout下创建 nav_header_main.xml：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">LinearLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></div><div class="line">    <span class="attr">xmlns:app</span>=<span class="string">"http://schemas.android.com/apk/res-auto"</span></div><div class="line">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">    <span class="attr">android:layout_height</span>=<span class="string">"@dimen/nav_header_height"</span></div><div class="line">    <span class="attr">android:background</span>=<span class="string">"@drawable/side_nav_bar"</span></div><div class="line">    <span class="attr">android:gravity</span>=<span class="string">"bottom"</span></div><div class="line">    <span class="attr">android:orientation</span>=<span class="string">"vertical"</span></div><div class="line">    <span class="attr">android:padding</span>=<span class="string">"@dimen/spacing_16"</span></div><div class="line">    <span class="attr">android:theme</span>=<span class="string">"@style/ThemeOverlay.AppCompat.Dark"</span>&gt;</div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">ImageView</span></span></div><div class="line">        <span class="attr">android:id</span>=<span class="string">"@+id/imageView"</span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">        <span class="attr">android:paddingTop</span>=<span class="string">"@dimen/nav_header_spacing"</span></div><div class="line">        <span class="attr">app:srcCompat</span>=<span class="string">"@android:drawable/sym_def_app_icon"</span> /&gt;</div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">        <span class="attr">android:paddingTop</span>=<span class="string">"@dimen/nav_header_spacing"</span></div><div class="line">        <span class="attr">android:text</span>=<span class="string">"Android Studio"</span></div><div class="line">        <span class="attr">android:textAppearance</span>=<span class="string">"@style/TextAppearance.AppCompat.Body1"</span> /&gt;</div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">        <span class="attr">android:id</span>=<span class="string">"@+id/textView"</span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">        <span class="attr">android:text</span>=<span class="string">"android.studio@android.com"</span> /&gt;</div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">LinearLayout</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="定义NavigationView的menu内容"><a href="#定义NavigationView的menu内容" class="headerlink" title="定义NavigationView的menu内容"></a>定义NavigationView的menu内容</h2><p>在res/menu下创建 drawer_layout.xml：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">menu</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">group</span> <span class="attr">android:checkableBehavior</span>=<span class="string">"single"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">item</span></span></div><div class="line">            <span class="attr">android:id</span>=<span class="string">"@+id/nav_camera"</span></div><div class="line">            <span class="attr">android:icon</span>=<span class="string">"@drawable/ic_menu_camera"</span></div><div class="line">            <span class="attr">android:title</span>=<span class="string">"Import"</span> /&gt;</div><div class="line">        <span class="tag">&lt;<span class="name">item</span></span></div><div class="line">            <span class="attr">android:id</span>=<span class="string">"@+id/nav_gallery"</span></div><div class="line">            <span class="attr">android:icon</span>=<span class="string">"@drawable/ic_menu_gallery"</span></div><div class="line">            <span class="attr">android:title</span>=<span class="string">"Gallery"</span> /&gt;</div><div class="line">        <span class="tag">&lt;<span class="name">item</span></span></div><div class="line">            <span class="attr">android:id</span>=<span class="string">"@+id/nav_slideshow"</span></div><div class="line">            <span class="attr">android:icon</span>=<span class="string">"@drawable/ic_menu_slideshow"</span></div><div class="line">            <span class="attr">android:title</span>=<span class="string">"Slideshow"</span> /&gt;</div><div class="line">        <span class="tag">&lt;<span class="name">item</span></span></div><div class="line">            <span class="attr">android:id</span>=<span class="string">"@+id/nav_manage"</span></div><div class="line">            <span class="attr">android:icon</span>=<span class="string">"@drawable/ic_menu_manage"</span></div><div class="line">            <span class="attr">android:title</span>=<span class="string">"Tools"</span> /&gt;</div><div class="line">    <span class="tag">&lt;/<span class="name">group</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">android:title</span>=<span class="string">"Communicate"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">menu</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">item</span></span></div><div class="line">                <span class="attr">android:id</span>=<span class="string">"@+id/nav_share"</span></div><div class="line">                <span class="attr">android:icon</span>=<span class="string">"@drawable/ic_menu_share"</span></div><div class="line">                <span class="attr">android:title</span>=<span class="string">"Share"</span> /&gt;</div><div class="line">            <span class="tag">&lt;<span class="name">item</span></span></div><div class="line">                <span class="attr">android:id</span>=<span class="string">"@+id/nav_send"</span></div><div class="line">                <span class="attr">android:icon</span>=<span class="string">"@drawable/ic_menu_send"</span></div><div class="line">                <span class="attr">android:title</span>=<span class="string">"Send"</span> /&gt;</div><div class="line">        <span class="tag">&lt;/<span class="name">menu</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">item</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">menu</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h1 id="DrawerLayout"><a href="#DrawerLayout" class="headerlink" title="DrawerLayout"></a>DrawerLayout</h1><p>DrawerLayout需要注意的地方前面说过了，直接看XML。</p>
+<h2 id="XML布局"><a href="#XML布局" class="headerlink" title="XML布局"></a>XML布局</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">android.support.v4.widget.DrawerLayout</span></span></div><div class="line">    <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></div><div class="line">    <span class="attr">xmlns:app</span>=<span class="string">"http://schemas.android.com/apk/res-auto"</span></div><div class="line">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></div><div class="line">    <span class="attr">android:fitsSystemWindows</span>=<span class="string">"true"</span></div><div class="line">    <span class="attr">android:id</span>=<span class="string">"@+id/drawer_layout"</span>&gt;</div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">android.support.design.widget.CoordinatorLayout</span></span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span>&gt;</div><div class="line"></div><div class="line">        <span class="tag">&lt;<span class="name">android.support.design.widget.AppBarLayout</span></span></div><div class="line">            <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">            <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">            <span class="attr">android:theme</span>=<span class="string">"@style/AppTheme.AppBarOverlay"</span>&gt;</div><div class="line"></div><div class="line">            <span class="tag">&lt;<span class="name">android.support.v7.widget.Toolbar</span></span></div><div class="line">                <span class="attr">android:id</span>=<span class="string">"@+id/toolbar"</span></div><div class="line">                <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">                <span class="attr">android:layout_height</span>=<span class="string">"?attr/actionBarSize"</span></div><div class="line">                <span class="attr">app:popupTheme</span>=<span class="string">"@style/AppTheme.PopupOverlay"</span> /&gt;</div><div class="line"></div><div class="line">        <span class="tag">&lt;/<span class="name">android.support.design.widget.AppBarLayout</span>&gt;</span></div><div class="line"></div><div class="line">        <span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">            <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></div><div class="line">            <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></div><div class="line">            <span class="attr">android:text</span>=<span class="string">"Hello World!"</span> /&gt;</div><div class="line"></div><div class="line">    <span class="tag">&lt;/<span class="name">android.support.design.widget.CoordinatorLayout</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">android.support.design.widget.NavigationView</span></span></div><div class="line">        <span class="attr">android:id</span>=<span class="string">"@+id/nav_view"</span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></div><div class="line">        <span class="attr">android:layout_gravity</span>=<span class="string">"start"</span></div><div class="line">        <span class="attr">app:headerLayout</span>=<span class="string">"@layout/nav_header_main"</span></div><div class="line">        <span class="attr">app:menu</span>=<span class="string">"@menu/drawer_layout"</span> /&gt;</div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">android.support.v4.widget.DrawerLayout</span>&gt;</span></div></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>DrawerLayout</strong><br>很简单，就是单纯作为最外层的布局使用。<br>需要注意<code>android:fitsSystemWindows=&quot;true&quot;</code>，设置为true之后，在5.0以上的设备中就有沉浸式状态栏的效果。</p>
+</li>
+<li><p><strong>NavigationView</strong><br><code>app:headerLayout</code> 设置头部布局。<br><code>app:menu</code> 设置menu内容。<br><code>android:layout_gravity=&quot;start&quot;</code> 必须。如果不设置，NavigationView会占满整个布局。<br><code>app:itemIconTint</code> menu图标的颜色<br><code>app:itemBackground</code> menu背景颜色<br><code>app:itemTextColor</code> menu字体的颜色</p>
+</li>
+</ul>
+<h2 id="Java代码：DrawerLayoutActivity"><a href="#Java代码：DrawerLayoutActivity" class="headerlink" title="Java代码：DrawerLayoutActivity"></a>Java代码：DrawerLayoutActivity</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DrawerLayoutActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">        setContentView(R.layout.activity_drawerlayout);</div><div class="line">        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);</div><div class="line">        setSupportActionBar(toolbar);</div><div class="line"></div><div class="line">        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);</div><div class="line">        ActionBarDrawerToggle toggle = <span class="keyword">new</span> ActionBarDrawerToggle(</div><div class="line">                <span class="keyword">this</span>, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);</div><div class="line">        drawer.addDrawerListener(toggle);</div><div class="line">        toggle.syncState();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用了ActionBarDrawerToggle来给Toolbar的左边添加一个图标，带有一个交互动画。</p>
+<p>在AndroidManifest.xml中注册该Activity，同时别忘记把主题设置成我们前面定义过的那个。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">activity</span> <span class="attr">android:name</span>=<span class="string">".drawerlayout.DrawerLayoutActivity"</span></span></div><div class="line">	<span class="attr">android:theme</span>=<span class="string">"@style/AppTheme.Fit"</span>/&gt;</div></pre></td></tr></table></figure></p>
+<h1 id="给NavigationView添加点击事件"><a href="#给NavigationView添加点击事件" class="headerlink" title="给NavigationView添加点击事件"></a>给NavigationView添加点击事件</h1><p>这里menu的点击事件，和头部布局中的点击事件需要分开写。</p>
+<h2 id="menu点击"><a href="#menu点击" class="headerlink" title="menu点击"></a>menu点击</h2><p>Activity 需要实现 NavigationView.OnNavigationItemSelectedListener 接口。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);</div><div class="line">navigationView.setNavigationItemSelectedListener(<span class="keyword">this</span>);</div></pre></td></tr></table></figure></p>
+<p>重写下面的方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onNavigationItemSelected</span><span class="params">(@NonNull MenuItem item)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> id = item.getItemId();</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (id == R.id.nav_camera) &#123;</div><div class="line">		<span class="comment">// Handle the camera action</span></div><div class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (id == R.id.nav_gallery) &#123;</div><div class="line"></div><div class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (id == R.id.nav_slideshow) &#123;</div><div class="line"></div><div class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (id == R.id.nav_manage) &#123;</div><div class="line"></div><div class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (id == R.id.nav_share) &#123;</div><div class="line"></div><div class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> (id == R.id.nav_send) &#123;</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);</div><div class="line">	drawer.closeDrawer(GravityCompat.START);</div><div class="line">	<span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="头部布局点击"><a href="#头部布局点击" class="headerlink" title="头部布局点击"></a>头部布局点击</h2><ol>
+<li><p>获取头部布局</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">View headerView = navigationView.getHeaderView(<span class="number">0</span>);</div></pre></td></tr></table></figure>
+</li>
+<li><p>然后通过调用headerView中的findViewById方法来查找到头部的控件，设置点击事件即可。</p>
+</li>
+</ol>
+<h1 id="NavigationView的menu图标颜色"><a href="#NavigationView的menu图标颜色" class="headerlink" title="NavigationView的menu图标颜色"></a>NavigationView的menu图标颜色</h1><p>上面这么用的时候，会发现menu的图标好像全是统一的一个颜色，那我们想显示图片自身的颜色呢？<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">navigationView.setItemIconTintList(<span class="keyword">null</span>);</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/Material-Design/" rel="tag"># Material Design</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Android/Material-Design-6-FloatActionButton、Snackbar.html" rel="next" title="Material Design ( 6 ) - FloatActionButton、Snackbar">
+                <i class="fa fa-chevron-left"></i> Material Design ( 6 ) - FloatActionButton、Snackbar
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="Android/Material-Design-7-DrawerLayout、NavigationView.html"
+           data-title="Material Design ( 7 ) - DrawerLayout、NavigationView" data-url="http://yoursite.com/Android/Material-Design-7-DrawerLayout、NavigationView.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.jpg"
+               alt="ghnor" />
+          <p class="site-author-name" itemprop="name">ghnor</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#定义Style"><span class="nav-number">1.</span> <span class="nav-text">定义Style</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NavigationView"><span class="nav-number">2.</span> <span class="nav-text">NavigationView</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义NavigationView头部布局"><span class="nav-number">2.1.</span> <span class="nav-text">定义NavigationView头部布局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义NavigationView的menu内容"><span class="nav-number">2.2.</span> <span class="nav-text">定义NavigationView的menu内容</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DrawerLayout"><span class="nav-number">3.</span> <span class="nav-text">DrawerLayout</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#XML布局"><span class="nav-number">3.1.</span> <span class="nav-text">XML布局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java代码：DrawerLayoutActivity"><span class="nav-number">3.2.</span> <span class="nav-text">Java代码：DrawerLayoutActivity</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#给NavigationView添加点击事件"><span class="nav-number">4.</span> <span class="nav-text">给NavigationView添加点击事件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#menu点击"><span class="nav-number">4.1.</span> <span class="nav-text">menu点击</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#头部布局点击"><span class="nav-number">4.2.</span> <span class="nav-text">头部布局点击</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NavigationView的menu图标颜色"><span class="nav-number">5.</span> <span class="nav-text">NavigationView的menu图标颜色</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ghnor</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ghnor"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
