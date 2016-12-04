@@ -4,8 +4,8 @@
 
 # Site
 title: ghnor's Blog
-subtitle: 生命吻我以痛，却要我报之以歌
-description: 生命吻我以痛，却要我报之以歌
+subtitle: 
+description: 
 author: ghnor
 language: zh-Hans
 timezone:
@@ -70,5 +70,5 @@ theme: next
 deploy:
   type: git
   repo: 
-    git@github.com:ghnor/ghnor.github.io.git,master
-    git@git.coding.net:ghnor/ghnor.coding.io.git,master
+    github: git@github.com:ghnor/ghnor.github.io.git,master
+    coding: git@git.coding.net:ghnor/ghnor.git,master
