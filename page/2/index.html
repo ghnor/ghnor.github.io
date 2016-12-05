@@ -640,7 +640,7 @@
 
       
         
-          <h1 id="数字"><a href="#数字" class="headerlink" title="数字"></a>数字</h1><h2 id="BigDecimal"><a href="#BigDecimal" class="headerlink" title="BigDecimal"></a>BigDecimal</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">float</span> f =  <span class="number">34.232323</span>;</div><div class="line">BigDecimal b  = <span class="keyword">new</span> BigDecimal(f);</div><div class="line"><span class="keyword">float</span> f1 = b.setScale(<span class="number">2</span>, BigDecimal.ROUND_HALF_UP).floatValue();</div><div class="line"><span class="comment">//setScale(2, BigDecimal.ROUND_HALF_UP) 表示四舍五入保留两位小数</span></div></pre></td></tr></table></figure>
+          <p>实际生产中，经常需要对数字，日期类型的数据进行操作。有时有采用全部转换为String类型再通过拆分字符串这种方法，不优雅也容易出现问题。<br>Java提供了现成的API方便我们做数据格式化。</p>
           <!--noindex-->
           <div class="post-more-link text-center">
             <a class="btn" href="/Android/数字，日期格式化.html#more" rel="contents">
