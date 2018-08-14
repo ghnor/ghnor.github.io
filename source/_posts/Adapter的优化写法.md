@@ -1,13 +1,9 @@
 ---
+path: Android/Adapter的优化写法.md
 title: Adapter的优化写法
-date: 2016-07-31 19:01:42
-categories: Android
-tags: Android
 ---
 
 ViewHolder不再单纯是View的容器，也承担了View实例化的操作。
-
-<!--more-->
 
 ```java
 public class CustomAdapter extends BaseAdapter {
