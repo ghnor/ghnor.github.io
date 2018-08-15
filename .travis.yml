@@ -36,7 +36,9 @@ after_script:
   # - cd ../
   # - mv _public/.git/ public/
   - cd ./public
+  - ls -a
   - git init
+  - ls -a
   - git config user.name "ghnor"  #修改name
   - git config user.email "ghnor.me@gmail.com"  #修改email
   - git add .
