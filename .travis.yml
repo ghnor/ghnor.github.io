@@ -1,0 +1,49 @@
+language: node_js
+
+node_js: stable
+
+# apt addons:
+
+# cache components:
+
+before_install:
+  - export TZ='Asia/Shanghai' # 更改时区
+
+install:
+  - npm install -g hexo-cli #安装hexo及插件
+  - npm install
+
+# before_script:
+
+script:
+  - hexo clean  #清除
+  - hexo generate  #生成
+
+after_script:
+  # - git clone https://${GH_REF}  # GH_REF是最下面配置的仓库地址
+  # - cd .deploy_git
+  # - git checkout master
+  # - cd ../
+  - git clone https://${GH_REF} _public # GH_REF是最下面配置的仓库地址
+  # - mkdir _public/
+  # - mv .git/ _public/   # 这一步之前的操作是为了保留master分支的提交记录，不然每次git init的话只有1条commit
+  - cd _public
+  - git checkout master
+  - cd ../
+  - mv _public/.git/ public/
+  - cd public
+  - git config user.name "ghnor"  #修改name
+  - git config user.email "ghnor.me@gmail.com"  #修改email
+  - git add .
+  - git commit -m "Travis CI Auto Build at `date +"%Y-%m-%d %H:%M"`"  # 提交记录包含时间 跟上面更改时区配合
+  - git push --force --quiet "https://${GITHUB_TOKEN}@${GH_REF}" master:master  #Travis_Token是在Travis中配置环境变量的名称
+
+# after_success or after_failure
+# OPTIONAL before_deploy
+# OPTIONAL deploy
+# OPTIONAL after_deploy
+# after_script
+
+env:
+  global:
+    - GH_REF: github.com/ghnor/ghnor.github.io.git
