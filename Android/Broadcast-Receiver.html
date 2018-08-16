@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2018 | ghnor&#39;s Blog</title>
+  <title>Broadcast Receiver | ghnor&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="ghnor&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/archives/2018/index.html">
+  <meta name="description" content="Broadcast包括两个概念，广播发送者和广播接收者(Receiver)，这里的广播实际就是指 Intent，程序可以自己发送广播自己接收，也可以接受系统或其他应用的广播或是发送广播给其他应用程序。发送者可以通过类似 Context.sendBroadcast()) 接口发送广播，接收者通过  Context.registerReceiver()) 动态注册或在 AndroidManifest.">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Broadcast Receiver">
+<meta property="og:url" content="http://yoursite.com/Android/Broadcast-Receiver.html">
 <meta property="og:site_name" content="ghnor&#39;s Blog">
+<meta property="og:description" content="Broadcast包括两个概念，广播发送者和广播接收者(Receiver)，这里的广播实际就是指 Intent，程序可以自己发送广播自己接收，也可以接受系统或其他应用的广播或是发送广播给其他应用程序。发送者可以通过类似 Context.sendBroadcast()) 接口发送广播，接收者通过  Context.registerReceiver()) 动态注册或在 AndroidManifest.">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2016-11-13T16:00:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ghnor&#39;s Blog">
+<meta name="twitter:title" content="Broadcast Receiver">
+<meta name="twitter:description" content="Broadcast包括两个概念，广播发送者和广播接收者(Receiver)，这里的广播实际就是指 Intent，程序可以自己发送广播自己接收，也可以接受系统或其他应用的广播或是发送广播给其他应用程序。发送者可以通过类似 Context.sendBroadcast()) 接口发送广播，接收者通过  Context.registerReceiver()) 动态注册或在 AndroidManifest.">
   
     <link rel="alternative" href="/atom.xml" title="ghnor&#39;s Blog" type="application/atom+xml">
   
@@ -150,36 +155,117 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Broadcast-Receiver" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/Android/Adapter的优化写法.html" class="archive-article-date">
-  	<time datetime="2018-08-16T05:45:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-16</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/Android/Adapter的优化写法.html">Adapter的优化写法</a>
+    <h1 class="article-title" itemprop="name">
+      Broadcast Receiver
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/Android/Broadcast-Receiver.html" class="archive-article-date">
+  	<time datetime="2016-11-13T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Broadcast包括两个概念，广播发送者和广播接收者(Receiver)，这里的广播实际就是指 Intent，程序可以自己发送广播自己接收，也可以接受系统或其他应用的广播或是发送广播给其他应用程序。<br>发送者可以通过类似 <a href="http://developer.android.com/reference/android/content/Context.html#sendBroadcast(android.content.Intent" target="_blank" rel="noopener">Context.sendBroadcast()</a>) 接口发送广播，接收者通过  <a href="http://developer.android.com/reference/android/content/Context.html#registerReceiver(android.content.BroadcastReceiver,%20android.content.IntentFilter" target="_blank" rel="noopener">Context.registerReceiver()</a>) 动态注册或在 AndroidManifest.xml 文件中通过 <receiver> 标签静态注册。注册完成后，当发送者发送某个广播时系统会将发送的广播(Intent)与系统中所有注册的符合条件的接收者(Receiver)的 IntentFilter 进行匹配，若匹配成功则执行相应接收者的 onReceive 函数。  </receiver></p>
+<h1 id="1-广播的接收"><a href="#1-广播的接收" class="headerlink" title="1. 广播的接收"></a>1. 广播的接收</h1><p>自定义广播接收器需要继承基类<code>BroadcastReceiver</code>或<code>WakefulBroadcastReceiver</code>，并实现抽象方法<code>onReceive(Context context, Intent intent)</code>。广播接收器接收到相应广播后，会自动回到onReceive(..)方法。默认情况下，广播接收器也是运行在 UI 线程，因此，<code>onReceive()</code>方法中不能执行太耗时的操作。否则将因此 ANR。</p>
+<blockquote>
+<p><strong>BroadcastReceiver</strong>：不会保证CPU的持续工作。当你执行长时间的操作时，CPU可能会在中途陷入休眠。<br><strong>WakefulBroadcastReceiver</strong>：保证CPU持续工作直到操作完成。<br><a href="http://stackoverflow.com/questions/26380534/broadcastreceiver-vs-wakefulbroadcastreceiver" target="_blank" rel="noopener">BroadcastReceiver Vs WakefulBroadcastReceiver</a></p>
+</blockquote>
+<h2 id="1-1-继承-BroadcastReceiver"><a href="#1-1-继承-BroadcastReceiver" class="headerlink" title="1.1. 继承 BroadcastReceiver"></a>1.1. 继承 BroadcastReceiver</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomBroadcastReceiver</span> <span class="keyword">extends</span> <span class="title">BroadcastReceiver</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"CustomBroadcastReceiver"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//TODO</span></span><br><span class="line">        Log.i(TAG, <span class="string">"receive broadcast"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="1-2-继承-WakefulBroadcastReceiver"><a href="#1-2-继承-WakefulBroadcastReceiver" class="headerlink" title="1.2. 继承 WakefulBroadcastReceiver"></a>1.2. 继承 WakefulBroadcastReceiver</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomBroadcastReceiver</span> <span class="keyword">extends</span> <span class="title">WakefulBroadcastReceiver</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"CustomBroadcastReceiver"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//TODO</span></span><br><span class="line">        Log.i(TAG, <span class="string">"receive broadcast"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="2-广播的注册"><a href="#2-广播的注册" class="headerlink" title="2. 广播的注册"></a>2. 广播的注册</h1><p>广播的注册分为<strong>动态注册</strong>和<strong>静态注册</strong>。</p>
+<ul>
+<li><strong>对bindService的调用</strong>，<receiver>注册的广播，在onReceive结束后广播即不存在，所以不能在其中给自己异步传递结果，如bindService而只能使用startService，如果想跟service交互可使用peekService。</receiver></li>
+<li><strong>手动控制</strong>。registerReceiver为动态注册，自己可以手动注册或是取消注册；<receiver>标签为静态注册，由系统开机时自动扫描注册，所以无法手动控制，开机一直运行中。</receiver></li>
+<li><strong>资源消耗不同</strong>。registerReceiver可以手动控制，所以适当的注册和取消注册能节省系统资源，<receiver>标签系统开机后一直有效。</receiver></li>
+<li><strong>有效期不同</strong>。通过registerReceiver注册的BroadcastReceiver在对其进行注册的Context对象”销毁”了或者调用了unregisterReceiver方法时也就失效了，而通过<receiver>标签注册的BroadcastReceiver只要应用程序没有被删除就一直有效。</receiver></li>
+<li><strong>对registerReceiver函数的调用许可不同</strong>。通过registerReceiver注册的BroadcastReceiver在其onReceive函数中可以再次调用某个Context的registerReceiver函数，而通过<receiver>标签注册的BroadcastReceiver不允许再调用某个Context的registerReceiver函数 。</receiver></li>
+<li><strong>使用情况不同</strong>。对于自己发送和接受的广播可以通过registerReceiver注册，对于系统常用广播的接收通常用<receiver>标签注册。</receiver></li>
+<li>在 Android 3.1/API level 11 之前，静态注册的广播接收器即使在APP退出的情况下依然可以接收到广播。<br>但是从 3.1 之后就不成立了。原因在于 Intent 与广播相关的 flag 增加了参数：FLAG_INCLUDE_STOPPED_PACKAGES 和 FLAG_EXCLUDE_STOPPED_PACKAGES。</li>
+</ul>
+<blockquote>
+<p>FLAG_INCLUDE_STOPPED_PACKAGES：包含已经停止的包（停止：即包所在的进程已经退出）<br>FLAG_EXCLUDE_STOPPED_PACKAGES：不包含已经停止的包</p>
+</blockquote>
+<p>自 3.1 开始，系统本身则增加了对所有app当前是否处于运行状态的跟踪。在发送广播时，不管是什么广播类型，系统默认直接增加了值为FLAG_EXCLUDE_STOPPED_PACKAGES的flag，导致即使是静态注册的广播接收器，对于其所在进程已经退出的app，同样无法接收到广播。<br>对于系统广播，由于是系统内部直接发出，无法更改此intent flag值，因此，3.1开始对于静态注册的接收系统广播的BroadcastReceiver，如果App进程已经退出，将不能接收到广播。<br>但是对于自定义的广播，可以通过复写此flag为FLAG_INCLUDE_STOPPED_PACKAGES，使得静态注册的BroadcastReceiver，即使所在App进程已经退出，也能能接收到广播，并会启动应用进程，但此时的BroadcastReceiver是重新新建的。<br>对于动态注册类型的BroadcastReceiver，由于此注册和取消注册实在其他组件（如Activity）中进行，因此，不受此改变影响。<br>在3.1以前，相信不少app可能通过静态注册方式监听各种系统广播，以此进行一些业务上的处理（如即时app已经退出，仍然能接收到，可以启动service等..）,3.1后，静态注册接受广播方式的改变，将直接导致此类方案不再可行。于是，通过将Service与App本身设置成不同的进程已经成为实现此类需求的可行替代方案。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent();</span><br><span class="line">intent.setAction(BROADCAST_ACTION);</span><br><span class="line">intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES); </span><br><span class="line">sendBroadcast(intent);</span><br></pre></td></tr></table></figure></p>
+<p>补充：<br>有些广播只能通过动态方式注册，比如时间变化事件、屏幕亮灭事件、电量变更事件，因为这些事件触发频率通常很高，如果允许后台监听，会导致进程频繁创建和销毁，从而影响系统整体性能。</p>
+<h2 id="2-1-动态注册"><a href="#2-1-动态注册" class="headerlink" title="2.1. 动态注册"></a>2.1. 动态注册</h2><p>代码中调用 Context.registerReceiver() 方法动态注册 BroadcastReceiver。<br>在 Context 的实例被销毁时，调用 Context.unregisterReceiver() 解除注册的 BroadcastReceiver。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String ACTION = <span class="string">"com.test.action"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> CustomBroadcastReceiver mCustomBroadcastReceiver;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line"></span><br><span class="line">        mCustomBroadcastReceiver = <span class="keyword">new</span> CustomBroadcastReceiver();</span><br><span class="line"></span><br><span class="line">        IntentFilter intentFilter = <span class="keyword">new</span> IntentFilter();</span><br><span class="line">        intentFilter.addAction(ACTION);</span><br><span class="line"></span><br><span class="line">        registerReceiver(mCustomBroadcastReceiver, intentFilter);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        unregisterReceiver(mCustomBroadcastReceiver);</span><br><span class="line">        <span class="keyword">super</span>.onDestroy();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-2-静态注册"><a href="#2-2-静态注册" class="headerlink" title="2.2. 静态注册"></a>2.2. 静态注册</h2><p>在 AndroidManifest.xml 文件中进行注册。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;receiver android:enabled=[<span class="string">"true"</span> | <span class="string">"false"</span>]</span><br><span class="line">	android:exported=[<span class="string">"true"</span> | <span class="string">"false"</span>]</span><br><span class="line">	android:icon=<span class="string">"drawable resource"</span></span><br><span class="line">	android:label=<span class="string">"string resource"</span></span><br><span class="line">	android:name=<span class="string">"string"</span></span><br><span class="line">	android:permission=<span class="string">"string"</span></span><br><span class="line">	android:process=<span class="string">"string"</span> &gt;</span><br><span class="line">	&lt;intent-filter&gt;</span><br><span class="line">		&lt;action android:name=<span class="string">"android.net.conn.CONNECTIVITY_CHANGE"</span> /&gt;</span><br><span class="line">		&lt;action android:name=<span class="string">"com.test.action"</span> /&gt;</span><br><span class="line">	&lt;/intent-filter&gt;</span><br><span class="line">&lt;/receiver&gt;</span><br></pre></td></tr></table></figure></p>
+<p>android:exported  —— 此broadcastReceiver能否接收其他App的发出的广播，这个属性默认值有点意思，其默认值是由receiver中有无intent-filter决定的，如果有intent-filter，默认值为true，否则为false。（同样的，activity/service中的此属性默认值一样遵循此规则）同时，需要注意的是，这个值的设定是以application或者application user id为界的，而非进程为界（一个应用中可能含有多个进程）；<br>android:name  —— 此broadcastReceiver类名；<br>android:permission  ——如果设置，具有相应权限的广播发送方发送的广播才能被此broadcastReceiver所接收；<br>android:process  —— broadcastReceiver运行所处的进程。默认为app的进程。可以指定独立的进程（Android四大基本组件都可以通过此属性指定自己的独立进程）<br>intent-filter —— 指定此广播接收器将用于接收特定的广播类型。<br>广播的类型既可以是系统广播，比如<code>&lt;action android:name=&quot;android.net.conn.CONNECTIVITY_CHANGE&quot; /&gt;</code>表示网络变化；也可以是自定义广播<code>&lt;action android:name=&quot;com.test.action&quot; /&gt;</code>。</p>
+<h1 id="3-广播的发送"><a href="#3-广播的发送" class="headerlink" title="3. 广播的发送"></a>3. 广播的发送</h1><p>广播根据发送方式的不同，可以分为<strong>普通广播</strong>,<strong>有序广播</strong>和<strong>粘性广播</strong>。  </p>
+<p>广播实际发送的是意图（Intent），通过Action属性与Receiver匹配。<br>如果发送广播时有相应的权限要求，BroadCastReceiver如果想要接收此广播，也需要有相应的权限。<br>setAction(…)对应BroadcastReceiver中的intent-Filter中的action。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent();</span><br><span class="line">intent.setAction(BROADCAST_ACTION);</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-1-普通广播"><a href="#3-1-普通广播" class="headerlink" title="3.1. 普通广播"></a>3.1. 普通广播</h2><p>普通的广播是不在意顺序的，最简单的理解是同时可以收到这个广播。如果应用是动态注册这个广播的，且广播发送时这个进程还活着，那么当然可以并发的把广播尽快地传送出去是最好的。<br>但是，如果是通过AndroidManifest.xml静态注册的情况，也就是说这个广播首先要把一个进程启动起来，这时并发启动很多进程就是个问题了。Android目前的做法是，对这种静态的广播接收者，自动按有序广播的方式来串行处理。但是这对应用是透明的，应用不能假设系统已经把静态的无序广播当成有序广播来处理。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Context.sendBroadcast(Intent intent);</span><br><span class="line">Context.sendBroadcast(Intent intent, String receiverPermission);</span><br></pre></td></tr></table></figure></p>
+<p>发送给特定的用户<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Context.sendBroadcastAsUser(Intent intent, UserHandle user);</span><br><span class="line">Context.sendBroadcastAsUser(Intent intent, UserHandle user, String receiverPermission);</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-2-有序广播"><a href="#3-2-有序广播" class="headerlink" title="3.2. 有序广播"></a>3.2. 有序广播</h2><p>有序广播的有序广播中的“有序”是针对广播接收者而言的，指的是发送出去的广播被BroadcastReceiver按照先后循序接收。有序广播的定义过程与普通广播无异，只是其的主要发送方式变为：sendOrderedBroadcast(intent, receiverPermission, …)。<br>对于有序广播，其主要特点总结如下：</p>
+<ul>
+<li>多个具有当前已经注册且有效的BroadcastReceiver接收有序广播时，是按照先后顺序接收的，先后顺序判定标准遵循为：将当前系统中所有有效的动态注册和静态注册的BroadcastReceiver按照priority属性值从大到小排序，对于具有相同的priority的动态广播和静态广播，动态广播会排在前面。</li>
+<li>先接收的BroadcastReceiver可以对此有序广播进行截断，使后面的BroadcastReceiver不再接收到此广播，也可以对广播进行修改，使后面的BroadcastReceiver接收到广播后解析得到错误的参数值。当然，一般情况下，不建议对有序广播进行此类操作，尤其是针对系统中的有序广播。<br>有序广播因为要处理消息的处理结果，所以要复杂一些。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sendOrderedBroadcast(Intent intent, String receiverPermission, </span><br><span class="line">		BroadcastReceiver resultReceiver, Handler scheduler, <span class="keyword">int</span> initialCode, </span><br><span class="line">		String initialData, Bundle initialExtras);</span><br></pre></td></tr></table></figure>
+<p>如果只是想让广播可以按优先级来收取，并不在意处理的结果，可以用下面的版本：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sendOrderedBroadcast(Intent intent, String receiverPermission);</span><br></pre></td></tr></table></figure></p>
+<p>同样，在多用户环境下，也可以选择给哪个用户发广播：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sendOrderedBroadcastAsUser(Intent intent, UserHandle user, String receiverPermission, </span><br><span class="line">                BroadcastReceiver resultReceiver, Handler scheduler, <span class="keyword">int</span> initialCode, </span><br><span class="line">                String initialData, Bundle initialExtras);</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-3-粘性广播"><a href="#3-3-粘性广播" class="headerlink" title="3.3. 粘性广播"></a>3.3. 粘性广播</h2><p>从Android 5.0(API 21)开始，因为安全性的问题，官方已经正式废弃了粘性广播。<br>在这里还是稍作介绍：<br>广播已经发出，但是没有接收器与广播匹配。或者在广播发出之后，广播接收器才注册。此时，广播接收器就无法接收广播。<br>Android引入了StickyBroadcast，在广播发送结束后会保存刚刚发送的广播（Intent），这样当接收者注册完Receiver后就可以继续使用刚才的广播。如果在接收者注册完成前发送了多条相同Action的粘性广播，注册完成后只会收到一条该Action的广播，并且消息内容是最后一次广播内容。<br>系统网络状态的改变发送的广播就是粘性广播。<br>粘性广播通过Context的<a href="http://developer.android.com/reference/android/content/Context.html#sendStickyBroadcast(android.content.Intent" target="_blank" rel="noopener">sendStickyBroadcast(Intent)</a>)接口发送，需要添加权限<code>&lt;uses-permission android:name=&quot;android.permission.BROADCAST_STICKY&quot;/&gt;</code><br>也可以通过Context的<a href="http://developer.android.com/reference/android/content/Context.html#removeStickyBroadcast(android.content.Intent" target="_blank" rel="noopener">removeStickyBroadcast</a>)(<a href="http://developer.android.com/reference/android/content/Intent.html" target="_blank" rel="noopener">Intent</a>)接口移除缓存的粘性广播。</p>
+<h1 id="4-本地广播LocalBroadcastManager"><a href="#4-本地广播LocalBroadcastManager" class="headerlink" title="4. 本地广播LocalBroadcastManager"></a>4. 本地广播LocalBroadcastManager</h1><p>LocalBroadcastManager除了能解决BroadcastReceiver进程间安全性问题外，相对Context操作的BroadcastReceiver而言还具有更高的运行效率。</p>
+<ul>
+<li><p>发送广播</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LocalBroadcastManager.getInstance(context).sendBroadcast(Intent);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注册广播</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LocalBroadcastManager.getInstance(context).registerReceiver(BroadcastReceiver, IntentFilter);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解除广播 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LocalBroadcastManager.getInstance(context).unregisterReceiver(BroadcastReceiver);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>其他同普通广播。</p>
+<h1 id="5-生命周期"><a href="#5-生命周期" class="headerlink" title="5. 生命周期"></a>5. 生命周期</h1><p>BroadcastReceiver<strong>在onReceive函数执行结束后即表示生命周期结束</strong>，所以不适合在onReceive中做绑定服务操作，结束后若某个进程只含有该BroadcastReceiver，则优先级将降低可能被系统回收，所以<strong>BroadcastReceiver中不适合做一些异步操作</strong>，如新建线程下载数据，BroadcastReceiver结束后可能在异步操作完成前进程已经被系统kill。<br>同时由于ANR限制BroadcastReceiver的onReceive函数必须在10秒内完成，而且onReceive默认会在主线程中执行，所以<strong>BroadcastReceiver中不适合做一些耗时操作</strong>，对于耗时操作需要交给service处理，比如网络或数据库耗时操作、对话框的显示(因为现实时间可能超时，用Notification代替)。</p>
+<h1 id="6-安全性"><a href="#6-安全性" class="headerlink" title="6. 安全性"></a>6. 安全性</h1><p>BroadcastReceiver的设计初衷就是从全局考虑的，可以方便应用程序和系统、应用程序之间、应用程序内的通信，所以对单个应用程序而言BroadcastReceiver是存在安全性问题的，相应问题及解决如下：</p>
+<ul>
+<li><p>当应用程序发送某个广播时系统会将发送的Intent与系统中所有注册的BroadcastReceiver的IntentFilter进行匹配，若匹配成功则执行相应的onReceive函数。可以通过类似sendBroadcast(Intent, String)的接口<strong>在发送广播时指定接收者必须具备的permission</strong>。或通过Intent.setPackage设置广播仅对某个程序有效。</p>
+</li>
+<li><p>当应用程序注册了某个广播时，即便设置了IntentFilter还是会接收到来自其他应用程序的广播进行匹配判断。对于动态注册的广播可以通过类似registerReceiver(BroadcastReceiver, IntentFilter, String, android.os.Handler)的接口<strong>指定发送者必须具备的permission</strong>，对于静态注册的广播可以通过<strong>android:exported=”false”属性</strong>表示接收者对外部应用程序不可用，即不接受来自外部的广播。</p>
+</li>
+<li><p>上面两个问题其实都可以通过LocalBroadcastManager来解决，LocalBroadcastManager只会将广播限定在当前应用程序中</p>
+</li>
+</ul>
+<h1 id="7-参考"><a href="#7-参考" class="headerlink" title="7. 参考"></a>7. 参考</h1><p><a href="http://www.cnblogs.com/trinea/archive/2012/11/09/2763182.html" target="_blank" rel="noopener">Android BroadcastReceiver介绍</a><br><a href="http://www.cnblogs.com/lwbqqyumidi/p/4168017.html" target="_blank" rel="noopener">Android总结篇系列：Android广播机制</a><br><a href="https://yq.aliyun.com/articles/53919" target="_blank" rel="noopener">说说Android的广播(1) - 普通广播,有序广播和粘性广播</a>  </p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -191,7 +277,7 @@
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -204,66 +290,113 @@
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/Android/Broadcast-Receiver.html" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/Android/Android-Gradle权威指南-1-Gradle入门.html" class="archive-article-date">
-  	<time datetime="2018-08-16T05:45:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-16</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/Android/Adapter的优化写法.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Adapter的优化写法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/Android/Android异常之ANR.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Android异常之ANR</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/Android/Android-Gradle权威指南-1-Gradle入门.html">Android Gradle权威指南 1 - Gradle入门</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Android//" class="article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
+        
+        
+    </div>
+</aside>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
   
   
-    </div></section>
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -286,8 +419,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

@@ -152,6 +152,181 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Dagger2-的初步了解和使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Android/Dagger2-的初步了解和使用.html">Dagger2 的初步了解和使用</a>
+    </h1>
+  
+
+        
+        <a href="/Android/Dagger2-的初步了解和使用.html" class="archive-article-date">
+  	<time datetime="2017-03-12T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Dagger2？"><a href="#Dagger2？" class="headerlink" title="Dagger2？"></a>Dagger2？</h1><p>Dagger 是 Java 平台的依赖注入库。在 J2EE 开发上流行甚广的 Spring 就是一个依赖注入库。此外还有 Google 的 Guice 和 Square 的 Dagger1。但它们都是是通过在运行时读取注解来实现依赖注入的，依赖的生成和注入需要依靠 Java 的反射机制，这对于对性能非常敏感的 Android 来说是一个硬伤。</p>
+<p>Dagger 同样使用注解来实现依赖注入，但它利用 APT(Annotation Process Tool) 在编译时生成辅助类，这些类继承特定父类或实现特定接口，程序在运行时 Dagger 加载这些辅助类，调用相应接口完成依赖生成和注入。Dagger 对于程序的性能影响非常小，因此更加适用于 Android 应用的开发。</p>
+<h1 id="开始之前"><a href="#开始之前" class="headerlink" title="开始之前"></a>开始之前</h1><p>在了解 Dagger2 之前，请务必先通晓两个概念：  </p>
+<ol>
+<li><a href="http://a.codekk.com/detail/Android/%E6%89%94%E7%89%A9%E7%BA%BF/%E5%85%AC%E5%85%B1%E6%8A%80%E6%9C%AF%E7%82%B9%E4%B9%8B%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5" target="_blank" rel="noopener">依赖注入（Dependency Injection : DI）</a>：面向对象编程的一种模式，最大的作用是解耦。  </li>
+<li><a href="http://a.codekk.com/detail/Android/Trinea/%E5%85%AC%E5%85%B1%E6%8A%80%E6%9C%AF%E7%82%B9%E4%B9%8B%20Java%20%E6%B3%A8%E8%A7%A3%20Annotation" target="_blank" rel="noopener">Java 注解（Annotation）</a>：了解到哪些是 Java 原生支持的注解。  </li>
+</ol>
+<h1 id="Dagger2-带给我们的注解"><a href="#Dagger2-带给我们的注解" class="headerlink" title="Dagger2 带给我们的注解"></a>Dagger2 带给我们的注解</h1><p>下文尝试尽量抛开特定的场景（比如 MVP 模式），以更具有普适性的代码，从骨架开始，慢慢去丰满血肉，更全面的去理解这里这些注解的使用。</p>
+<h3 id="Inject"><a href="#Inject" class="headerlink" title="@Inject"></a>@Inject</h3><p>假设 MainActivity 依赖一个 Tester 的类，代码应该如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Tester</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Tester</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Inject</span> </span><br><span class="line">    Tester tester;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>@Inject 有两个作用：</strong>  </p>
+<ol>
+<li>标记 Tester 的构造方法，通知 Dagger2 在需要该类实例时可以通过该构造函数 new 出相关实例从而提供依赖。提供依赖的方式还有 @Provide ，下面细说。  </li>
+<li>标记 MainActivity 的 Tester 变量，通知 Dagger2 该变量实例需要由它来提供，也就是上述的需要 Dagger2 去 new 出 Tester 的实例 tester 。  </li>
+</ol>
+<p>我们另外还需要一个中间件去连接<strong>依赖提供方</strong>和<strong>依赖使用方</strong>，这就是 @Component ，详细的内容在下面介绍，先看下这个例子中的 TestComponent：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TestComponent</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inject</span><span class="params">(CActivity cActivity)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 MainActivity 的 onCreate() 加入：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    ...</span><br><span class="line">    DaggerTestComponent.builder().build().inject(<span class="keyword">this</span>);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>DaggerTestComponent 是 Dagger2 帮我们生成的类，命名规则就是在我们定义的接口名称前加上Dagger，实现了我们之前定义的 TestComponent 接口。执行完这一行代码，tester 就已经不是 null 了。</p>
+<h3 id="Provides"><a href="#Provides" class="headerlink" title="@Provides"></a>@Provides</h3><p>@Inject 标记构造方法来生成依赖对象的方式有它的局限性，如：  </p>
+<ol>
+<li>接口（Interface），没有构造方法，自然无处标记。  </li>
+<li>第三方库提供的类，不适合去直接修改源码，标记构造方法。  </li>
+</ol>
+<p>对于上述的问题，就需要 @Provide 来提供依赖：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestModule</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Provides</span></span><br><span class="line">    <span class="function">Tester <span class="title">provideTester</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Tester();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>需要注意的是：</strong>  </p>
+<ol>
+<li>@Provides 只能用于标记非构造方法，并且该方法必须在 @Moudle 内部。  </li>
+<li>@Provides 修饰的方法的方法名建议以 provide 开头。  </li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span>(modules = TestModule.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TestComponent</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inject</span><span class="params">(CActivity cActivity)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里跟之前使用 @Inject 提供依赖时的 Component 不同，标识了提供依赖的 TestModule。 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Inject</span> </span><br><span class="line">    Tester tester;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(@Nullable Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        DaggerTestComponent.builder().testModule(<span class="keyword">new</span> TestModule()).build().inject(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>DaggerTestComponent 也同样多了 testModule() 方法，参数就是我们自己定义的 TestModule。</p>
+<h3 id="Module"><a href="#Module" class="headerlink" title="@Module"></a>@Module</h3><p>@Module 一般用来标记类，该注解告知 Dagger2 可以到该类中寻找需要的依赖。上述的 @Provides 则标记提供依赖实例的方法。两者都是一起使用的。  </p>
+<h3 id="Component"><a href="#Component" class="headerlink" title="@Component"></a>@Component</h3><p>Component一般用来标注接口，如上文所说，作用在于作为<strong>依赖提供方</strong>和<strong>依赖使用方</strong>沟通的桥梁。</p>
+<p>更重要的一点在于：Component 可以组合不同的 Module 和 Component。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span>(dependencies = ApplicationComponent.class, modules = ActivityModule.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ActivityComponent</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>多个 Module 和 Component 的情况：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span>(</span><br><span class="line">dependencies = &#123;Component1.class,Component2.class,...&#125;, </span><br><span class="line">modules = &#123;Module1.class,Module1.class,...&#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ActivityComponent</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>敲黑板，划重点：</strong></p>
+<ul>
+<li><p>Component 和它依赖的其他 Component 的 @Scope 作用域（@Scope下文会详细介绍）不能相同。</p>
+</li>
+<li><p>如果在依赖使用方需要依赖的对象并不是由当前直接的 Component 的 Module 提供的，而是由其所依赖的其他 Component 的 Module 提供的。那么就在被依赖的 Component 中就需要提供一个返回值为这个被依赖的 Compnent 的 Module 提供的依赖对象的方法，方法名可以随意。（贼™绕，血崩！）  </p>
+</li>
+</ul>
+<p>举个栗子：  </p>
+<p>这里有一个 AModule 和 AComponent：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AModule</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Provides</span></span><br><span class="line">    <span class="function">Tester <span class="title">provideTester</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Tester();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span>(modules = AModule.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AComponent</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>还有一个依赖于 AComponent 的 BComponent：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span>(dependencies = AComponent.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BComponent</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inject</span><span class="params">(MainActivity mainActivity)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 MainActivity 中就依赖 Tester 对象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Inject</span> </span><br><span class="line">    Tester tester;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这么写的话，编译器就不干了…我们需要在被依赖的 ACompnent 中添加返回值为 Tester 的方法，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span>(modules = AModule.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AComponent</span> </span>&#123;</span><br><span class="line">    <span class="function">Tester <span class="title">getTester</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>栗子举完了，但是这里我仍有个疑惑，为何这里这么不智能？需要显示去提供依赖？明明 @Subcomponent （下文详述）就可以很智能的去父 Component 中查找缺失的依赖…</p>
+<h3 id="Subcomponent"><a href="#Subcomponent" class="headerlink" title="@Subcomponent"></a>@Subcomponent</h3><p>@Subcomponent 其功能效果类似 component 的 dependencies。但是使用 @Subcomponent 不需要在父 component 中显式添加子 component 需要用到的对象，只需要添加返回子 Component 的方法即可，子 Component 能自动在父 Component 中查找缺失的依赖。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">// 父Component</span><br><span class="line">@PerApp</span><br><span class="line">@Component(modules = AppModule.class)</span><br><span class="line">public AppComponent&#123;</span><br><span class="line">    ActivityComponent getActivityComponent();  // 1.只需要在父Component添加返回子Component的方法即可</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 子Component</span><br><span class="line">@PerAcitivity   // 2.注意子 Component 的 Scope 范围小于父 Component </span><br><span class="line">@Subcomponent(modules = ActivityModule.class)   // 3.使用 @Subcomponent 注解</span><br><span class="line">public ActivityComponent&#123;</span><br><span class="line">    void inject(MainActivity activity); </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class App extends Application &#123;</span><br><span class="line"></span><br><span class="line">    AppComponent mAppComponent;</span><br><span class="line">    </span><br><span class="line">    @Inject</span><br><span class="line">    ToastUtil toastUtil;</span><br><span class="line">    </span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate() &#123;</span><br><span class="line">        super.onCreate();</span><br><span class="line"></span><br><span class="line">        mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public AppComponent getAppComponent()&#123;</span><br><span class="line">        return mAppComponent;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class SomeActivity extends Activity&#123;</span><br><span class="line">    public void onCreate(Bundle savedInstanceState)&#123;</span><br><span class="line">        ...</span><br><span class="line">        App.getAppComponent().getActivityComponent().inject(this);//4.调用getActivityComponent方法创建出子Component</span><br><span class="line">    &#125;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@Subcomponent 和 Component 在使用最大的差异就在于：<br>当我们使用的 @Subcomponent，父 Component 可以完全不暴露自己，而只把子 Component 传递给其使用者。</p>
+<h3 id="Qualifier"><a href="#Qualifier" class="headerlink" title="@Qualifier"></a>@Qualifier</h3><blockquote>
+<p>这段内容引自：<a href="http://a.codekk.com/detail/Android/%E6%89%94%E7%89%A9%E7%BA%BF/Dagger%20%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90" target="_blank" rel="noopener">Dagger 源码解析</a></p>
+</blockquote>
+<p>如果有两类程序员，他们的能力值 power 分别是 5 和 1000，应该怎样让 Dagger 对他们做出区分呢？使用 @Qualifier 注解即可。</p>
+<p>(1). 创建一个 @Qualifier 注解，用于区分两类程序员：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Qualifier</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention</span>(RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Level &#123;</span><br><span class="line">  <span class="function">String <span class="title">value</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>(2). 为这两类程序员分别设置 @Provides 函数，并使用 @Qualifier 注解对他们做出不同的标记：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Provides</span> <span class="meta">@Level</span>(<span class="string">"low"</span>) <span class="function">Coder <span class="title">provideLowLevelCoder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Coder coder = <span class="keyword">new</span> Coder();</span><br><span class="line">    coder.setName(<span class="string">"战五渣"</span>);</span><br><span class="line">    coder.setPower(<span class="number">5</span>);</span><br><span class="line">    <span class="keyword">return</span> coder;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Provides</span> <span class="meta">@Level</span>(<span class="string">"high"</span>) <span class="function">Coder <span class="title">provideHighLevelCoder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Coder coder = <span class="keyword">new</span> Coder();</span><br><span class="line">    coder.setName(<span class="string">"大神"</span>);</span><br><span class="line">    coder.setPower(<span class="number">1000</span>);</span><br><span class="line">    <span class="keyword">return</span> coder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>(3). 在声明 @Inject 对象的时候，加上对应的 @Qualifier 注解：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Inject</span> <span class="meta">@Level</span>(<span class="string">"low"</span>) Coder lowLevelCoder;</span><br><span class="line"><span class="meta">@Inject</span> <span class="meta">@Level</span>(<span class="string">"high"</span>) Coder highLevelCoder;</span><br></pre></td></tr></table></figure>
+<p>此外，还有一个默认实现的注解 @Named，使用方法同上，源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Qualifier</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention</span>(RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Named &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** The name. */</span></span><br><span class="line">    <span class="function">String <span class="title">value</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Scope"><a href="#Scope" class="headerlink" title="@Scope"></a>@Scope</h3><p>Dagger2 可以通过 @Scope 自定义注解限定注解作用域。<br>我们直接看 Dagger2 自带的，通过 @Scope 实现的 @Singleton 注解，源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Scope</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention</span>(RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Singleton&#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>用法如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Singleton</span> <span class="comment">// @Inject 提供对象的单例模式</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Tester</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Tester</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Provides</span></span><br><span class="line"><span class="meta">@Singleton</span> <span class="comment">// @Provides 提供对象的单例模式</span></span><br><span class="line"><span class="function">Tester <span class="title">provideTester</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Tester();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Singleton</span> <span class="comment">// 标明该 Component 中有 Module 使用了 @Singleton</span></span><br><span class="line"><span class="meta">@Component</span>(modules = TestModule.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ActivityComponent</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inject</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果要使用我们自己的注解，比如在 MVP 中非常常见的 @PreActivity，将上面的 @Singleton 替换成 @PreActivity 即可，使用上无区别：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Scope</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> PreActivity &#123;&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="如何理解-Scope"><a href="#如何理解-Scope" class="headerlink" title="如何理解 @Scope"></a>如何理解 @Scope</h4><blockquote>
+<p><a href="http://www.jianshu.com/p/1d42d2e6f4a5" target="_blank" rel="noopener">参看：Android：dagger2让你爱不释手-重点概念讲解、融合篇</a></p>
+</blockquote>
+<p>这里我们使用一个最简单的 @Singleton 注解提供一个 AppComponent。编译后，Dagger2 自动帮我们生成如下代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Generated</span>(<span class="string">"dagger.internal.codegen.ComponentProcessor"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">DaggerAppComponent</span> <span class="keyword">implements</span> <span class="title">AppComponent</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> Provider&lt;Context&gt; provideContextProvider;</span><br><span class="line">  <span class="keyword">private</span> MembersInjector&lt;App&gt; appMembersInjector;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">DaggerAppComponent</span><span class="params">(Builder builder)</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">assert</span> builder != <span class="keyword">null</span>; <span class="comment">// 判断了只有第一次实例化这个Component时才会去执行下面的代码</span></span><br><span class="line">    initialize(builder);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Builder <span class="title">builder</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Builder();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initialize</span><span class="params">(<span class="keyword">final</span> Builder builder)</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">this</span>.provideContextProvider = ScopedProvider.create(AppModule_ProvideContextFactory.create(builder.appModule));</span><br><span class="line">    <span class="keyword">this</span>.appMembersInjector = App_MembersInjector.create((MembersInjector) MembersInjectors.noOp(), provideToastUtilProvider);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Context <span class="title">context</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">return</span> provideContextProvider.get();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inject</span><span class="params">(App app)</span> </span>&#123;  </span><br><span class="line">    appMembersInjector.injectMembers(app);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Builder</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> AppModule appModule;</span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Builder</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> AppComponent <span class="title">build</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">      <span class="keyword">if</span> (appModule == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"appModule must be set"</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> DaggerAppComponent(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> Builder <span class="title">appModule</span><span class="params">(AppModule appModule)</span> </span>&#123;  </span><br><span class="line">      <span class="keyword">if</span> (appModule == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"appModule"</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">this</span>.appModule = appModule;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>传递进来的 appModule 首先交由 AppModule_ProvideContextFactory：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Generated</span>(<span class="string">"dagger.internal.codegen.ComponentProcessor"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">AppModule_ProvideContextFactory</span> <span class="keyword">implements</span> <span class="title">Factory</span>&lt;<span class="title">Context</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> AppModule <span class="keyword">module</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">AppModule_ProvideContextFactory</span><span class="params">(AppModule <span class="keyword">module</span>)</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">assert</span> <span class="keyword">module</span> != <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">this</span>.<span class="keyword">module</span> = <span class="keyword">module</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Context <span class="title">get</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">    Context provided = <span class="keyword">module</span>.provideContext(); <span class="comment">// 这就是我们在 AppModule 中定义的方法，去提供 Context 对象的实例。</span></span><br><span class="line">    <span class="keyword">if</span> (provided == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"Cannot return null from a non-@Nullable @Provides method"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> provided;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Factory&lt;Context&gt; <span class="title">create</span><span class="params">(AppModule <span class="keyword">module</span>)</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> AppModule_ProvideContextFactory(<span class="keyword">module</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个类的功能其实就是维护了 Context 对象，其他类在想使用时就可以从这里拿。<br>继续看之前，AppModule_ProvideContextFactory 通过工厂模式创建了自己的实例后就把自己传递给了 ScopedProvider：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ScopedProvider</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">Provider</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object UNINITIALIZED = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Factory&lt;T&gt; factory;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">volatile</span> Object instance = UNINITIALIZED;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">ScopedProvider</span><span class="params">(Factory&lt;T&gt; factory)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">assert</span> factory != <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">this</span>.factory = factory;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>) <span class="comment">// cast only happens when result comes from the factory</span></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// double-check idiom from EJ2: Item 71</span></span><br><span class="line">    Object result = instance;</span><br><span class="line">    <span class="keyword">if</span> (result == UNINITIALIZED) &#123;</span><br><span class="line">      <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">        result = instance;</span><br><span class="line">        <span class="keyword">if</span> (result == UNINITIALIZED) &#123;</span><br><span class="line">          instance = result = factory.get();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (T) result;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Returns a new scoped provider for the given factory. */</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Provider&lt;T&gt; <span class="title">create</span><span class="params">(Factory&lt;T&gt; factory)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (factory == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ScopedProvider&lt;T&gt;(factory);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>对之前的 Context 对象，做一次双重校验锁，目的是为了实现对象的线程安全。<br>在用到 Context 对象的地方，都是类似于 DaggerAppComponent 中的 provideContextProvider.get() 方法去获取实例。</p>
+<p>总结来说，@Scope本身并不控制对象的生命周期，其生命周期其实还是看生成的 Component 对象的生命周期。</p>
+<h1 id="后话"><a href="#后话" class="headerlink" title="后话"></a>后话</h1><p>其实知晓 Dagger2 注解的使用，大致了解 Dagger2 的原理其实并不是难点或者说重点。<br>在实际工程中如何灵活去使用它，如何根据业务的需要切分 Module 和 Component 才是我们在之后需要时间不断去打磨。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Android//" class="article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/Android/Dagger2-的初步了解和使用.html">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Adapter的优化写法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -165,7 +340,7 @@
 
         
         <a href="/Android/Adapter的优化写法.html" class="archive-article-date">
-  	<time datetime="2018-08-16T05:45:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-16</time>
+  	<time datetime="2016-11-13T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-14</time>
 </a>
         
       </header>
@@ -237,29 +412,88 @@
 
 
   
-    <article id="post-Android-Gradle权威指南-1-Gradle入门" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Broadcast-Receiver" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/Android/Android-Gradle权威指南-1-Gradle入门.html">Android Gradle权威指南 1 - Gradle入门</a>
+      <a class="article-title" href="/Android/Broadcast-Receiver.html">Broadcast Receiver</a>
     </h1>
   
 
         
-        <a href="/Android/Android-Gradle权威指南-1-Gradle入门.html" class="archive-article-date">
-  	<time datetime="2018-08-16T05:45:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-16</time>
+        <a href="/Android/Broadcast-Receiver.html" class="archive-article-date">
+  	<time datetime="2016-11-13T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-14</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Gradle-Wrapper"><a href="#Gradle-Wrapper" class="headerlink" title="Gradle Wrapper"></a>Gradle Wrapper</h2><p>是对Gradle的一层包装，封装了统一的Gradle版本和配置。</p>
-<p>利用<code>gradle wrapper</code>命令，自动生成如下的文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+        <p>Broadcast包括两个概念，广播发送者和广播接收者(Receiver)，这里的广播实际就是指 Intent，程序可以自己发送广播自己接收，也可以接受系统或其他应用的广播或是发送广播给其他应用程序。<br>发送者可以通过类似 <a href="http://developer.android.com/reference/android/content/Context.html#sendBroadcast(android.content.Intent" target="_blank" rel="noopener">Context.sendBroadcast()</a>) 接口发送广播，接收者通过  <a href="http://developer.android.com/reference/android/content/Context.html#registerReceiver(android.content.BroadcastReceiver,%20android.content.IntentFilter" target="_blank" rel="noopener">Context.registerReceiver()</a>) 动态注册或在 AndroidManifest.xml 文件中通过 <receiver> 标签静态注册。注册完成后，当发送者发送某个广播时系统会将发送的广播(Intent)与系统中所有注册的符合条件的接收者(Receiver)的 IntentFilter 进行匹配，若匹配成功则执行相应接收者的 onReceive 函数。  </receiver></p>
+<h1 id="1-广播的接收"><a href="#1-广播的接收" class="headerlink" title="1. 广播的接收"></a>1. 广播的接收</h1><p>自定义广播接收器需要继承基类<code>BroadcastReceiver</code>或<code>WakefulBroadcastReceiver</code>，并实现抽象方法<code>onReceive(Context context, Intent intent)</code>。广播接收器接收到相应广播后，会自动回到onReceive(..)方法。默认情况下，广播接收器也是运行在 UI 线程，因此，<code>onReceive()</code>方法中不能执行太耗时的操作。否则将因此 ANR。</p>
+<blockquote>
+<p><strong>BroadcastReceiver</strong>：不会保证CPU的持续工作。当你执行长时间的操作时，CPU可能会在中途陷入休眠。<br><strong>WakefulBroadcastReceiver</strong>：保证CPU持续工作直到操作完成。<br><a href="http://stackoverflow.com/questions/26380534/broadcastreceiver-vs-wakefulbroadcastreceiver" target="_blank" rel="noopener">BroadcastReceiver Vs WakefulBroadcastReceiver</a></p>
+</blockquote>
+<h2 id="1-1-继承-BroadcastReceiver"><a href="#1-1-继承-BroadcastReceiver" class="headerlink" title="1.1. 继承 BroadcastReceiver"></a>1.1. 继承 BroadcastReceiver</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomBroadcastReceiver</span> <span class="keyword">extends</span> <span class="title">BroadcastReceiver</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"CustomBroadcastReceiver"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//TODO</span></span><br><span class="line">        Log.i(TAG, <span class="string">"receive broadcast"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="1-2-继承-WakefulBroadcastReceiver"><a href="#1-2-继承-WakefulBroadcastReceiver" class="headerlink" title="1.2. 继承 WakefulBroadcastReceiver"></a>1.2. 继承 WakefulBroadcastReceiver</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomBroadcastReceiver</span> <span class="keyword">extends</span> <span class="title">WakefulBroadcastReceiver</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"CustomBroadcastReceiver"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//TODO</span></span><br><span class="line">        Log.i(TAG, <span class="string">"receive broadcast"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="2-广播的注册"><a href="#2-广播的注册" class="headerlink" title="2. 广播的注册"></a>2. 广播的注册</h1><p>广播的注册分为<strong>动态注册</strong>和<strong>静态注册</strong>。</p>
+<ul>
+<li><strong>对bindService的调用</strong>，<receiver>注册的广播，在onReceive结束后广播即不存在，所以不能在其中给自己异步传递结果，如bindService而只能使用startService，如果想跟service交互可使用peekService。</receiver></li>
+<li><strong>手动控制</strong>。registerReceiver为动态注册，自己可以手动注册或是取消注册；<receiver>标签为静态注册，由系统开机时自动扫描注册，所以无法手动控制，开机一直运行中。</receiver></li>
+<li><strong>资源消耗不同</strong>。registerReceiver可以手动控制，所以适当的注册和取消注册能节省系统资源，<receiver>标签系统开机后一直有效。</receiver></li>
+<li><strong>有效期不同</strong>。通过registerReceiver注册的BroadcastReceiver在对其进行注册的Context对象”销毁”了或者调用了unregisterReceiver方法时也就失效了，而通过<receiver>标签注册的BroadcastReceiver只要应用程序没有被删除就一直有效。</receiver></li>
+<li><strong>对registerReceiver函数的调用许可不同</strong>。通过registerReceiver注册的BroadcastReceiver在其onReceive函数中可以再次调用某个Context的registerReceiver函数，而通过<receiver>标签注册的BroadcastReceiver不允许再调用某个Context的registerReceiver函数 。</receiver></li>
+<li><strong>使用情况不同</strong>。对于自己发送和接受的广播可以通过registerReceiver注册，对于系统常用广播的接收通常用<receiver>标签注册。</receiver></li>
+<li>在 Android 3.1/API level 11 之前，静态注册的广播接收器即使在APP退出的情况下依然可以接收到广播。<br>但是从 3.1 之后就不成立了。原因在于 Intent 与广播相关的 flag 增加了参数：FLAG_INCLUDE_STOPPED_PACKAGES 和 FLAG_EXCLUDE_STOPPED_PACKAGES。</li>
+</ul>
+<blockquote>
+<p>FLAG_INCLUDE_STOPPED_PACKAGES：包含已经停止的包（停止：即包所在的进程已经退出）<br>FLAG_EXCLUDE_STOPPED_PACKAGES：不包含已经停止的包</p>
+</blockquote>
+<p>自 3.1 开始，系统本身则增加了对所有app当前是否处于运行状态的跟踪。在发送广播时，不管是什么广播类型，系统默认直接增加了值为FLAG_EXCLUDE_STOPPED_PACKAGES的flag，导致即使是静态注册的广播接收器，对于其所在进程已经退出的app，同样无法接收到广播。<br>对于系统广播，由于是系统内部直接发出，无法更改此intent flag值，因此，3.1开始对于静态注册的接收系统广播的BroadcastReceiver，如果App进程已经退出，将不能接收到广播。<br>但是对于自定义的广播，可以通过复写此flag为FLAG_INCLUDE_STOPPED_PACKAGES，使得静态注册的BroadcastReceiver，即使所在App进程已经退出，也能能接收到广播，并会启动应用进程，但此时的BroadcastReceiver是重新新建的。<br>对于动态注册类型的BroadcastReceiver，由于此注册和取消注册实在其他组件（如Activity）中进行，因此，不受此改变影响。<br>在3.1以前，相信不少app可能通过静态注册方式监听各种系统广播，以此进行一些业务上的处理（如即时app已经退出，仍然能接收到，可以启动service等..）,3.1后，静态注册接受广播方式的改变，将直接导致此类方案不再可行。于是，通过将Service与App本身设置成不同的进程已经成为实现此类需求的可行替代方案。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent();</span><br><span class="line">intent.setAction(BROADCAST_ACTION);</span><br><span class="line">intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES); </span><br><span class="line">sendBroadcast(intent);</span><br></pre></td></tr></table></figure></p>
+<p>补充：<br>有些广播只能通过动态方式注册，比如时间变化事件、屏幕亮灭事件、电量变更事件，因为这些事件触发频率通常很高，如果允许后台监听，会导致进程频繁创建和销毁，从而影响系统整体性能。</p>
+<h2 id="2-1-动态注册"><a href="#2-1-动态注册" class="headerlink" title="2.1. 动态注册"></a>2.1. 动态注册</h2><p>代码中调用 Context.registerReceiver() 方法动态注册 BroadcastReceiver。<br>在 Context 的实例被销毁时，调用 Context.unregisterReceiver() 解除注册的 BroadcastReceiver。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String ACTION = <span class="string">"com.test.action"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> CustomBroadcastReceiver mCustomBroadcastReceiver;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line"></span><br><span class="line">        mCustomBroadcastReceiver = <span class="keyword">new</span> CustomBroadcastReceiver();</span><br><span class="line"></span><br><span class="line">        IntentFilter intentFilter = <span class="keyword">new</span> IntentFilter();</span><br><span class="line">        intentFilter.addAction(ACTION);</span><br><span class="line"></span><br><span class="line">        registerReceiver(mCustomBroadcastReceiver, intentFilter);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        unregisterReceiver(mCustomBroadcastReceiver);</span><br><span class="line">        <span class="keyword">super</span>.onDestroy();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-2-静态注册"><a href="#2-2-静态注册" class="headerlink" title="2.2. 静态注册"></a>2.2. 静态注册</h2><p>在 AndroidManifest.xml 文件中进行注册。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;receiver android:enabled=[<span class="string">"true"</span> | <span class="string">"false"</span>]</span><br><span class="line">	android:exported=[<span class="string">"true"</span> | <span class="string">"false"</span>]</span><br><span class="line">	android:icon=<span class="string">"drawable resource"</span></span><br><span class="line">	android:label=<span class="string">"string resource"</span></span><br><span class="line">	android:name=<span class="string">"string"</span></span><br><span class="line">	android:permission=<span class="string">"string"</span></span><br><span class="line">	android:process=<span class="string">"string"</span> &gt;</span><br><span class="line">	&lt;intent-filter&gt;</span><br><span class="line">		&lt;action android:name=<span class="string">"android.net.conn.CONNECTIVITY_CHANGE"</span> /&gt;</span><br><span class="line">		&lt;action android:name=<span class="string">"com.test.action"</span> /&gt;</span><br><span class="line">	&lt;/intent-filter&gt;</span><br><span class="line">&lt;/receiver&gt;</span><br></pre></td></tr></table></figure></p>
+<p>android:exported  —— 此broadcastReceiver能否接收其他App的发出的广播，这个属性默认值有点意思，其默认值是由receiver中有无intent-filter决定的，如果有intent-filter，默认值为true，否则为false。（同样的，activity/service中的此属性默认值一样遵循此规则）同时，需要注意的是，这个值的设定是以application或者application user id为界的，而非进程为界（一个应用中可能含有多个进程）；<br>android:name  —— 此broadcastReceiver类名；<br>android:permission  ——如果设置，具有相应权限的广播发送方发送的广播才能被此broadcastReceiver所接收；<br>android:process  —— broadcastReceiver运行所处的进程。默认为app的进程。可以指定独立的进程（Android四大基本组件都可以通过此属性指定自己的独立进程）<br>intent-filter —— 指定此广播接收器将用于接收特定的广播类型。<br>广播的类型既可以是系统广播，比如<code>&lt;action android:name=&quot;android.net.conn.CONNECTIVITY_CHANGE&quot; /&gt;</code>表示网络变化；也可以是自定义广播<code>&lt;action android:name=&quot;com.test.action&quot; /&gt;</code>。</p>
+<h1 id="3-广播的发送"><a href="#3-广播的发送" class="headerlink" title="3. 广播的发送"></a>3. 广播的发送</h1><p>广播根据发送方式的不同，可以分为<strong>普通广播</strong>,<strong>有序广播</strong>和<strong>粘性广播</strong>。  </p>
+<p>广播实际发送的是意图（Intent），通过Action属性与Receiver匹配。<br>如果发送广播时有相应的权限要求，BroadCastReceiver如果想要接收此广播，也需要有相应的权限。<br>setAction(…)对应BroadcastReceiver中的intent-Filter中的action。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent();</span><br><span class="line">intent.setAction(BROADCAST_ACTION);</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-1-普通广播"><a href="#3-1-普通广播" class="headerlink" title="3.1. 普通广播"></a>3.1. 普通广播</h2><p>普通的广播是不在意顺序的，最简单的理解是同时可以收到这个广播。如果应用是动态注册这个广播的，且广播发送时这个进程还活着，那么当然可以并发的把广播尽快地传送出去是最好的。<br>但是，如果是通过AndroidManifest.xml静态注册的情况，也就是说这个广播首先要把一个进程启动起来，这时并发启动很多进程就是个问题了。Android目前的做法是，对这种静态的广播接收者，自动按有序广播的方式来串行处理。但是这对应用是透明的，应用不能假设系统已经把静态的无序广播当成有序广播来处理。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Context.sendBroadcast(Intent intent);</span><br><span class="line">Context.sendBroadcast(Intent intent, String receiverPermission);</span><br></pre></td></tr></table></figure></p>
+<p>发送给特定的用户<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Context.sendBroadcastAsUser(Intent intent, UserHandle user);</span><br><span class="line">Context.sendBroadcastAsUser(Intent intent, UserHandle user, String receiverPermission);</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-2-有序广播"><a href="#3-2-有序广播" class="headerlink" title="3.2. 有序广播"></a>3.2. 有序广播</h2><p>有序广播的有序广播中的“有序”是针对广播接收者而言的，指的是发送出去的广播被BroadcastReceiver按照先后循序接收。有序广播的定义过程与普通广播无异，只是其的主要发送方式变为：sendOrderedBroadcast(intent, receiverPermission, …)。<br>对于有序广播，其主要特点总结如下：</p>
+<ul>
+<li>多个具有当前已经注册且有效的BroadcastReceiver接收有序广播时，是按照先后顺序接收的，先后顺序判定标准遵循为：将当前系统中所有有效的动态注册和静态注册的BroadcastReceiver按照priority属性值从大到小排序，对于具有相同的priority的动态广播和静态广播，动态广播会排在前面。</li>
+<li>先接收的BroadcastReceiver可以对此有序广播进行截断，使后面的BroadcastReceiver不再接收到此广播，也可以对广播进行修改，使后面的BroadcastReceiver接收到广播后解析得到错误的参数值。当然，一般情况下，不建议对有序广播进行此类操作，尤其是针对系统中的有序广播。<br>有序广播因为要处理消息的处理结果，所以要复杂一些。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sendOrderedBroadcast(Intent intent, String receiverPermission, </span><br><span class="line">		BroadcastReceiver resultReceiver, Handler scheduler, <span class="keyword">int</span> initialCode, </span><br><span class="line">		String initialData, Bundle initialExtras);</span><br></pre></td></tr></table></figure>
+<p>如果只是想让广播可以按优先级来收取，并不在意处理的结果，可以用下面的版本：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sendOrderedBroadcast(Intent intent, String receiverPermission);</span><br></pre></td></tr></table></figure></p>
+<p>同样，在多用户环境下，也可以选择给哪个用户发广播：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sendOrderedBroadcastAsUser(Intent intent, UserHandle user, String receiverPermission, </span><br><span class="line">                BroadcastReceiver resultReceiver, Handler scheduler, <span class="keyword">int</span> initialCode, </span><br><span class="line">                String initialData, Bundle initialExtras);</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-3-粘性广播"><a href="#3-3-粘性广播" class="headerlink" title="3.3. 粘性广播"></a>3.3. 粘性广播</h2><p>从Android 5.0(API 21)开始，因为安全性的问题，官方已经正式废弃了粘性广播。<br>在这里还是稍作介绍：<br>广播已经发出，但是没有接收器与广播匹配。或者在广播发出之后，广播接收器才注册。此时，广播接收器就无法接收广播。<br>Android引入了StickyBroadcast，在广播发送结束后会保存刚刚发送的广播（Intent），这样当接收者注册完Receiver后就可以继续使用刚才的广播。如果在接收者注册完成前发送了多条相同Action的粘性广播，注册完成后只会收到一条该Action的广播，并且消息内容是最后一次广播内容。<br>系统网络状态的改变发送的广播就是粘性广播。<br>粘性广播通过Context的<a href="http://developer.android.com/reference/android/content/Context.html#sendStickyBroadcast(android.content.Intent" target="_blank" rel="noopener">sendStickyBroadcast(Intent)</a>)接口发送，需要添加权限<code>&lt;uses-permission android:name=&quot;android.permission.BROADCAST_STICKY&quot;/&gt;</code><br>也可以通过Context的<a href="http://developer.android.com/reference/android/content/Context.html#removeStickyBroadcast(android.content.Intent" target="_blank" rel="noopener">removeStickyBroadcast</a>)(<a href="http://developer.android.com/reference/android/content/Intent.html" target="_blank" rel="noopener">Intent</a>)接口移除缓存的粘性广播。</p>
+<h1 id="4-本地广播LocalBroadcastManager"><a href="#4-本地广播LocalBroadcastManager" class="headerlink" title="4. 本地广播LocalBroadcastManager"></a>4. 本地广播LocalBroadcastManager</h1><p>LocalBroadcastManager除了能解决BroadcastReceiver进程间安全性问题外，相对Context操作的BroadcastReceiver而言还具有更高的运行效率。</p>
+<ul>
+<li><p>发送广播</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LocalBroadcastManager.getInstance(context).sendBroadcast(Intent);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注册广播</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LocalBroadcastManager.getInstance(context).registerReceiver(BroadcastReceiver, IntentFilter);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解除广播 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LocalBroadcastManager.getInstance(context).unregisterReceiver(BroadcastReceiver);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>其他同普通广播。</p>
+<h1 id="5-生命周期"><a href="#5-生命周期" class="headerlink" title="5. 生命周期"></a>5. 生命周期</h1><p>BroadcastReceiver<strong>在onReceive函数执行结束后即表示生命周期结束</strong>，所以不适合在onReceive中做绑定服务操作，结束后若某个进程只含有该BroadcastReceiver，则优先级将降低可能被系统回收，所以<strong>BroadcastReceiver中不适合做一些异步操作</strong>，如新建线程下载数据，BroadcastReceiver结束后可能在异步操作完成前进程已经被系统kill。<br>同时由于ANR限制BroadcastReceiver的onReceive函数必须在10秒内完成，而且onReceive默认会在主线程中执行，所以<strong>BroadcastReceiver中不适合做一些耗时操作</strong>，对于耗时操作需要交给service处理，比如网络或数据库耗时操作、对话框的显示(因为现实时间可能超时，用Notification代替)。</p>
+<h1 id="6-安全性"><a href="#6-安全性" class="headerlink" title="6. 安全性"></a>6. 安全性</h1><p>BroadcastReceiver的设计初衷就是从全局考虑的，可以方便应用程序和系统、应用程序之间、应用程序内的通信，所以对单个应用程序而言BroadcastReceiver是存在安全性问题的，相应问题及解决如下：</p>
+<ul>
+<li><p>当应用程序发送某个广播时系统会将发送的Intent与系统中所有注册的BroadcastReceiver的IntentFilter进行匹配，若匹配成功则执行相应的onReceive函数。可以通过类似sendBroadcast(Intent, String)的接口<strong>在发送广播时指定接收者必须具备的permission</strong>。或通过Intent.setPackage设置广播仅对某个程序有效。</p>
+</li>
+<li><p>当应用程序注册了某个广播时，即便设置了IntentFilter还是会接收到来自其他应用程序的广播进行匹配判断。对于动态注册的广播可以通过类似registerReceiver(BroadcastReceiver, IntentFilter, String, android.os.Handler)的接口<strong>指定发送者必须具备的permission</strong>，对于静态注册的广播可以通过<strong>android:exported=”false”属性</strong>表示接收者对外部应用程序不可用，即不接受来自外部的广播。</p>
+</li>
+<li><p>上面两个问题其实都可以通过LocalBroadcastManager来解决，LocalBroadcastManager只会将广播限定在当前应用程序中</p>
+</li>
+</ul>
+<h1 id="7-参考"><a href="#7-参考" class="headerlink" title="7. 参考"></a>7. 参考</h1><p><a href="http://www.cnblogs.com/trinea/archive/2012/11/09/2763182.html" target="_blank" rel="noopener">Android BroadcastReceiver介绍</a><br><a href="http://www.cnblogs.com/lwbqqyumidi/p/4168017.html" target="_blank" rel="noopener">Android总结篇系列：Android广播机制</a><br><a href="https://yq.aliyun.com/articles/53919" target="_blank" rel="noopener">说说Android的广播(1) - 普通广播,有序广播和粘性广播</a>  </p>
 
       
 
@@ -294,7 +528,527 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/Android/Android-Gradle权威指南-1-Gradle入门.html">展开全文 >></a>
+          <a class="article-more-a" href="/Android/Broadcast-Receiver.html">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Android异常之ANR" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Android/Android异常之ANR.html">Android异常之ANR</a>
+    </h1>
+  
+
+        
+        <a href="/Android/Android异常之ANR.html" class="archive-article-date">
+  	<time datetime="2016-11-02T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>ANR：Application Not Responding，即应用无响应。</p>
+<p>可以通过 /data/anr/traces.txt 文件查看ANR信息。</p>
+<h3 id="ANR一般有三种类型"><a href="#ANR一般有三种类型" class="headerlink" title="ANR一般有三种类型"></a>ANR一般有三种类型</h3><ol>
+<li><p>KeyDispatchTimeout(5 seconds)<br>按键或触摸事件在特定时间内无响应</p>
+</li>
+<li><p>BroadcastTimeout(10 seconds)<br>BroadcastReceiver在特定时间内无法处理完成</p>
+</li>
+<li><p>ServiceTimeout(20 seconds)<br>Service在特定的时间内无法处理完成</p>
+</li>
+</ol>
+<h3 id="可能的原因"><a href="#可能的原因" class="headerlink" title="可能的原因"></a>可能的原因</h3><ul>
+<li>主线程被IO操作（从4.0之后网络IO不允许在主线程中）阻塞。</li>
+<li>主线程中存在耗时的计算</li>
+<li>主线程中错误的操作，比如Thread.wait或者Thread.sleep等 Android系统会监控程序的响应状况，一旦出现下面两种情况，则弹出ANR对话框</li>
+<li>应用在5秒内未响应用户的输入事件（如按键或者触摸）</li>
+<li>BroadcastReceiver未在10秒内完成相关的处理</li>
+<li>Service在特定的时间内无法处理完成 20秒</li>
+<li>使用AsyncTask处理耗时IO操作。</li>
+<li>使用Thread或者HandlerThread时，调用Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND)设置优先级，否则仍然会降低程序响应，因为默认Thread的优先级和主线程相同。</li>
+<li>使用Handler处理工作线程结果，而不是使用Thread.wait()或者Thread.sleep()来阻塞主线程。</li>
+<li>Activity的onCreate和onResume回调中尽量避免耗时的代码</li>
+<li>BroadcastReceiver中onReceive代码也要尽量减少耗时，建议使用IntentService处理。</li>
+</ul>
+<h3 id="如何避免"><a href="#如何避免" class="headerlink" title="如何避免"></a>如何避免</h3><ul>
+<li><p>UI线程尽量只做跟UI相关的工作，但一些复杂的UI操作，还是需要一些技巧来处理，不如你让一个Button去setText一个10M的文本，UI肯定崩掉了，不过对于此类问题，分段加载貌似是最好的方法了。</p>
+</li>
+<li><p>让耗时的工作（比如数据库操作，I/O，连接网络或者别的有可能阻碍UI线程的操作）把它放入单独的线程处理。</p>
+</li>
+<li><p>尽量用Handler来处理UIthread和别的thread之间的交互。</p>
+</li>
+</ul>
+<h3 id="主要的UI线程"><a href="#主要的UI线程" class="headerlink" title="主要的UI线程"></a>主要的UI线程</h3><ul>
+<li><p>Activity：onCreate()、onResume()、onDestroy()、onKeyDown()、onClick()</p>
+</li>
+<li><p>Service：onCreate(), onStart()、onDestroy()</p>
+</li>
+<li><p>BroadcastReceiver：onReceiver()</p>
+</li>
+<li><p>Application：onCreate()、onTerminate()</p>
+</li>
+<li><p>AsyncTask：onPreExecute()、onProgressUpdate()、onPostExecute()、onCancel()</p>
+</li>
+<li><p>Mainthread handler：handleMessage()、post(runnable r)</p>
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Android//" class="article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/Android/Android异常之ANR.html">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Android异常之FC" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Android/Android异常之FC.html">Android异常之FC</a>
+    </h1>
+  
+
+        
+        <a href="/Android/Android异常之FC.html" class="archive-article-date">
+  	<time datetime="2016-11-02T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>尽管很消极，但是程序的crash是很难被避免的。如果能够知道程序crash的原因，就可以修复问题。</p>
+<p>在发生crash时，应该提供一个更友好的界面让程序重新再启动，同时也应该存在一个错误上报的机制收集错误日志帮助我们修复问题。</p>
+<p>Android提供了处理这类问题的方法，当crash发生时，系统会调用<code>UncaughtExceptionHandler</code>的<code>uncaughtException</code>方法。</p>
+<h3 id="实现Thread-UncaughtExceptionHandler接口拦截异常全局异常"><a href="#实现Thread-UncaughtExceptionHandler接口拦截异常全局异常" class="headerlink" title="实现Thread.UncaughtExceptionHandler接口拦截异常全局异常"></a>实现Thread.UncaughtExceptionHandler接口拦截异常全局异常</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CrashHandler</span> <span class="keyword">implements</span> <span class="title">UncaughtExceptionHandler</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> CrashHandler instance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CrashHandler <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> CrashHandler();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(Context ctx)</span> </span>&#123;</span><br><span class="line">        Thread.setDefaultUncaughtExceptionHandler(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 核心方法，当程序crash 会回调此方法， Throwable中存放这错误日志</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">uncaughtException</span><span class="params">(Thread arg0, Throwable arg1)</span> </span>&#123;</span><br><span class="line">        String logPath;</span><br><span class="line">        <span class="keyword">if</span> (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) &#123;</span><br><span class="line">            logPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + File.separator + <span class="string">"log"</span>;</span><br><span class="line">            File file = <span class="keyword">new</span> File(logPath);</span><br><span class="line">            <span class="keyword">if</span> (!file.exists()) &#123;</span><br><span class="line">                file.mkdirs();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                FileWriter fw = <span class="keyword">new</span> FileWriter(logPath + File.separator + <span class="string">"errorlog.log"</span>, <span class="keyword">true</span>);</span><br><span class="line">                fw.write(<span class="keyword">new</span> Date() + <span class="string">"\n"</span>);</span><br><span class="line">                <span class="comment">// 错误信息</span></span><br><span class="line">                <span class="comment">// 这里还可以加上当前的系统版本，机型型号 等等信息</span></span><br><span class="line">                StackTraceElement[] stackTrace = arg1.getStackTrace();</span><br><span class="line">                fw.write(arg1.getMessage() + <span class="string">"\n"</span>);</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; stackTrace.length; i++) &#123;</span><br><span class="line">                    fw.write(<span class="string">"file:"</span> + stackTrace[i].getFileName() + <span class="string">" class:"</span> + stackTrace[i].getClassName() + <span class="string">" method:"</span> + stackTrace[i].getMethodName() + <span class="string">" line:"</span> + stackTrace[i].getLineNumber() + <span class="string">"\n"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                fw.write(<span class="string">"\n"</span>);</span><br><span class="line">                fw.close();</span><br><span class="line">                <span class="comment">// 上传错误信息到服务器</span></span><br><span class="line">                <span class="comment">// uploadToServer();</span></span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                Log.e(<span class="string">"crash handler"</span>, <span class="string">"load file failed..."</span>, e.getCause());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        arg1.printStackTrace();</span><br><span class="line">        android.os.Process.killProcess(android.os.Process.myPid());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="在Application初始化时设置给线程"><a href="#在Application初始化时设置给线程" class="headerlink" title="在Application初始化时设置给线程"></a>在Application初始化时设置给线程</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CrashHandler crashHandler = CrashHandler.getInstance(); </span><br><span class="line">crashHandler.init(getApplicationContext());</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Android//" class="article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/Android/Android异常之FC.html">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Android内存泄露总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Android/Android内存泄露总结.html">Android内存泄露总结</a>
+    </h1>
+  
+
+        
+        <a href="/Android/Android内存泄露总结.html" class="archive-article-date">
+  	<time datetime="2016-10-25T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p><a href="http://bugly.qq.com/bbs/forum.php?mod=viewthread&amp;tid=21&amp;highlight=%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%AF%87" target="_blank" rel="noopener">内存泄露从入门到精通三部曲之基础知识篇</a><br><a href="http://bugly.qq.com/bbs/forum.php?mod=viewthread&amp;tid=62&amp;highlight=%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E6%8E%92%E6%9F%A5%E6%96%B9%E6%B3%95%E7%AF%87" target="_blank" rel="noopener">内存泄露从入门到精通三部曲之排查方法篇</a><br><a href="http://bugly.qq.com/bbs/forum.php?mod=viewthread&amp;tid=125&amp;highlight=%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8E%9F%E5%9B%A0%E4%B8%8E%E7%94%A8%E6%88%B7%E5%AE%9E%E8%B7%B5" target="_blank" rel="noopener">内存泄露从入门到精通三部曲之常见原因与用户实践</a></p>
+</blockquote>
+<h1 id="什么是内存泄露"><a href="#什么是内存泄露" class="headerlink" title="什么是内存泄露"></a>什么是内存泄露</h1><p>当一个对象已经不需要再使用了，本该被回收时，而有另外一个正在使用的对象持有它的引用从而导致它不能被回收，这导致本该被回收的对象不能被回收而停留在堆内存中，这种情况就称为内存泄漏(Memory Leak)。</p>
+<h1 id="常见的内存泄露及解决"><a href="#常见的内存泄露及解决" class="headerlink" title="常见的内存泄露及解决"></a>常见的内存泄露及解决</h1><h2 id="谨慎使用getSystemService"><a href="#谨慎使用getSystemService" class="headerlink" title="谨慎使用getSystemService"></a>谨慎使用getSystemService</h2><p>比如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> PowerManager powerManager = (PowerManager)getSystemService(Context.POWER_SERVICE);</span><br></pre></td></tr></table></figure></p>
+<p>一般认为，powerManager持有的应该是Application的Context的引用。<br>事实上，是根据调用者来决定是Activity还是Application的Context引用。</p>
+<p><strong>解决：</strong>  </p>
+<ul>
+<li><p>不使用静态变量持有PowerManager</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PowerManager powerManager = (PowerManager)getSystemService(Context.POWER_SERVICE);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>改为由Application调用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PowerManager powerManager = (PowerManager)getApplicationContext().getSystemService(Context.POWER_SERVICE);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>建议</strong>  </p>
+<ul>
+<li>如果服务和UI相关，则用Activity</li>
+<li>如果是类似ALARM_SERVICE,CONNECTIVITY_SERVICE建议有限选用Application Context</li>
+<li>如果出现出现了内存泄漏，排除问题，可以考虑使用Application Context</li>
+</ul>
+<h2 id="单例造成的内存泄露"><a href="#单例造成的内存泄露" class="headerlink" title="单例造成的内存泄露"></a>单例造成的内存泄露</h2><p>由于单例的静态特性使得单例的生命周期和应用的生命周期一样长，这就说明了如果一个对象已经不需要使用了，而单例对象还持有该对象的引用，那么这个对象将不能被正常回收，这就导致了内存泄漏。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance;</span><br><span class="line">    <span class="keyword">private</span> Context context;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.context = context;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance != <span class="keyword">null</span>) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> Singleton(context);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果传入的是Activity的context，那么当context对应的Activity被退出时，因为该单例持有context的引用，这部分内存就无法被回收。</p>
+<p><strong>解决：</strong>  </p>
+<p>将Activity的context替换为Application的context。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton instance;</span><br><span class="line">    <span class="keyword">private</span> Context context;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.context = context.getApplicationContext();;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (instance != <span class="keyword">null</span>) &#123;</span><br><span class="line">            instance = <span class="keyword">new</span> Singleton(context);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是实际上，ApplicationContext与ActivityContext在职能上是有区别的。有些情况下只能使用ActivityContext，如果碰到这种情况，就要考虑是否有更合理的设计以代替单例模式。</p>
+<h2 id="非静态内部类造成的内存泄露"><a href="#非静态内部类造成的内存泄露" class="headerlink" title="非静态内部类造成的内存泄露"></a>非静态内部类造成的内存泄露</h2><p>在 Java 中，非静态内部类（包括匿名内部类，如Handler、Runnable匿名内部类容易导致内存泄露）会持有外部类对象（如Activity）的强引用，而静态的内部类则不会引用外部类对象。<br>当内部类对象的生命周期长于外部类对象时，因为内部类对象持有外部类对象的引用，导致外部类对象无法被回收，就会造成内存泄露的发生。</p>
+<h3 id="1-非静态内部类创建静态实例造成的内存泄漏"><a href="#1-非静态内部类创建静态实例造成的内存泄漏" class="headerlink" title="1. 非静态内部类创建静态实例造成的内存泄漏"></a>1. 非静态内部类创建静态实例造成的内存泄漏</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> InternalClass mInternalClass = <span class="keyword">null</span>;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        <span class="keyword">if</span>(mInternalClass == <span class="keyword">null</span>)&#123;</span><br><span class="line">            mInternalClass = <span class="keyword">new</span> InternalClass();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">InternalClass</span> </span>&#123;</span><br><span class="line">		<span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>解决：</strong>  </p>
+<p>将该内部类设为静态内部类或将该内部类抽取出来封装成一个单例，如果需要使用Context，请使用ApplicationContext。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> InternalClass mInternalClass = <span class="keyword">null</span>;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        <span class="keyword">if</span>(mInternalClass == <span class="keyword">null</span>)&#123;</span><br><span class="line">            mInternalClass = <span class="keyword">new</span> InternalClass();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">InternalClass</span> </span>&#123;</span><br><span class="line">		<span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-Handler造成的内存泄露"><a href="#2-Handler造成的内存泄露" class="headerlink" title="2. Handler造成的内存泄露"></a>2. Handler造成的内存泄露</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Handler mHandler = <span class="keyword">new</span> Handler() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</span><br><span class="line">            <span class="comment">//...</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        </span><br><span class="line">        Message message = Message.obtain();</span><br><span class="line">        mHandler.sendMessage(message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Handler是在一个Looper线程中不断轮询处理消息，那么当这个Activity退出时消息队列中还有未处理的消息或者正在处理消息，而消息队列中的Message持有Handler实例的引用，Handler实例又持有Activity的引用，所以导致该Activity的内存资源无法及时回收，引发内存泄漏。</p>
+<p><strong>解决：</strong></p>
+<p>通过静态内部类+弱引用解决。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppcompatActivity</span> </span>&#123;</span><br><span class="line">	StaticHandler mHandler = <span class="keyword">new</span> StaticHandler(<span class="keyword">this</span>);</span><br><span class="line">#</span><br><span class="line">	<span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">StaticHandler</span> <span class="keyword">extends</span> <span class="title">Handler</span> </span>&#123;</span><br><span class="line">		WeakReference&lt;MainActivity&gt; activityReference;</span><br><span class="line"></span><br><span class="line">		StaticHandler(MainActivity activity) &#123;</span><br><span class="line">			activityReference = <span class="keyword">new</span> WeakReference&lt;&gt;(activity);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</span><br><span class="line">			MainActivity activity = activityReference.get();</span><br><span class="line">			<span class="keyword">if</span> (activity != <span class="keyword">null</span>) &#123;</span><br><span class="line">				<span class="comment">//...</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是Looper线程的消息队列中还是可能会有待处理的消息，所以我们在Activity的Destroy时或者Stop时应该移除消息队列中的消息。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">super</span>.onDestroy();</span><br><span class="line">	mHandler.removeCallbacksAndMessages(<span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>也可以使用<code>mHandler.removeCallbacks();</code>或<code>mHandler.removeMessages();</code>来移除指定的Runnable和Message。</p>
+<h3 id="3-Thread造成的内存泄露"><a href="#3-Thread造成的内存泄露" class="headerlink" title="3. Thread造成的内存泄露"></a>3. Thread造成的内存泄露</h3><p>同上，线程 Thread 对象的 run 任务未执行完之前，它是不会被释放的，而我们经常在 Activity 中 new 一个线程来执行耗时任务，通常也都是通过匿名内部类的方法构造线程对象，因此非常容易导致 Activity 无法及时释放。</p>
+<h2 id="WebView的内存泄漏"><a href="#WebView的内存泄漏" class="headerlink" title="WebView的内存泄漏"></a>WebView的内存泄漏</h2><p>Android 中的 WebView 存在很大的兼容性问题，有些 WebView 甚至存在内存泄露的问题。所以通常根治这个问题的办法是为 WebView 开启另外一个进程，通过 AIDL 与主进程进行通信， WebView 所在的进程可以根据业务的需要选择合适的时机进行销毁，从而达到内存的完整释放。</p>
+<h2 id="AlertDialog造成的内存泄露"><a href="#AlertDialog造成的内存泄露" class="headerlink" title="AlertDialog造成的内存泄露"></a>AlertDialog造成的内存泄露</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> AlertDialog.Builder(<span class="keyword">this</span>)</span><br><span class="line">	.setPositiveButton(<span class="string">"Baguette"</span>, <span class="keyword">new</span> DialogInterface.OnClickListener() &#123;</span><br><span class="line">		<span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(DialogInterface dialog, <span class="keyword">int</span> which)</span> </span>&#123;</span><br><span class="line">			MyActivity.<span class="keyword">this</span>.makeBread();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;)</span><br><span class="line">	.show();</span><br></pre></td></tr></table></figure>
+<p>DialogInterface.OnClickListener 的匿名实现类持有了 MainActivity 的引用；</p>
+<p>而在 AlertDialog 的实现中，OnClickListener 类将被包装在一个 Message 对象中（具体可以看 AlertController 类的 setButton 方法），而且这个 Message 会在其内部被复制一份（AlertController 类的 mButtonHandler 中可以看到），两份 Message 中只有一个被 recycle，另一个（OnClickListener 的成员变量引用的 Message 对象）将会泄露！</p>
+<p>解决办法：</p>
+<ul>
+<li>Android 5.0 以上不存在此问题；</li>
+<li>Message 对象的泄漏无法避免，但是如果仅仅是一个空的 Message 对象，将被放入对象池作为后用，是没有问题的；</li>
+<li>让 DialogInterface.OnClickListener 对象不持有外部类的强引用，如用 static 类实现；</li>
+<li>在 Activity 退出前 dismiss dialog!</li>
+</ul>
+<h2 id="Drawable引起的内存泄露"><a href="#Drawable引起的内存泄露" class="headerlink" title="Drawable引起的内存泄露"></a>Drawable引起的内存泄露</h2><p><em>Android 在 4.0 以后已经解决了这个问题。这里可以跳过。</em></p>
+<p>当我们屏幕旋转时，默认会销毁掉当前的 Activity，然后创建一个新的 Activity 并保持之前的状态。在这个过程中，Android 系统会重新加载程序的UI视图和资源。假设我们有一个程序用到了一个很大的 Bitmap 图像，我们不想每次屏幕旋转时都重新加载这个 Bitmap 对象，最简单的办法就是将这个 Bitmap 对象使用 static 修饰。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Drawable sBackground;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle state)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">super</span>.onCreate(state);</span><br><span class="line"></span><br><span class="line">	TextView label = <span class="keyword">new</span> TextView(<span class="keyword">this</span>);</span><br><span class="line">	label.setText(<span class="string">"Leaks are bad"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (sBackground == <span class="keyword">null</span>) &#123;</span><br><span class="line">		sBackground = getDrawable(R.drawable.large_bitmap);</span><br><span class="line">	&#125;</span><br><span class="line">	label.setBackgroundDrawable(sBackground);</span><br><span class="line"></span><br><span class="line">	setContentView(label);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是上面的方法在屏幕旋转时有可能引起内存泄露，因为，当一个 Drawable 绑定到了 View 上，实际上这个 View 对象就会成为这个 Drawable 的一个 callback 成员变量，上面的例子中静态的 sBackground 持有 TextView 对象的引用，而 TextView 持有 Activity 的引用。当屏幕旋转时，Activity 无法被销毁，这样就产生了内存泄露问题。</p>
+<p>该问题主要产生在 4.0 以前，因为在 2.3.7 及以下版本 Drawable 的 setCallback 方法的实现是直接赋值，而从 4.0.1 开始，setCallback 采用了弱引用处理这个问题，避免了内存泄露问题。</p>
+<h2 id="资源未关闭造成的内存泄露"><a href="#资源未关闭造成的内存泄露" class="headerlink" title="资源未关闭造成的内存泄露"></a>资源未关闭造成的内存泄露</h2><ul>
+<li>BroadcastReceiver，ContentObserver 之类的没有解除注册啊；</li>
+<li>File，Cursor，Stream 之类的没有 close 啊；</li>
+<li>无限循环的动画在 Activity 退出前没有停止啊；</li>
+<li>一些其他的该 release 的没有 release，该 recycle 的没有 recycle…等等。</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>不要让生命周期长于Activity的对象持有到Activity的引用  </li>
+<li>尽量使用Application的Context而不是Activity的Context  </li>
+<li>尽量不要在Activity中使用非静态内部类，因为非静态内部类会隐式持有外部类实例的引用。如果使用静态内部类，将外部实例引用作为弱引用持有  </li>
+<li>垃圾回收不能解决内存泄露</li>
+</ul>
+<h1 id="几种内存检测工具的介绍"><a href="#几种内存检测工具的介绍" class="headerlink" title="几种内存检测工具的介绍"></a>几种内存检测工具的介绍</h1><ul>
+<li>Memory Monitor</li>
+<li>Allocation Tracker</li>
+<li>Heap Viewer</li>
+<li>LeakCanary</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Android//" class="article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/Android/Android内存泄露总结.html">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-CoordinatorLayout与Behavior的一己之见" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/Android/CoordinatorLayout与Behavior的一己之见.html">CoordinatorLayout与Behavior的一己之见</a>
+    </h1>
+  
+
+        
+        <a href="/Android/CoordinatorLayout与Behavior的一己之见.html" class="archive-article-date">
+  	<time datetime="2016-10-09T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>许多文章都是将<code>CoordinatorLayout</code>、<code>AppbarLayout</code>、<code>CollapsingToolbarLayout</code>、<code>Toolbar</code>等放在一起介绍，容易误解为这几个布局一定要互相搭配，且仅仅适用于这些场景中。<br>其实不然，其中最重要的是<code>CoordinatorLayout</code>，我把它称为协调布局。协调什么布局呢？自然是嵌套在其内部的Child View。<br><code>CoordinatorLayout</code>充当了一个中间层的角色，一边接收其他组件的事件，一边将接收到的事件通知给内部的其他组件。<br><code>Behavior</code>就是<code>CoordinatorLayout</code>传递事件的媒介，<code>Behavior</code> 定义了 <code>CoordinatorLayout</code> 中<strong>直接子 View</strong>的行为规范，决定了当收到不同事件时，应该做怎样的处理。  </p>
+<p>总结来说，<code>Behavior</code>代理以下四种事件，其大致传递流程如下图：</p>
+<p><img src="http://ohle0c848.bkt.clouddn.com/android/behavior-flux.png" alt=""></p>
+<p>事件流好像很高深莫测的样子…，再简化一点的说法：<code>CoordinatorLayout</code>中的某个或某几个方法被其他类调用，之后<code>CoordinatorLayout</code>再调用<code>Behavior</code>中的某个或某几个方法（=。=好像更抽象了）。<br>总之，让这四类事件现在脑子里有个印象就可以了。</p>
+<p>接着先介绍一下自定义Behavior的通用流程。为什么是通用流程呢？因为上面提到了有四种事件流，根据不同的事件流，是要重写不同的方法的，会在下面一一说明。</p>
+<h1 id="自定义Behavior的通用流程"><a href="#自定义Behavior的通用流程" class="headerlink" title="自定义Behavior的通用流程"></a>自定义Behavior的通用流程</h1><p><strong>1. 重写构造方法</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomBehavior</span> <span class="keyword">extends</span> <span class="title">CoordinatorLayout</span>.<span class="title">Behavior</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomBehavior</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>一定要重写这个构造方法，因为当你在XML中设置该<code>Behavior</code>时，在 <code>CoordinatorLayout</code> 中会反射调用该方法，并生成该 <code>Behavior</code> 实例。<br><strong>2. 绑定到View</strong><br>绑定的方法有三种：<br>在 XML 文件中，设置任意 View 的属性<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app:layout_behavior=<span class="string">"你的Behavior的包路径和类名"</span></span><br></pre></td></tr></table></figure></p>
+<p>或者在代码中：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(CoordinatorLayout.LayoutParams)child.getLayoutParams().setBehavior();</span><br></pre></td></tr></table></figure></p>
+<p>再或者当你的View是自定义的View时。<br>在你的自定义View类上添加@DefaultBehavior(你的Behavior.class)。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@DefaultBehavior</span>(CustomBehavior.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomView</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>3. 判断依赖对象</strong><br>当 <code>CoordinatorLayout</code> 收到某个 view 的变化或者嵌套滑动事件时，<code>CoordinatorLayout</code>就会尝试把事件下发给<code>Behavior</code>，绑定了该 <code>Behavior</code> 的 view 就会对事件做出响应。  </p>
+<p>下面是这两个具有依赖的关系的view在<code>Behavior</code>方法中的形参名，方便读者分辨：<br>被动变化，也就是绑定了<code>Behavior</code>的view称为<code>child</code><br>主动变化的view在「变化事件」中称为<code>dependency</code>；在「嵌套滑动事件」中称为<code>target</code>。  </p>
+<p>因为可能会存在很多的Child View可以向<code>CoordinatorLayout</code>发出消息，也同时存在很多的Child View拥有着不同的<code>Behavior</code>，那么在<code>CoordinatorLayout</code>将真正的事件传递进这个<code>Behavior</code>之前，肯定需要一个方法，告知<code>CoordinatorLayout</code>这两者的依赖关系是否成立。如果关系成立，那么就把事件下发给你，如果关系不成立，那咱就到此over。<br>下面以「变化事件」的<code>layoutDependsOn</code>说几个例子，「嵌套滑动事件」就在<code>onStartNestedScroll</code>中做同样的判断。另外的两种「布局事件」「触摸事件」就没有这一步了。<br><strong>a.根据id</strong><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">layoutDependsOn</span><span class="params">(CoordinatorLayout parent, View child, View dependency)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> dependency.getId() == R.id.xxx;</span><br><span class="line">&#125;</span><br><span class="line">```  </span><br><span class="line">**b.根据类型**</span><br><span class="line">```java</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">layoutDependsOn</span><span class="params">(CoordinatorLayout parent, View child, View dependency)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> dependency <span class="keyword">instanceof</span> CustomView;</span><br><span class="line">&#125;</span><br><span class="line">```  </span><br><span class="line">**c.根据id的另一种写法**</span><br><span class="line">```java</span><br><span class="line">&lt;declare-styleable name=<span class="string">"Follow"</span>&gt;</span><br><span class="line">	&lt;attr name=<span class="string">"target"</span> format=<span class="string">"reference"</span>/&gt;</span><br><span class="line">&lt;/declare-styleable&gt;</span><br></pre></td></tr></table></figure></p>
+<p>先自定义target这个属性。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;android.support.design.widget.CoordinatorLayout    </span><br><span class="line">    xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    xmlns:app=<span class="string">"http://schemas.android.com/apk/res-auto"</span></span><br><span class="line">    xmlns:tools=<span class="string">"http://schemas.android.com/tools"</span></span><br><span class="line">    android:orientation=<span class="string">"vertical"</span></span><br><span class="line">    android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">    android:layout_height=<span class="string">"match_parent"</span></span><br><span class="line">    android:fitsSystemWindows=<span class="string">"true"</span></span><br><span class="line">    tools:context=<span class="string">".MainActivity"</span>&gt;</span><br><span class="line"></span><br><span class="line">    &lt;View</span><br><span class="line">        android:id=<span class="string">"@+id/first"</span></span><br><span class="line">        android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">        android:layout_height=<span class="string">"128dp"</span></span><br><span class="line">        android:background=<span class="string">"@android:color/holo_blue_light"</span>/&gt;</span><br><span class="line"></span><br><span class="line">    &lt;View</span><br><span class="line">        android:id=<span class="string">"@+id/second"</span></span><br><span class="line">        android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">        android:layout_height=<span class="string">"128dp"</span></span><br><span class="line">        app:layout_behavior=<span class="string">".FollowBehavior"</span></span><br><span class="line">        app:target=<span class="string">"@id/first"</span></span><br><span class="line">        android:background=<span class="string">"@android:color/holo_green_light"</span>/&gt;</span><br><span class="line"></span><br><span class="line">&lt;/android.support.design.widget.CoordinatorLayout&gt;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FollowBehavior</span> <span class="keyword">extends</span> <span class="title">CoordinatorLayout</span>.<span class="title">Behavior</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> targetId;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">FollowBehavior</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(context, attrs);</span><br><span class="line">		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Follow);</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; a.getIndexCount(); i++) &#123;</span><br><span class="line">			<span class="keyword">int</span> attr = a.getIndex(i);</span><br><span class="line">			<span class="keyword">if</span>(a.getIndex(i) == R.styleable.Follow_target)&#123;</span><br><span class="line">				targetId = a.getResourceId(attr, -<span class="number">1</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		a.recycle();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onDependentViewChanged</span><span class="params">(CoordinatorLayout parent, View child, View dependency)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">layoutDependsOn</span><span class="params">(CoordinatorLayout parent, View child, View dependency)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> dependency.getId() == targetId;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="四种不同的事件流"><a href="#四种不同的事件流" class="headerlink" title="四种不同的事件流"></a>四种不同的事件流</h1><h2 id="1-触摸事件"><a href="#1-触摸事件" class="headerlink" title="1. 触摸事件"></a>1. 触摸事件</h2><p>TouchEvent 最主要的方法就是两个：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onInterceptTouchEvent</span><span class="params">(MotionEvent ev)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent ev)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>在 <code>CoordinatorLayout</code> 的 <code>onInterceptTouchEvent</code> 和 <code>onTouchEvent</code> 方法中，会尝试调用其 Child View 拥有的 <code>Behavior</code> 中的同名方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onInterceptTouchEvent</span><span class="params">(CoordinatorLayout parent, View child, MotionEvent ev)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(CoordinatorLayout parent, View child, MotionEvent ev)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>如果 <code>Behavior</code> 对触摸事件进行了拦截，就不会再分发到 Child View 自身拥有的触摸事件中。<br>这就意味着：<strong>在不知道具体View的情况下，就可以重写它的触摸事件。</strong><br>然而有一点我们需要注意到的是：<strong>onTouch事件是CoordinatorLayout分发下来的，所以这里的onTouchEvent并不是我们控件自己的onTouch事件</strong>，也就是说，你假如手指不在我们的控件上滑动，也会触发onTouchEvent。<br>需要在<code>onTouchEvent</code>方法中的<code>MotionEvent.ACTION_DOWN</code>下添加：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ox = ev.getX();</span><br><span class="line">oy = ev.getY();</span><br><span class="line"><span class="keyword">if</span> (oy &lt; child.getTop() || oy &gt; child.getBottom() || ox &lt; child.getLeft() || ox &gt; child.getRight()) &#123; </span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>对手势的位置进行过滤，不是我们控件范围内的，舍弃掉。</p>
+<h2 id="2-布局事件"><a href="#2-布局事件" class="headerlink" title="2. 布局事件"></a>2. 布局事件</h2><p>视图布局无非就是这两个方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMeasure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onLayout</span><span class="params">(<span class="keyword">boolean</span> changed, <span class="keyword">int</span> l, <span class="keyword">int</span> t, <span class="keyword">int</span> r, <span class="keyword">int</span> b)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>在 <code>CoordinatorLayout</code> 的 <code>onMeasure</code> 和 <code>onLayout</code> 方法中，也会尝试调用其 Child View 拥有的 <code>Behavior</code> 中对应的方法，分别是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onMeasureChild</span><span class="params">(CoordinatorLayout parent, V child, <span class="keyword">int</span> parentWidthMeasureSpec, <span class="keyword">int</span> widthUsed,</span></span></span><br><span class="line"><span class="function"><span class="params">								<span class="keyword">int</span> parentHeightMeasureSpec, <span class="keyword">int</span> heightUsed)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onLayoutChild</span><span class="params">(CoordinatorLayout parent, V child, <span class="keyword">int</span> layoutDirection)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>同样地，<code>CoordinatorLayout</code> 会优先处理 <code>Behavior</code> 中所重写的布局事件。</p>
+<h2 id="3-变化事件"><a href="#3-变化事件" class="headerlink" title="3. 变化事件"></a>3. 变化事件</h2><p>这个变化是指 View 的位置、尺寸发生了变化。<br>在 <code>CoordinatorLayout</code> 的 <code>onDraw</code> 方法中，会遍历全部的 Child View 尝试寻找是否有相互关联的对象。<br>确定是否关联的方式有两种：<br><strong>1. Behavior中定义</strong><br>通过 <code>Behavior</code> 的 <code>layoutDependsOn</code> 方法来判断是否有依赖关系，如果有就继续调用 <code>onDependentViewChanged</code>。FloatActionButton 可以在 Snackbar 弹出时主动上移就通过该方式实现。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 判断是dependency是否是当前behavior需要的对象</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> parent CoordinatorLayout</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> child 该Behavior对应的那个View</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> dependency dependency 要检查的View(child是否要依赖这个dependency)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> true 依赖, false 不依赖</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">layoutDependsOn</span><span class="params">(CoordinatorLayout parent, Button child, View dependency)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 当改变dependency的尺寸或者位置时被调用</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> parent CoordinatorLayout</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> child  该Behavior对应的那个View</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> dependency child依赖dependency</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> true 处理了, false 没处理</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onDependentViewChanged</span><span class="params">(CoordinatorLayout parent, Button child, View dependency)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 在layoutDependsOn返回true的基础上之后，通知dependency被移除了</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> parent CoordinatorLayout</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> child 该Behavior对应的那个View</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> dependency child依赖dependency</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDependentViewRemoved</span><span class="params">(CoordinatorLayout parent, Button child, View dependency)</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>2. XML中设置属性</strong><br>通过 XML 中设置的 <code>layout_anchor</code>，关联设置了 <code>layout_anchor</code> 的 Child View 与 <code>layout_anchor</code> 对应的目标 dependency View。随后调用 <code>offsetChildToAnchor(child, layoutDirection);</code>，其实就是调整两者的位置，让它们可以一起变化。FloatActionButton 可以跟随 Toolbar 上下移动就是该方式实现。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app:layout_anchor=<span class="string">"@id/dependencyView.id"</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="4-嵌套滑动事件"><a href="#4-嵌套滑动事件" class="headerlink" title="4. 嵌套滑动事件"></a>4. 嵌套滑动事件</h2><p><strong>实现NestedScrollingChild</strong><br>如果一个View想向外界传递滑动事件，即通知 NestedScrollingParent，就必须实现此接口。<br>而 Child 与 Parent 的具体交互逻辑，<a href="https://developer.android.com/reference/android/support/v4/view/NestedScrollingChildHelper.html" target="_blank" rel="noopener">NestedScrollingChildHelper</a> 辅助类基本已经帮我们封装好了，所以我们只需要调用对应的方法即可。<br>NestedScrollingChild接口的一般实现：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomNestedScrollingChildView</span> <span class="keyword">extends</span> <span class="title">View</span> <span class="keyword">implements</span> <span class="title">NestedScrollingChild</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> NestedScrollingChildHelper mChildHelper = <span class="keyword">new</span> NestedScrollingChildHelper(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 设置当前View能否滑动</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> enabled</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setNestedScrollingEnabled</span><span class="params">(<span class="keyword">boolean</span> enabled)</span> </span>&#123;</span><br><span class="line">        mChildHelper.setNestedScrollingEnabled(enabled);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 判断当前View能否滑动</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isNestedScrollingEnabled</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mChildHelper.isNestedScrollingEnabled();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 启动嵌套滑动事件流</span></span><br><span class="line"><span class="comment">     * 1. 寻找可以接收 NestedScroll 事件的 parent view，即实现了 NestedScrollingParent 接口的 ViewGroup</span></span><br><span class="line"><span class="comment">     * 2. 通知该 parent view，现在我要把滑动的参数传递给你</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> axes</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">startNestedScroll</span><span class="params">(<span class="keyword">int</span> axes)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mChildHelper.startNestedScroll(axes);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 停止嵌套滑动事件流</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stopNestedScroll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mChildHelper.stopNestedScroll();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 是否存在接收 NestedScroll 事件的 parent view</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasNestedScrollingParent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mChildHelper.hasNestedScrollingParent();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 在滑动之后，向父view汇报滚动情况，包括child view消费的部分和child view没有消费的部分。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> dxConsumed x方向已消费的滑动距离</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> dyConsumed y方向已消费的滑动距离</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> dxUnconsumed x方向未消费的滑动距离</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> dyUnconsumed y方向未消费的滑动距离</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> offsetInWindow 如果parent view滑动导致child view的窗口发生了变化（child View的位置发生了变化）</span></span><br><span class="line"><span class="comment">     *                       该参数返回x(offsetInWindow[0]) y(offsetInWindow[1])方向的变化</span></span><br><span class="line"><span class="comment">     *                       如果你记录了手指最后的位置，需要根据参数offsetInWindow计算偏移量，</span></span><br><span class="line"><span class="comment">     *                       才能保证下一次的touch事件的计算是正确的。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 如果parent view接受了它的滚动参数，进行了部分消费，则这个函数返回true，否则为false。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">dispatchNestedScroll</span><span class="params">(<span class="keyword">int</span> dxConsumed, <span class="keyword">int</span> dyConsumed, <span class="keyword">int</span> dxUnconsumed,</span></span></span><br><span class="line"><span class="function"><span class="params">                                        <span class="keyword">int</span> dyUnconsumed, <span class="keyword">int</span>[] offsetInWindow)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mChildHelper.dispatchNestedScroll(dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed,</span><br><span class="line">                offsetInWindow);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 在滑动之前，先问一下 parent view 是否需要滑动，</span></span><br><span class="line"><span class="comment">     * 即child view的onInterceptTouchEvent或onTouchEvent方法中调用。</span></span><br><span class="line"><span class="comment">     * 1. 如果parent view滑动了一定距离，你需要重新计算一下parent view滑动后剩下给你的滑动距离剩余量，</span></span><br><span class="line"><span class="comment">     *      然后自己进行剩余的滑动。</span></span><br><span class="line"><span class="comment">     * 2. 该方法的第三第四个参数返回parent view消费掉的滑动距离和child view的窗口偏移量，</span></span><br><span class="line"><span class="comment">     *      如果你记录了手指最后的位置，需要根据第四个参数offsetInWindow计算偏移量，</span></span><br><span class="line"><span class="comment">     *      才能保证下一次的touch事件的计算是正确的。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> dx x方向的滑动距离</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> dy y方向的滑动距离</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> consumed 如果不是null, 则告诉child view现在parent view滑动的情况，</span></span><br><span class="line"><span class="comment">     *                 consumed[0]parent view告诉child view水平方向滑动的距离(dx)</span></span><br><span class="line"><span class="comment">     *                 consumed[1]parent view告诉child view垂直方向滑动的距离(dy)</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> offsetInWindow 可选 length=2 的数组，</span></span><br><span class="line"><span class="comment">     *                       如果parent view滑动导致child View的窗口发生了变化（子View的位置发生了变化）</span></span><br><span class="line"><span class="comment">     *                       该参数返回x(offsetInWindow[0]) y(offsetInWindow[1])方向的变化</span></span><br><span class="line"><span class="comment">     *                       如果你记录了手指最后的位置，需要根据参数offsetInWindow计算偏移量，</span></span><br><span class="line"><span class="comment">     *                       才能保证下一次的touch事件的计算是正确的。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 如果parent view对滑动距离进行了部分消费，则这个函数返回true，否则为false。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">dispatchNestedPreScroll</span><span class="params">(<span class="keyword">int</span> dx, <span class="keyword">int</span> dy, <span class="keyword">int</span>[] consumed, <span class="keyword">int</span>[] offsetInWindow)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mChildHelper.dispatchNestedPreScroll(dx, dy, consumed, offsetInWindow);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 在嵌套滑动的child view快速滑动之后再调用该函数向parent view汇报快速滑动情况。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> velocityX 水平方向的速度</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> velocityY 垂直方向的速度</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> consumed true 表示child view快速滑动了, false 表示child view没有快速滑动</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> true 表示parent view快速滑动了, false 表示parent view没有快速滑动</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">dispatchNestedFling</span><span class="params">(<span class="keyword">float</span> velocityX, <span class="keyword">float</span> velocityY, <span class="keyword">boolean</span> consumed)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mChildHelper.dispatchNestedFling(velocityX, velocityY, consumed);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 在嵌套滑动的child view快速滑动之前告诉parent view快速滑动的情况。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> velocityX 水平方向的速度</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> velocityY 垂直方向的速度</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> true 表示parent view快速滑动了, false 表示parent view没有快速滑动</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">dispatchNestedPreFling</span><span class="params">(<span class="keyword">float</span> velocityX, <span class="keyword">float</span> velocityY)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mChildHelper.dispatchNestedPreFling(velocityX, velocityY);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>实现NestedScrollingParent</strong><br>如果一个View Group想接收来自 NestedScrollingChild 的滑动事件，就需要实现该接口。<br>同样有一个<a href="https://developer.android.com/reference/android/support/v4/view/NestedScrollingParentHelper.html" target="_blank" rel="noopener">NestedScrollingParentHelper
+</a> 辅助类，帮我们封装好了 parent view 与 child view之间的具体交互逻辑。<br>由 NestedScrollingChild 主动发出滑动事件传递给 NestedScrollingParent，NestedScrollingParent 做出响应。<br>之间的调用关系如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>Child View</th>
+<th>Parent View</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>startNestedScroll</td>
+<td>onStartNestedScroll、onNestedScrollAccepted</td>
+</tr>
+<tr>
+<td>dispatchNestedPreScroll</td>
+<td>onNestedPreScroll</td>
+</tr>
+<tr>
+<td>dispatchNestedScroll</td>
+<td>onNestedScroll</td>
+</tr>
+<tr>
+<td>stopNestedScroll</td>
+<td>onStopNestedScroll</td>
+</tr>
+<tr>
+<td>dispatchNestedFling</td>
+<td>onNestedFling</td>
+</tr>
+<tr>
+<td>dispatchNestedPreFling</td>
+<td>onNestedPreFling</td>
+</tr>
+</tbody>
+</table>
+<p><strong>继承Behavior</strong><br>在上面的说明中提到 Parent View 会消费一部分或全部的滑动距离，但其实大部分情况下，我们的 Parent View 自身并不会消费滑动距离，都是传递给 <code>Behavior</code>，也就是拥有这个 <code>Behavior</code> 的 Child View 才是真正消费滑动距离的实例。<br><code>Behavior</code> 拥有与 <code>NestedScrollingParent</code> 接口完全同名的方法。在每一个 <code>NestedScrollingParent</code> 的方法中都会调用 <code>Behavior</code> 中的同名方法。<br>有这么几个方法做下特别说明：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 开始嵌套滑动的时候被调用</span></span><br><span class="line"><span class="comment"> * 1. 需要判断滑动的方向是否是我们需要的。</span></span><br><span class="line"><span class="comment"> *      nestedScrollAxes == ViewCompat.SCROLL_AXIS_HORIZONTAL 表示是水平方向的滑动</span></span><br><span class="line"><span class="comment"> *      nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL 表示是竖直方向的滑动</span></span><br><span class="line"><span class="comment"> * 2. 返回 true 表示继续接收后续的滑动事件，返回 false 表示不再接收后续滑动事件</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onStartNestedScroll</span><span class="params">(CoordinatorLayout coordinatorLayout, View child,</span></span></span><br><span class="line"><span class="function"><span class="params">								   View directTargetChild, View target, <span class="keyword">int</span> nestedScrollAxes)</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 滑动中调用</span></span><br><span class="line"><span class="comment"> * 1. 正在上滑：dyConsumed &gt; 0 &amp;&amp; dyUnconsumed == 0</span></span><br><span class="line"><span class="comment"> * 2. 已经到顶部了还在上滑：dyConsumed == 0 &amp;&amp; dyUnconsumed &gt; 0</span></span><br><span class="line"><span class="comment"> * 3. 正在下滑：dyConsumed &lt; 0 &amp;&amp; dyUnconsumed == 0</span></span><br><span class="line"><span class="comment"> * 4. 已经打底部了还在下滑：dyConsumed == 0 &amp;&amp; dyUnconsumed &lt; 0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNestedScroll</span><span class="params">(CoordinatorLayout coordinatorLayout, View child, View target,</span></span></span><br><span class="line"><span class="function"><span class="params">						   <span class="keyword">int</span> dxConsumed, <span class="keyword">int</span> dyConsumed, <span class="keyword">int</span> dxUnconsumed, <span class="keyword">int</span> dyUnconsumed)</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 快速滑动中调用</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onNestedFling</span><span class="params">(CoordinatorLayout coordinatorLayout, View child, View target,</span></span></span><br><span class="line"><span class="function"><span class="params">							 <span class="keyword">float</span> velocityX, <span class="keyword">float</span> velocityY, <span class="keyword">boolean</span> consumed)</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>总结一下这四种事件流，和各自需要实现的方法。<br>根据在<code>自定义Behavior</code>时是否需要判断依赖关系，把<code>Behavior</code>代理的四种情况分成两类：<br>事件来自外部父view：<br>1.布局事件：<code>Behavior</code>的 <code>onMeasureChild</code>+<code>onLayoutChild</code><br>2.触摸事件：<code>Behavior</code>的<code>onInterceptTouchEvent</code>+<code>onTouchEvent</code><br>事件来自内部子view：<br>3.view变化事件：<code>Behavior</code>的<code>layoutDependsOn</code>+<code>onDependentViewChanged</code>+<code>onDependentViewRemoved</code><br>4.嵌套滑动事件：<code>Behavior</code>的<code>onStartNestedScroll</code>+<code>onNestedScrollAccepted</code>+<code>onStopNestedScroll</code>+<code>onNestedScroll</code>+<code>onNestedPreScroll</code>+<code>onNestedFling</code>+<code>onNestedPreFling</code>  </p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>之前在Google、百度<code>自定义Behavior</code>造轮子的时候，刚开始看一篇，觉得不过如此，就这么点东西。再看一篇，咦~实现怎么又不一样了，再来一篇又不一样了。<br>本文就是想起一个大纲的作用，轮子再怎么造，还是这么些个方法。以后再看别人的轮子或者自己造轮子的时候，可以清晰一些。</p>
+<h1 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h1><p><a href="https://segmentfault.com/a/1190000006657044" target="_blank" rel="noopener">sidhu眼中的CoordinatorLayout.Behavior（一）</a><br><a href="https://segmentfault.com/a/1190000006665225" target="_blank" rel="noopener">sidhu眼中的CoordinatorLayout.Behavior（二）</a><br><a href="https://segmentfault.com/a/1190000006666005" target="_blank" rel="noopener">sidhu眼中的CoordinatorLayout.Behavior（三）</a><br><a href="http://blog.csdn.net/yanzhenjie1003/article/details/52205665" target="_blank" rel="noopener">Material Design系列，自定义Behavior支持所有View</a><br><a href="http://blog.csdn.net/huachao1001/article/details/51554608" target="_blank" rel="noopener">CoordinatorLayout的使用如此简单</a>  </p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Android//" class="article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/Android/CoordinatorLayout与Behavior的一己之见.html">展开全文 >></a>
         </p>
       
 

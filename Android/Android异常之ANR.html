@@ -6,16 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>ghnor&#39;s Blog</title>
+  <title>Android异常之ANR | ghnor&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="ghnor&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/categories/index.html">
+  <meta name="description" content="ANR：Application Not Responding，即应用无响应。 可以通过 /data/anr/traces.txt 文件查看ANR信息。 ANR一般有三种类型 KeyDispatchTimeout(5 seconds)按键或触摸事件在特定时间内无响应  BroadcastTimeout(10 seconds)BroadcastReceiver在特定时间内无法处理完成  Service">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android异常之ANR">
+<meta property="og:url" content="http://yoursite.com/Android/Android异常之ANR.html">
 <meta property="og:site_name" content="ghnor&#39;s Blog">
+<meta property="og:description" content="ANR：Application Not Responding，即应用无响应。 可以通过 /data/anr/traces.txt 文件查看ANR信息。 ANR一般有三种类型 KeyDispatchTimeout(5 seconds)按键或触摸事件在特定时间内无响应  BroadcastTimeout(10 seconds)BroadcastReceiver在特定时间内无法处理完成  Service">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-16T08:20:42.104Z">
+<meta property="og:updated_time" content="2016-11-02T16:00:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ghnor&#39;s Blog">
+<meta name="twitter:title" content="Android异常之ANR">
+<meta name="twitter:description" content="ANR：Application Not Responding，即应用无响应。 可以通过 /data/anr/traces.txt 文件查看ANR信息。 ANR一般有三种类型 KeyDispatchTimeout(5 seconds)按键或触摸事件在特定时间内无响应  BroadcastTimeout(10 seconds)BroadcastReceiver在特定时间内无法处理完成  Service">
   
     <link rel="alternative" href="/atom.xml" title="ghnor&#39;s Blog" type="application/atom+xml">
   
@@ -151,12 +155,72 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="page-undefined" class="article article-type-page " itemscope itemprop="blogPost">
+            <article id="post-Android异常之ANR" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android异常之ANR
+    </h1>
+  
+
+        
+        <a href="/Android/Android异常之ANR.html" class="archive-article-date">
+  	<time datetime="2016-11-02T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-03</time>
+</a>
+        
+      </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>ANR：Application Not Responding，即应用无响应。</p>
+<p>可以通过 /data/anr/traces.txt 文件查看ANR信息。</p>
+<h3 id="ANR一般有三种类型"><a href="#ANR一般有三种类型" class="headerlink" title="ANR一般有三种类型"></a>ANR一般有三种类型</h3><ol>
+<li><p>KeyDispatchTimeout(5 seconds)<br>按键或触摸事件在特定时间内无响应</p>
+</li>
+<li><p>BroadcastTimeout(10 seconds)<br>BroadcastReceiver在特定时间内无法处理完成</p>
+</li>
+<li><p>ServiceTimeout(20 seconds)<br>Service在特定的时间内无法处理完成</p>
+</li>
+</ol>
+<h3 id="可能的原因"><a href="#可能的原因" class="headerlink" title="可能的原因"></a>可能的原因</h3><ul>
+<li>主线程被IO操作（从4.0之后网络IO不允许在主线程中）阻塞。</li>
+<li>主线程中存在耗时的计算</li>
+<li>主线程中错误的操作，比如Thread.wait或者Thread.sleep等 Android系统会监控程序的响应状况，一旦出现下面两种情况，则弹出ANR对话框</li>
+<li>应用在5秒内未响应用户的输入事件（如按键或者触摸）</li>
+<li>BroadcastReceiver未在10秒内完成相关的处理</li>
+<li>Service在特定的时间内无法处理完成 20秒</li>
+<li>使用AsyncTask处理耗时IO操作。</li>
+<li>使用Thread或者HandlerThread时，调用Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND)设置优先级，否则仍然会降低程序响应，因为默认Thread的优先级和主线程相同。</li>
+<li>使用Handler处理工作线程结果，而不是使用Thread.wait()或者Thread.sleep()来阻塞主线程。</li>
+<li>Activity的onCreate和onResume回调中尽量避免耗时的代码</li>
+<li>BroadcastReceiver中onReceive代码也要尽量减少耗时，建议使用IntentService处理。</li>
+</ul>
+<h3 id="如何避免"><a href="#如何避免" class="headerlink" title="如何避免"></a>如何避免</h3><ul>
+<li><p>UI线程尽量只做跟UI相关的工作，但一些复杂的UI操作，还是需要一些技巧来处理，不如你让一个Button去setText一个10M的文本，UI肯定崩掉了，不过对于此类问题，分段加载貌似是最好的方法了。</p>
+</li>
+<li><p>让耗时的工作（比如数据库操作，I/O，连接网络或者别的有可能阻碍UI线程的操作）把它放入单独的线程处理。</p>
+</li>
+<li><p>尽量用Handler来处理UIthread和别的thread之间的交互。</p>
+</li>
+</ul>
+<h3 id="主要的UI线程"><a href="#主要的UI线程" class="headerlink" title="主要的UI线程"></a>主要的UI线程</h3><ul>
+<li><p>Activity：onCreate()、onResume()、onDestroy()、onKeyDown()、onClick()</p>
+</li>
+<li><p>Service：onCreate(), onStart()、onDestroy()</p>
+</li>
+<li><p>BroadcastReceiver：onReceiver()</p>
+</li>
+<li><p>Application：onCreate()、onTerminate()</p>
+</li>
+<li><p>AsyncTask：onPreExecute()、onProgressUpdate()、onPostExecute()、onCancel()</p>
+</li>
+<li><p>Mainthread handler：handleMessage()、post(runnable r)</p>
+</li>
+</ul>
+
       
 
       
@@ -185,7 +249,29 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Android//" class="article-tag-list-link color3">Android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
 
       
 
@@ -235,7 +321,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/categories/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/Android/Android异常之ANR.html" alt="微信分享二维码">
     </div>
 </div>
 
@@ -247,6 +333,25 @@
 </article>
 
   
+<nav id="article-nav">
+  
+    <a href="/Android/Broadcast-Receiver.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Broadcast Receiver
+        
+      </div>
+    </a>
+  
+  
+    <a href="/Android/Android异常之FC.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Android异常之FC</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -265,6 +370,16 @@
 </aside>
 
 
+
+  
+  
+  
+
+  
+
+  
+
+  
 
 
           </div>
@@ -287,7 +402,7 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
