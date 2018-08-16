@@ -40,9 +40,9 @@ after_script:
   - ls -a
   # - git init
   # - ls -a
-  - git remote -v
-  - git remote remove origin
-  - git remote add origin https://${GH_REF}
+  # - git remote -v
+  # - git remote remove origin
+  # - git remote add origin https://${GH_REF}
   - git config user.name "ghnor"  #修改name
   - git config user.email "ghnor.me@gmail.com"  #修改email
   - git add .
