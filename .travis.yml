@@ -40,8 +40,8 @@ after_script:
   - ls -a
   # - git init
   # - ls -a
-  - git config --global user.name "ghnor"  #修改name
-  - git config --global user.email "ghnor.me@gmail.com"  #修改email
+  - git config user.name "ghnor"  #修改name
+  - git config user.email "ghnor.me@gmail.com"  #修改email
   - git add .
   - git commit -m "Travis CI Auto Build at `date +"%Y-%m-%d %H:%M"`"  # 提交记录包含时间 跟上面更改时区配合
   - git push --force --quiet "https://${GITHUB_TOKEN}@${GH_REF}" master:master  #Travis_Token是在Travis中配置环境变量的名称
