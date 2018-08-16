@@ -1,6 +1,12 @@
 ---
 path: Android/Adapter的优化写法.md
 title: Adapter的优化写法
+date: 2018-08-16T13:45:21.000Z
+updated: 2018-08-16T13:45:24.000Z
+tags:
+    - Android
+categories:
+    - Android
 ---
 
 ViewHolder不再单纯是View的容器，也承担了View实例化的操作。
