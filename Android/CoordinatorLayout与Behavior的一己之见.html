@@ -8,19 +8,19 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>CoordinatorLayout与Behavior的一己之见 | ghnor&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言">
+  <meta name="description" content="前言许多文章都是将CoordinatorLayout、AppbarLayout、CollapsingToolbarLayout、Toolbar等放在一起介绍，容易误解为这几个布局一定要互相搭配，且仅仅适用于这些场景中。其实不然，其中最重要的是CoordinatorLayout，我把它称为协调布局。协调什么布局呢？自然是嵌套在其内部的Child View。CoordinatorLayout充当了一">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CoordinatorLayout与Behavior的一己之见">
 <meta property="og:url" content="http://yoursite.com/Android/CoordinatorLayout与Behavior的一己之见.html">
 <meta property="og:site_name" content="ghnor&#39;s Blog">
-<meta property="og:description" content="前言">
+<meta property="og:description" content="前言许多文章都是将CoordinatorLayout、AppbarLayout、CollapsingToolbarLayout、Toolbar等放在一起介绍，容易误解为这几个布局一定要互相搭配，且仅仅适用于这些场景中。其实不然，其中最重要的是CoordinatorLayout，我把它称为协调布局。协调什么布局呢？自然是嵌套在其内部的Child View。CoordinatorLayout充当了一">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ohle0c848.bkt.clouddn.com/android/behavior-flux.png">
 <meta property="og:updated_time" content="2016-12-04T06:24:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CoordinatorLayout与Behavior的一己之见">
-<meta name="twitter:description" content="前言">
+<meta name="twitter:description" content="前言许多文章都是将CoordinatorLayout、AppbarLayout、CollapsingToolbarLayout、Toolbar等放在一起介绍，容易误解为这几个布局一定要互相搭配，且仅仅适用于这些场景中。其实不然，其中最重要的是CoordinatorLayout，我把它称为协调布局。协调什么布局呢？自然是嵌套在其内部的Child View。CoordinatorLayout充当了一">
 <meta name="twitter:image" content="http://ohle0c848.bkt.clouddn.com/android/behavior-flux.png">
   
     <link rel="alternative" href="/atom.xml" title="ghnor&#39;s Blog" type="application/atom+xml">
@@ -155,8 +155,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><a id="more"></a>
-<p>许多文章都是将<code>CoordinatorLayout</code>、<code>AppbarLayout</code>、<code>CollapsingToolbarLayout</code>、<code>Toolbar</code>等放在一起介绍，容易误解为这几个布局一定要互相搭配，且仅仅适用于这些场景中。<br>其实不然，其中最重要的是<code>CoordinatorLayout</code>，我把它称为协调布局。协调什么布局呢？自然是嵌套在其内部的Child View。<br><code>CoordinatorLayout</code>充当了一个中间层的角色，一边接收其他组件的事件，一边将接收到的事件通知给内部的其他组件。<br><code>Behavior</code>就是<code>CoordinatorLayout</code>传递事件的媒介，<code>Behavior</code> 定义了 <code>CoordinatorLayout</code> 中<strong>直接子 View</strong>的行为规范，决定了当收到不同事件时，应该做怎样的处理。  </p>
+        <a id="more"></a>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>许多文章都是将<code>CoordinatorLayout</code>、<code>AppbarLayout</code>、<code>CollapsingToolbarLayout</code>、<code>Toolbar</code>等放在一起介绍，容易误解为这几个布局一定要互相搭配，且仅仅适用于这些场景中。<br>其实不然，其中最重要的是<code>CoordinatorLayout</code>，我把它称为协调布局。协调什么布局呢？自然是嵌套在其内部的Child View。<br><code>CoordinatorLayout</code>充当了一个中间层的角色，一边接收其他组件的事件，一边将接收到的事件通知给内部的其他组件。<br><code>Behavior</code>就是<code>CoordinatorLayout</code>传递事件的媒介，<code>Behavior</code> 定义了 <code>CoordinatorLayout</code> 中<strong>直接子 View</strong>的行为规范，决定了当收到不同事件时，应该做怎样的处理。  </p>
 <p>总结来说，<code>Behavior</code>代理以下四种事件，其大致传递流程如下图：</p>
 <p><img src="http://ohle0c848.bkt.clouddn.com/android/behavior-flux.png" alt=""></p>
 <p>事件流好像很高深莫测的样子…，再简化一点的说法：<code>CoordinatorLayout</code>中的某个或某几个方法被其他类调用，之后<code>CoordinatorLayout</code>再调用<code>Behavior</code>中的某个或某几个方法（=。=好像更抽象了）。<br>总之，让这四类事件现在脑子里有个印象就可以了。</p>

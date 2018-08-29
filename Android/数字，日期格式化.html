@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>数字，日期格式化 | ghnor&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="实际生产中，经常需要对数字，日期类型的数据进行操作。有时有采用全部转换为String类型再通过拆分字符串这种方法，不优雅也容易出现问题。">
+  <meta name="description" content="实际生产中，经常需要对数字，日期类型的数据进行操作。有时有采用全部转换为String类型再通过拆分字符串这种方法，不优雅也容易出现问题。Java提供了现成的API方便我们做数据格式化。 数字BigDecimal1234float f =  34.232323;BigDecimal b  = new BigDecimal(f);float f1 = b.setScale(2, BigDecimal">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数字，日期格式化">
 <meta property="og:url" content="http://yoursite.com/Android/数字，日期格式化.html">
 <meta property="og:site_name" content="ghnor&#39;s Blog">
-<meta property="og:description" content="实际生产中，经常需要对数字，日期类型的数据进行操作。有时有采用全部转换为String类型再通过拆分字符串这种方法，不优雅也容易出现问题。">
+<meta property="og:description" content="实际生产中，经常需要对数字，日期类型的数据进行操作。有时有采用全部转换为String类型再通过拆分字符串这种方法，不优雅也容易出现问题。Java提供了现成的API方便我们做数据格式化。 数字BigDecimal1234float f =  34.232323;BigDecimal b  = new BigDecimal(f);float f1 = b.setScale(2, BigDecimal">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-11-30T06:27:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数字，日期格式化">
-<meta name="twitter:description" content="实际生产中，经常需要对数字，日期类型的数据进行操作。有时有采用全部转换为String类型再通过拆分字符串这种方法，不优雅也容易出现问题。">
+<meta name="twitter:description" content="实际生产中，经常需要对数字，日期类型的数据进行操作。有时有采用全部转换为String类型再通过拆分字符串这种方法，不优雅也容易出现问题。Java提供了现成的API方便我们做数据格式化。 数字BigDecimal1234float f =  34.232323;BigDecimal b  = new BigDecimal(f);float f1 = b.setScale(2, BigDecimal">
   
     <link rel="alternative" href="/atom.xml" title="ghnor&#39;s Blog" type="application/atom+xml">
   
@@ -153,9 +153,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>实际生产中，经常需要对数字，日期类型的数据进行操作。有时有采用全部转换为String类型再通过拆分字符串这种方法，不优雅也容易出现问题。  </p>
-<a id="more"></a>
-<p>Java提供了现成的API方便我们做数据格式化。</p>
+        <a id="more"></a>
+<p>实际生产中，经常需要对数字，日期类型的数据进行操作。有时有采用全部转换为String类型再通过拆分字符串这种方法，不优雅也容易出现问题。<br>Java提供了现成的API方便我们做数据格式化。</p>
 <h2 id="数字"><a href="#数字" class="headerlink" title="数字"></a>数字</h2><h3 id="BigDecimal"><a href="#BigDecimal" class="headerlink" title="BigDecimal"></a>BigDecimal</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">float</span> f =  <span class="number">34.232323</span>;</span><br><span class="line">BigDecimal b  = <span class="keyword">new</span> BigDecimal(f);</span><br><span class="line"><span class="keyword">float</span> f1 = b.setScale(<span class="number">2</span>, BigDecimal.ROUND_HALF_UP).floatValue();</span><br><span class="line"><span class="comment">//setScale(2, BigDecimal.ROUND_HALF_UP) 表示四舍五入保留两位小数</span></span><br></pre></td></tr></table></figure>
 <h3 id="DecimalFormat"><a href="#DecimalFormat" class="headerlink" title="DecimalFormat"></a>DecimalFormat</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">float</span> price = <span class="number">1.2f</span>;</span><br><span class="line">DecimalFormat decimalFormat=<span class="keyword">new</span> DecimalFormat(<span class="string">".00"</span>);<span class="comment">//构造方法的字符格式这里如果小数不足2位,会以0补足.</span></span><br><span class="line">String p = decimalFomat.format(price);<span class="comment">//format 返回的是字符串*</span></span><br></pre></td></tr></table></figure>
 <h3 id="String-Format"><a href="#String-Format" class="headerlink" title="String.Format"></a>String.Format</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">float</span> f = <span class="number">4545.487f</span>;</span><br><span class="line">String str = String.format(<span class="string">"%.2f"</span>, f);</span><br></pre></td></tr></table></figure>

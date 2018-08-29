@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Socket的简单使用 | ghnor&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="初始化Socket">
+  <meta name="description" content="初始化Socket 1Socket so = new Socket(HOST, PORT); 发送数据 12345678910try &amp;#123;    if (!socket.isClosed() &amp;amp;&amp;amp; !socket.isOutputShutdown()) &amp;#123;        OutputStream os = socket.getOutputStream();">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Socket的简单使用">
 <meta property="og:url" content="http://yoursite.com/Android/Socket的简单使用.html">
 <meta property="og:site_name" content="ghnor&#39;s Blog">
-<meta property="og:description" content="初始化Socket">
+<meta property="og:description" content="初始化Socket 1Socket so = new Socket(HOST, PORT); 发送数据 12345678910try &amp;#123;    if (!socket.isClosed() &amp;amp;&amp;amp; !socket.isOutputShutdown()) &amp;#123;        OutputStream os = socket.getOutputStream();">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-11-30T06:27:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Socket的简单使用">
-<meta name="twitter:description" content="初始化Socket">
+<meta name="twitter:description" content="初始化Socket 1Socket so = new Socket(HOST, PORT); 发送数据 12345678910try &amp;#123;    if (!socket.isClosed() &amp;amp;&amp;amp; !socket.isOutputShutdown()) &amp;#123;        OutputStream os = socket.getOutputStream();">
   
     <link rel="alternative" href="/atom.xml" title="ghnor&#39;s Blog" type="application/atom+xml">
   
@@ -153,8 +153,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>初始化Socket</p>
-<a id="more"></a>
+        <a id="more"></a>
+<p>初始化Socket</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Socket so = <span class="keyword">new</span> Socket(HOST, PORT);</span><br></pre></td></tr></table></figure>
 <p>发送数据</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!socket.isClosed() &amp;&amp; !socket.isOutputShutdown()) &#123;</span><br><span class="line">        OutputStream os = socket.getOutputStream();</span><br><span class="line">        String message = <span class="string">"xxxxxx"</span>;</span><br><span class="line">        os.write(message.getBytes());</span><br><span class="line">        os.flush();</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
