@@ -11,6 +11,9 @@ categories:
 
 > 原文：[Android inpreferredconfig参数分析](http://blog.csdn.net/ccpat/article/details/46834089)
 
+<!--more-->
+
+
 ### 参数说明
 
 BitmapFactory.Options.inPreferredConfig的可选值有四个，分别为ALPHA_8，RGB_565，ARGB_4444，ARGB_8888。它们的含义列举如下:

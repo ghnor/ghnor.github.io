@@ -11,6 +11,9 @@ categories:
 
 TabLayout用以实现Android上常见的页面切换效果。
 
+<!--more-->
+
+
 ## 属性说明
 * 下方滚动的下划线颜色
 ```

@@ -11,6 +11,9 @@ categories:
 
 初始化Socket
 
+<!--more-->
+
+
 ```java
 Socket so = new Socket(HOST, PORT);
 ```

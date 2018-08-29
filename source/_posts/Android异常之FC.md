@@ -11,6 +11,9 @@ categories:
 
 尽管很消极，但是程序的crash是很难被避免的。如果能够知道程序crash的原因，就可以修复问题。
 
+<!--more-->
+
+
 在发生crash时，应该提供一个更友好的界面让程序重新再启动，同时也应该存在一个错误上报的机制收集错误日志帮助我们修复问题。
 
 Android提供了处理这类问题的方法，当crash发生时，系统会调用`UncaughtExceptionHandler`的`uncaughtException`方法。

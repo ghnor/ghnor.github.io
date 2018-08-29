@@ -11,6 +11,9 @@ categories:
 
 # FloatActionButton
 
+<!--more-->
+
+
 一个变相的ImageView。
 
 ## 属性介绍

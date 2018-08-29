@@ -11,6 +11,9 @@ categories:
 
 app/build.gradle
 
+<!--more-->
+
+
 ```gradle
 android {
     defaultConfig {

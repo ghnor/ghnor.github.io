@@ -11,6 +11,9 @@ categories:
 
 AppBarLayout其实就是一个垂直方向的LinearLayout，可以实现Material Design中标题栏的滚动效果。
 
+<!--more-->
+
+
 AppBarLayout的子View通过app:layout_scrollFlags属性或LayoutParams.setScrollFlags()方法来声明自身“滚动行为”。
 
 AppBarLayout只有作为CoordinatorLayout的直接子View时，并同时在CoordinatorLayout中添加一个可滚动的scrolling view（如：NestedScrollView、RecyclerView...）才能响应滚动行为。

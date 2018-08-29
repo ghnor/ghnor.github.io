@@ -11,6 +11,9 @@ categories:
 
 ## 引入jar包
 
+<!--more-->
+
+
 #### 方式一：
 
 ```gradle

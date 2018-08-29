@@ -11,6 +11,9 @@ categories:
 
 ## NFC相关AndroidManifest配置
 
+<!--more-->
+
+
 权限：`<uses-permissionandroid:name="Android.permission.NFC"/>`
 
 特殊功能限制，让你的应用在googleplay上被声明使用者必须拥有nfc功能：`<uses-feature android:name="android.hardware.nfc"android:required="true"/>`

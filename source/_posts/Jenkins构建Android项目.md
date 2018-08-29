@@ -11,6 +11,9 @@ categories:
 
 ## 安装启动
 
+<!--more-->
+
+
 需要的工具：  
 1. [jenkins.war](http://mirrors.jenkins-ci.org/war/latest/jenkins.war)  
 2. Gradle  

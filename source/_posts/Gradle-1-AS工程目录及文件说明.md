@@ -11,6 +11,9 @@ categories:
 
 ## Gradle 和 Android Studio 工程目录：
 
+<!--more-->
+
+
 |  |  |  |
 | :--- | :--- | :--- |
 | app |  | Android App目录 |

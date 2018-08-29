@@ -11,6 +11,9 @@ categories:
 
 ANR：Application Not Responding，即应用无响应。
 
+<!--more-->
+
+
 可以通过 /data/anr/traces.txt 文件查看ANR信息。
 
 ### ANR一般有三种类型
