@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>源码分析 - Router @chenenyu | ghnor&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="项目地址：Router @chenenyu  最简单的一次调用： 1Router.build(&quot;test&quot;).go(this); 就从这个调用开始看，跟着走一遍。 Router.build入口真正的调用类是RealRouter。 RealRouter.build接受两种入参，Uri（String也会被包装为Uri）和RouterRequest。 入参是Uri时，AbsRouter（RealRou">
+  <meta name="description" content="项目地址：Router @chenenyu">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="源码分析 - Router @chenenyu">
 <meta property="og:url" content="http://yoursite.com/Android/源码分析-Router-@chenenyu.html">
 <meta property="og:site_name" content="ghnor&#39;s Blog">
-<meta property="og:description" content="项目地址：Router @chenenyu  最简单的一次调用： 1Router.build(&quot;test&quot;).go(this); 就从这个调用开始看，跟着走一遍。 Router.build入口真正的调用类是RealRouter。 RealRouter.build接受两种入参，Uri（String也会被包装为Uri）和RouterRequest。 入参是Uri时，AbsRouter（RealRou">
+<meta property="og:description" content="项目地址：Router @chenenyu">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-08-29T06:58:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="源码分析 - Router @chenenyu">
-<meta name="twitter:description" content="项目地址：Router @chenenyu  最简单的一次调用： 1Router.build(&quot;test&quot;).go(this); 就从这个调用开始看，跟着走一遍。 Router.build入口真正的调用类是RealRouter。 RealRouter.build接受两种入参，Uri（String也会被包装为Uri）和RouterRequest。 入参是Uri时，AbsRouter（RealRou">
+<meta name="twitter:description" content="项目地址：Router @chenenyu">
   
     <link rel="alternative" href="/atom.xml" title="ghnor&#39;s Blog" type="application/atom+xml">
   
@@ -156,6 +156,7 @@
         <blockquote>
 <p><a href="https://github.com/chenenyu/Router" target="_blank" rel="noopener">项目地址：Router @chenenyu</a></p>
 </blockquote>
+<a id="more"></a>
 <p>最简单的一次调用：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Router.build(<span class="string">"test"</span>).go(<span class="keyword">this</span>);</span><br></pre></td></tr></table></figure>
 <p>就从这个调用开始看，跟着走一遍。</p>

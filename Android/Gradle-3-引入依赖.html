@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Gradle 3 - 引入依赖 | ghnor&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="引入jar包方式一：123dependencies &amp;#123;  compile fileTree(dir: &apos;libs&apos;, include: [&apos;*.jar&apos;]) // 即添加所有在libs文件夹中的jar&amp;#125; 方式二：123dependencies &amp;#123;  compile files(&apos;xxx.jar&apos;) // 添加某个jar包作为依赖&amp;#125; 除此之外，compile">
+  <meta name="description" content="引入jar包">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Gradle 3 - 引入依赖">
 <meta property="og:url" content="http://yoursite.com/Android/Gradle-3-引入依赖.html">
 <meta property="og:site_name" content="ghnor&#39;s Blog">
-<meta property="og:description" content="引入jar包方式一：123dependencies &amp;#123;  compile fileTree(dir: &apos;libs&apos;, include: [&apos;*.jar&apos;]) // 即添加所有在libs文件夹中的jar&amp;#125; 方式二：123dependencies &amp;#123;  compile files(&apos;xxx.jar&apos;) // 添加某个jar包作为依赖&amp;#125; 除此之外，compile">
+<meta property="og:description" content="引入jar包">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-11-30T07:24:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gradle 3 - 引入依赖">
-<meta name="twitter:description" content="引入jar包方式一：123dependencies &amp;#123;  compile fileTree(dir: &apos;libs&apos;, include: [&apos;*.jar&apos;]) // 即添加所有在libs文件夹中的jar&amp;#125; 方式二：123dependencies &amp;#123;  compile files(&apos;xxx.jar&apos;) // 添加某个jar包作为依赖&amp;#125; 除此之外，compile">
+<meta name="twitter:description" content="引入jar包">
   
     <link rel="alternative" href="/atom.xml" title="ghnor&#39;s Blog" type="application/atom+xml">
   
@@ -153,7 +153,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="引入jar包"><a href="#引入jar包" class="headerlink" title="引入jar包"></a>引入jar包</h2><h4 id="方式一："><a href="#方式一：" class="headerlink" title="方式一："></a>方式一：</h4><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">  <span class="keyword">compile</span> <span class="keyword">fileTree</span>(dir: <span class="string">'libs'</span>, <span class="keyword">include</span>: [<span class="string">'*.jar'</span>]) <span class="comment">// 即添加所有在libs文件夹中的jar</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h2 id="引入jar包"><a href="#引入jar包" class="headerlink" title="引入jar包"></a>引入jar包</h2><a id="more"></a>
+<h4 id="方式一："><a href="#方式一：" class="headerlink" title="方式一："></a>方式一：</h4><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">  <span class="keyword">compile</span> <span class="keyword">fileTree</span>(dir: <span class="string">'libs'</span>, <span class="keyword">include</span>: [<span class="string">'*.jar'</span>]) <span class="comment">// 即添加所有在libs文件夹中的jar</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="方式二："><a href="#方式二：" class="headerlink" title="方式二："></a>方式二：</h4><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">  <span class="keyword">compile</span> files(<span class="string">'xxx.jar'</span>) <span class="comment">// 添加某个jar包作为依赖</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>除此之外，<code>compile fileTree(dir: &#39;libs&#39;, include: [&#39;*.jar&#39;])</code>能够将dir表示的路径下符合include表示的后缀名的文件全部作为依赖：</p>
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">compile</span> <span class="keyword">fileTree</span>(dir: [<span class="string">'libs'</span>, <span class="string">'xxx'</span>], <span class="keyword">include</span>: [<span class="string">'*.jar'</span>, <span class="string">'.xxx'</span>])</span><br></pre></td></tr></table></figure>

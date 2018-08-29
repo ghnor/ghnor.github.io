@@ -8,13 +8,13 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Material Design 4 - AppBarLayout | ghnor&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="AppBarLayout其实就是一个垂直方向的LinearLayout，可以实现Material Design中标题栏的滚动效果。 AppBarLayout的子View通过app:layout_scrollFlags属性或LayoutParams.setScrollFlags()方法来声明自身“滚动行为”。 AppBarLayout只有作为CoordinatorLayout的直接子View时，并同">
+  <meta name="description" content="AppBarLayout其实就是一个垂直方向的LinearLayout，可以实现Material Design中标题栏的滚动效果。">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Material Design 4 - AppBarLayout">
 <meta property="og:url" content="http://yoursite.com/Android/Material-Design-4-AppBarLayout.html">
 <meta property="og:site_name" content="ghnor&#39;s Blog">
-<meta property="og:description" content="AppBarLayout其实就是一个垂直方向的LinearLayout，可以实现Material Design中标题栏的滚动效果。 AppBarLayout的子View通过app:layout_scrollFlags属性或LayoutParams.setScrollFlags()方法来声明自身“滚动行为”。 AppBarLayout只有作为CoordinatorLayout的直接子View时，并同">
+<meta property="og:description" content="AppBarLayout其实就是一个垂直方向的LinearLayout，可以实现Material Design中标题栏的滚动效果。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://ohle0c848.bkt.clouddn.com/android/appbarlayout-1.gif">
 <meta property="og:image" content="http://ohle0c848.bkt.clouddn.com/android/appbarlayout-2.gif">
@@ -23,7 +23,7 @@
 <meta property="og:updated_time" content="2017-11-30T07:24:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Material Design 4 - AppBarLayout">
-<meta name="twitter:description" content="AppBarLayout其实就是一个垂直方向的LinearLayout，可以实现Material Design中标题栏的滚动效果。 AppBarLayout的子View通过app:layout_scrollFlags属性或LayoutParams.setScrollFlags()方法来声明自身“滚动行为”。 AppBarLayout只有作为CoordinatorLayout的直接子View时，并同">
+<meta name="twitter:description" content="AppBarLayout其实就是一个垂直方向的LinearLayout，可以实现Material Design中标题栏的滚动效果。">
 <meta name="twitter:image" content="http://ohle0c848.bkt.clouddn.com/android/appbarlayout-1.gif">
   
     <link rel="alternative" href="/atom.xml" title="ghnor&#39;s Blog" type="application/atom+xml">
@@ -159,6 +159,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>AppBarLayout其实就是一个垂直方向的LinearLayout，可以实现Material Design中标题栏的滚动效果。</p>
+<a id="more"></a>
 <p>AppBarLayout的子View通过app:layout_scrollFlags属性或LayoutParams.setScrollFlags()方法来声明自身“滚动行为”。</p>
 <p>AppBarLayout只有作为CoordinatorLayout的直接子View时，并同时在CoordinatorLayout中添加一个可滚动的scrolling view（如：NestedScrollView、RecyclerView…）才能响应滚动行为。</p>
 <p>说一点，普通的ScrollView也是可以的滚动的，却不能响应AppbarLayout的滚动行为。其中关键在于CoordiantorLayout和Behavior，可以看我之前的文章【CoordinatorLayout与Behavior的一己之见】，里面大致介绍了其中的原理，可以让你初窥门径。</p>

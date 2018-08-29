@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Material Design 7 - DrawerLayout、NavigationView | ghnor&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="用以实现Android中的抽屉样式，在Google自己推出BottomNavigation之前，抽屉样式的交互可谓Material Design的标杆。 添加内容布局作为DrawerLayout的首个子view，并设置宽高为match_parent，不能设置layout_gravity。 在内容布局之下添加抽屉布局，设置layout_gravity，控制其在屏幕的左或右出现。一般设置高度match">
+  <meta name="description" content="用以实现Android中的抽屉样式，在Google自己推出BottomNavigation之前，抽屉样式的交互可谓Material Design的标杆。">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Material Design 7 - DrawerLayout、NavigationView">
 <meta property="og:url" content="http://yoursite.com/Android/Material-Design-7-DrawerLayout、NavigationView.html">
 <meta property="og:site_name" content="ghnor&#39;s Blog">
-<meta property="og:description" content="用以实现Android中的抽屉样式，在Google自己推出BottomNavigation之前，抽屉样式的交互可谓Material Design的标杆。 添加内容布局作为DrawerLayout的首个子view，并设置宽高为match_parent，不能设置layout_gravity。 在内容布局之下添加抽屉布局，设置layout_gravity，控制其在屏幕的左或右出现。一般设置高度match">
+<meta property="og:description" content="用以实现Android中的抽屉样式，在Google自己推出BottomNavigation之前，抽屉样式的交互可谓Material Design的标杆。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-11-30T07:24:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Material Design 7 - DrawerLayout、NavigationView">
-<meta name="twitter:description" content="用以实现Android中的抽屉样式，在Google自己推出BottomNavigation之前，抽屉样式的交互可谓Material Design的标杆。 添加内容布局作为DrawerLayout的首个子view，并设置宽高为match_parent，不能设置layout_gravity。 在内容布局之下添加抽屉布局，设置layout_gravity，控制其在屏幕的左或右出现。一般设置高度match">
+<meta name="twitter:description" content="用以实现Android中的抽屉样式，在Google自己推出BottomNavigation之前，抽屉样式的交互可谓Material Design的标杆。">
   
     <link rel="alternative" href="/atom.xml" title="ghnor&#39;s Blog" type="application/atom+xml">
   
@@ -154,6 +154,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>用以实现Android中的抽屉样式，在Google自己推出BottomNavigation之前，抽屉样式的交互可谓Material Design的标杆。</p>
+<a id="more"></a>
 <p>添加内容布局作为DrawerLayout的首个子view，并设置宽高为<code>match_parent</code>，不能设置<code>layout_gravity</code>。</p>
 <p>在内容布局之下添加抽屉布局，设置<code>layout_gravity</code>，控制其在屏幕的左或右出现。一般设置高度<code>match_parent</code>，宽度<code>wrap_content</code>。不能设置多个抽屉布局，会报错。</p>
 <p>抽屉布局呢，其实任意view都可以，但是Material Design中推荐使用NavigationView。</p>

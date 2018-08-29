@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Broadcast Receiver | ghnor&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Broadcast包括两个概念，广播发送者和广播接收者(Receiver)，这里的广播实际就是指 Intent，程序可以自己发送广播自己接收，也可以接受系统或其他应用的广播或是发送广播给其他应用程序。发送者可以通过类似 Context.sendBroadcast()) 接口发送广播，接收者通过  Context.registerReceiver()) 动态注册或在 AndroidManifest.">
+  <meta name="description" content="Broadcast包括两个概念，广播发送者和广播接收者(Receiver)，这里的广播实际就是指 Intent，程序可以自己发送广播自己接收，也可以接受系统或其他应用的广播或是发送广播给其他应用程序。">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Broadcast Receiver">
 <meta property="og:url" content="http://yoursite.com/Android/Broadcast-Receiver.html">
 <meta property="og:site_name" content="ghnor&#39;s Blog">
-<meta property="og:description" content="Broadcast包括两个概念，广播发送者和广播接收者(Receiver)，这里的广播实际就是指 Intent，程序可以自己发送广播自己接收，也可以接受系统或其他应用的广播或是发送广播给其他应用程序。发送者可以通过类似 Context.sendBroadcast()) 接口发送广播，接收者通过  Context.registerReceiver()) 动态注册或在 AndroidManifest.">
+<meta property="og:description" content="Broadcast包括两个概念，广播发送者和广播接收者(Receiver)，这里的广播实际就是指 Intent，程序可以自己发送广播自己接收，也可以接受系统或其他应用的广播或是发送广播给其他应用程序。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-11-14T14:29:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Broadcast Receiver">
-<meta name="twitter:description" content="Broadcast包括两个概念，广播发送者和广播接收者(Receiver)，这里的广播实际就是指 Intent，程序可以自己发送广播自己接收，也可以接受系统或其他应用的广播或是发送广播给其他应用程序。发送者可以通过类似 Context.sendBroadcast()) 接口发送广播，接收者通过  Context.registerReceiver()) 动态注册或在 AndroidManifest.">
+<meta name="twitter:description" content="Broadcast包括两个概念，广播发送者和广播接收者(Receiver)，这里的广播实际就是指 Intent，程序可以自己发送广播自己接收，也可以接受系统或其他应用的广播或是发送广播给其他应用程序。">
   
     <link rel="alternative" href="/atom.xml" title="ghnor&#39;s Blog" type="application/atom+xml">
   
@@ -153,7 +153,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Broadcast包括两个概念，广播发送者和广播接收者(Receiver)，这里的广播实际就是指 Intent，程序可以自己发送广播自己接收，也可以接受系统或其他应用的广播或是发送广播给其他应用程序。<br>发送者可以通过类似 <a href="http://developer.android.com/reference/android/content/Context.html#sendBroadcast(android.content.Intent" target="_blank" rel="noopener">Context.sendBroadcast()</a>) 接口发送广播，接收者通过  <a href="http://developer.android.com/reference/android/content/Context.html#registerReceiver(android.content.BroadcastReceiver,%20android.content.IntentFilter" target="_blank" rel="noopener">Context.registerReceiver()</a>) 动态注册或在 AndroidManifest.xml 文件中通过 <receiver> 标签静态注册。注册完成后，当发送者发送某个广播时系统会将发送的广播(Intent)与系统中所有注册的符合条件的接收者(Receiver)的 IntentFilter 进行匹配，若匹配成功则执行相应接收者的 onReceive 函数。  </receiver></p>
+        <p>Broadcast包括两个概念，广播发送者和广播接收者(Receiver)，这里的广播实际就是指 Intent，程序可以自己发送广播自己接收，也可以接受系统或其他应用的广播或是发送广播给其他应用程序。  </p>
+<a id="more"></a>
+<p>发送者可以通过类似 <a href="http://developer.android.com/reference/android/content/Context.html#sendBroadcast(android.content.Intent" target="_blank" rel="noopener">Context.sendBroadcast()</a>) 接口发送广播，接收者通过  <a href="http://developer.android.com/reference/android/content/Context.html#registerReceiver(android.content.BroadcastReceiver,%20android.content.IntentFilter" target="_blank" rel="noopener">Context.registerReceiver()</a>) 动态注册或在 AndroidManifest.xml 文件中通过 <receiver> 标签静态注册。注册完成后，当发送者发送某个广播时系统会将发送的广播(Intent)与系统中所有注册的符合条件的接收者(Receiver)的 IntentFilter 进行匹配，若匹配成功则执行相应接收者的 onReceive 函数。  </receiver></p>
 <h1 id="1-广播的接收"><a href="#1-广播的接收" class="headerlink" title="1. 广播的接收"></a>1. 广播的接收</h1><p>自定义广播接收器需要继承基类<code>BroadcastReceiver</code>或<code>WakefulBroadcastReceiver</code>，并实现抽象方法<code>onReceive(Context context, Intent intent)</code>。广播接收器接收到相应广播后，会自动回到onReceive(..)方法。默认情况下，广播接收器也是运行在 UI 线程，因此，<code>onReceive()</code>方法中不能执行太耗时的操作。否则将因此 ANR。</p>
 <blockquote>
 <p><strong>BroadcastReceiver</strong>：不会保证CPU的持续工作。当你执行长时间的操作时，CPU可能会在中途陷入休眠。<br><strong>WakefulBroadcastReceiver</strong>：保证CPU持续工作直到操作完成。<br><a href="http://stackoverflow.com/questions/26380534/broadcastreceiver-vs-wakefulbroadcastreceiver" target="_blank" rel="noopener">BroadcastReceiver Vs WakefulBroadcastReceiver</a></p>
