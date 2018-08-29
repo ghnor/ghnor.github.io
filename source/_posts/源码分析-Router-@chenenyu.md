@@ -9,10 +9,9 @@ categories:
     - Android
 ---
 
-> [项目地址：Router @chenenyu](https://github.com/chenenyu/Router)
-
 <!--more-->
 
+> [项目地址：Router @chenenyu](https://github.com/chenenyu/Router)
 
 最简单的一次调用：
 

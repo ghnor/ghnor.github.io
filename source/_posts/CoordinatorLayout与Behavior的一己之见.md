@@ -9,10 +9,9 @@ categories:
     - Android
 ---
 
-# 前言
-
 <!--more-->
 
+# 前言
 
 许多文章都是将`CoordinatorLayout`、`AppbarLayout`、`CollapsingToolbarLayout`、`Toolbar`等放在一起介绍，容易误解为这几个布局一定要互相搭配，且仅仅适用于这些场景中。  
 其实不然，其中最重要的是`CoordinatorLayout`，我把它称为协调布局。协调什么布局呢？自然是嵌套在其内部的Child View。  

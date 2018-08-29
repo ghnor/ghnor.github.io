@@ -9,10 +9,9 @@ categories:
     - Android
 ---
 
-# Dagger2？
-
 <!--more-->
 
+# Dagger2？
 
 Dagger 是 Java 平台的依赖注入库。在 J2EE 开发上流行甚广的 Spring 就是一个依赖注入库。此外还有 Google 的 Guice 和 Square 的 Dagger1。但它们都是是通过在运行时读取注解来实现依赖注入的，依赖的生成和注入需要依靠 Java 的反射机制，这对于对性能非常敏感的 Android 来说是一个硬伤。
 

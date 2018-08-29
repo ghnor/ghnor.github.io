@@ -9,10 +9,9 @@ categories:
     - Android
 ---
 
-ViewHolder不再单纯是View的容器，也承担了View实例化的操作。
-
 <!--more-->
 
+ViewHolder不再单纯是View的容器，也承担了View实例化的操作。
 
 ```java
 public class CustomAdapter extends BaseAdapter {

@@ -9,10 +9,9 @@ categories:
     - Android
 ---
 
-## Gradle 和 Android Studio 工程目录：
-
 <!--more-->
 
+## Gradle 和 Android Studio 工程目录：
 
 |  |  |  |
 | :--- | :--- | :--- |

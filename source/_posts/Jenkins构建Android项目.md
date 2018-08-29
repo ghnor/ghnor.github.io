@@ -9,10 +9,9 @@ categories:
     - Android
 ---
 
-## 安装启动
-
 <!--more-->
 
+## 安装启动
 
 需要的工具：  
 1. [jenkins.war](http://mirrors.jenkins-ci.org/war/latest/jenkins.war)  

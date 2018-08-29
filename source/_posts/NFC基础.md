@@ -9,10 +9,9 @@ categories:
     - Android
 ---
 
-## NFC相关AndroidManifest配置
-
 <!--more-->
 
+## NFC相关AndroidManifest配置
 
 权限：`<uses-permissionandroid:name="Android.permission.NFC"/>`
 

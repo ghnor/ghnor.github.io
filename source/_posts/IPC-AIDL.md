@@ -9,10 +9,9 @@ categories:
     - Android
 ---
 
-本文主要是《Android开发艺术探索》中AIDL一章的笔记。
-
 <!--more-->
 
+本文主要是《Android开发艺术探索》中AIDL一章的笔记。
 
 **使用AIDL来进行进程间通信的流程，分为服务端和客户端两个方面。**
 

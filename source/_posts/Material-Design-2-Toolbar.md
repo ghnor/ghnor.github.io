@@ -9,10 +9,9 @@ categories:
     - Android
 ---
 
-在Material Design中，推荐使用Toolbar代替之前3.0中的Actionbar，以提供更灵活的视图展现。  
-
 <!--more-->
 
+在Material Design中，推荐使用Toolbar代替之前3.0中的Actionbar，以提供更灵活的视图展现。  
 使用`AppCompatActivity.setSupportActionBar(Toolbar)`之后，Toolbar就可以接管Actionbar的功能，例如option menu。  
 实质上继承于ViewGroup，可以在标题栏上显示任意内容，宽高也可以任意设置。
 

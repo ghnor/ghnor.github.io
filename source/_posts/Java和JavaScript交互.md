@@ -9,10 +9,9 @@ categories:
     - Android
 ---
 
-# 步骤：
-
 <!--more-->
 
+# 步骤：
 1. WebView开启JavaScript脚本执行  
 2. WebView设置供JavaScript调用的交互接口  
 3. 客户端和网页端编写调用对方的代码。

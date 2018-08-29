@@ -9,10 +9,9 @@ categories:
     - Android
 ---
 
-## Gradle Wrapper
-
 <!--more-->
 
+## Gradle Wrapper
 
 是对Gradle的一层包装，封装了统一的Gradle版本和配置。
 

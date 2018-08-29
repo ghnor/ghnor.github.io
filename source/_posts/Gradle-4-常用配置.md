@@ -9,10 +9,9 @@ categories:
     - Android
 ---
 
-app/build.gradle
-
 <!--more-->
 
+app/build.gradle
 
 ```gradle
 android {

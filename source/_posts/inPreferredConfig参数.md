@@ -9,10 +9,9 @@ categories:
     - Android
 ---
 
-> 原文：[Android inpreferredconfig参数分析](http://blog.csdn.net/ccpat/article/details/46834089)
-
 <!--more-->
 
+> 原文：[Android inpreferredconfig参数分析](http://blog.csdn.net/ccpat/article/details/46834089)
 
 ### 参数说明
 

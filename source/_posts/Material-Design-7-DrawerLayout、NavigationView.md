@@ -9,10 +9,9 @@ categories:
     - Android
 ---
 
-用以实现Android中的抽屉样式，在Google自己推出BottomNavigation之前，抽屉样式的交互可谓Material Design的标杆。
-
 <!--more-->
 
+用以实现Android中的抽屉样式，在Google自己推出BottomNavigation之前，抽屉样式的交互可谓Material Design的标杆。
 
 添加内容布局作为DrawerLayout的首个子view，并设置宽高为`match_parent`，不能设置`layout_gravity`。
 

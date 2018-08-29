@@ -9,10 +9,9 @@ categories:
     - Android
 ---
 
-ANR：Application Not Responding，即应用无响应。
-
 <!--more-->
 
+ANR：Application Not Responding，即应用无响应。
 
 可以通过 /data/anr/traces.txt 文件查看ANR信息。
 

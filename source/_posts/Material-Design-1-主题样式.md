@@ -9,10 +9,9 @@ categories:
     - Android
 ---
 
-在build.grade中添加：
-
 <!--more-->
 
+在build.grade中添加：
 ```
 compile 'com.android.support:appcompat-v7:version'
 compile 'com.android.support:design:version'

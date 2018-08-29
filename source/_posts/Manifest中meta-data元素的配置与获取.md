@@ -9,10 +9,9 @@ categories:
     - Android
 ---
 
-`<meta-data>`是提供组件额外的数据用的，它本身就是一个键值对，可以自定义名称和值。  
-
 <!--more-->
 
+`<meta-data>`是提供组件额外的数据用的，它本身就是一个键值对，可以自定义名称和值。  
 它可以包含在`<activity>`、`<application>`、`<service>`和`<receiver>`中。
 
 ## 配置

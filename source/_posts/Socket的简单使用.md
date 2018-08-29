@@ -9,10 +9,9 @@ categories:
     - Android
 ---
 
-初始化Socket
-
 <!--more-->
 
+初始化Socket
 
 ```java
 Socket so = new Socket(HOST, PORT);
