@@ -1,8 +1,8 @@
 ---
 path: Android/CoordinatorLayout与Behavior的一己之见.md
 title: CoordinatorLayout与Behavior的一己之见
-date: 2016-10-10T00:00:00.000Z
-updated: 2016-12-04T00:00:00.000Z
+date: 2016-10-10T20:11:00.000Z
+updated: 2016-12-04T14:24:00.000Z
 tags:
     - Android
 categories:

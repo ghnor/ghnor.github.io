@@ -1,8 +1,8 @@
 ---
 path: 'Android/Dagger2 的初步了解和使用.md'
 title: 'Dagger2 的初步了解和使用'
-date: 2017-03-13T00:00:00.000Z
-updated: 2017-03-13T00:00:00.000Z
+date: 2017-03-13T12:10:00.000Z
+updated: 2017-03-13T12:10:00.000Z
 tags:
     - Android
 categories:

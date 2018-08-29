@@ -1,8 +1,8 @@
 ---
 path: Android/Android异常之ANR.md
 title: Android异常之ANR
-date: 2016-11-03T00:00:00.000Z
-updated: 2016-11-03T00:00:00.000Z
+date: 2016-11-03T13:36:00.000Z
+updated: 2016-11-03T13:36:00.000Z
 tags:
     - Android
 categories:
