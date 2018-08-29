@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2016/11 | ghnor&#39;s Blog</title>
+  <title>Gradle 1 - AS工程目录及文件说明 | ghnor&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="ghnor&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/archives/2016/11/index.html">
+  <meta name="description" content="Gradle 和 Android Studio 工程目录：          app  Android App目录    app.iml AS识别项目的配置文件    build 模块构建输出目录（代码编译后生成的文件存放的位置、生成的Apk文件等）    build.gradle module构建脚本    libs 相关库文件目录    proguard-rules.pro proguard混">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gradle 1 - AS工程目录及文件说明">
+<meta property="og:url" content="http://yoursite.com/Android/Gradle-1-AS工程目录及文件说明.html">
 <meta property="og:site_name" content="ghnor&#39;s Blog">
+<meta property="og:description" content="Gradle 和 Android Studio 工程目录：          app  Android App目录    app.iml AS识别项目的配置文件    build 模块构建输出目录（代码编译后生成的文件存放的位置、生成的Apk文件等）    build.gradle module构建脚本    libs 相关库文件目录    proguard-rules.pro proguard混">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-30T07:24:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ghnor&#39;s Blog">
+<meta name="twitter:title" content="Gradle 1 - AS工程目录及文件说明">
+<meta name="twitter:description" content="Gradle 和 Android Studio 工程目录：          app  Android App目录    app.iml AS识别项目的配置文件    build 模块构建输出目录（代码编译后生成的文件存放的位置、生成的Apk文件等）    build.gradle module构建脚本    libs 相关库文件目录    proguard-rules.pro proguard混">
   
     <link rel="alternative" href="/atom.xml" title="ghnor&#39;s Blog" type="application/atom+xml">
   
@@ -128,36 +133,180 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Gradle-1-AS工程目录及文件说明" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Gradle 1 - AS工程目录及文件说明
+    </h1>
+  
+
+        
+        <a href="/Android/Gradle-1-AS工程目录及文件说明.html" class="archive-article-date">
+  	<time datetime="2017-11-30T07:24:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-30</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Gradle-和-Android-Studio-工程目录："><a href="#Gradle-和-Android-Studio-工程目录：" class="headerlink" title="Gradle 和 Android Studio 工程目录："></a>Gradle 和 Android Studio 工程目录：</h2><table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left"></th>
+<th style="text-align:left"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">app</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">Android App目录</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">app.iml</td>
+<td style="text-align:left">AS识别项目的配置文件</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">build</td>
+<td style="text-align:left">模块构建输出目录（代码编译后生成的文件存放的位置、生成的Apk文件等）</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">build.gradle</td>
+<td style="text-align:left">module构建脚本</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">libs</td>
+<td style="text-align:left">相关库文件目录</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">proguard-rules.pro</td>
+<td style="text-align:left">proguard混淆配置</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">src</td>
+<td style="text-align:left">源代码，资源等</td>
+</tr>
+<tr>
+<td style="text-align:left">build</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">构建输出目录</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">generated</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">intermediates</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">build.gradle</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">工程构建文件</td>
+</tr>
+<tr>
+<td style="text-align:left">gradle</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">wrapper</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">gradle.properties</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">gradle相关的全局属性设置</td>
+</tr>
+<tr>
+<td style="text-align:left">gradlew</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">Linux下的gradle wrapper可执行文件</td>
+</tr>
+<tr>
+<td style="text-align:left">gradlew.bat</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">windows下的gradle wrapper可执行文件</td>
+</tr>
+<tr>
+<td style="text-align:left">local.properties</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">配置Androod SDK位置文件</td>
+</tr>
+<tr>
+<td style="text-align:left">settings.gradle</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">工程配置</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>build.gradle #project构建文件</strong></li>
+</ul>
+<p>顶级构建文件，可以为所有子项目/模块添加常用的配置选项。</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//buildscript中的声明是gradle脚本自身需要使用的资源</span></span><br><span class="line"><span class="comment">//可以声明的资源包括依赖项、第三方插件、maven仓库地址等。</span></span><br><span class="line"><span class="keyword">buildscript</span> &#123;</span><br><span class="line">    <span class="keyword">repositories</span> &#123;</span><br><span class="line">        jcenter()  <span class="comment">//使用jcenter库</span></span><br><span class="line">        <span class="comment">//mavenCentral()</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">dependencies</span> &#123;</span><br><span class="line">        <span class="comment">// 配置使用gradle所需要依赖的版本库</span></span><br><span class="line">        <span class="keyword">classpath</span> <span class="string">'com.android.tools.build:gradle:2.1.0'</span></span><br><span class="line">        <span class="comment">//注意：不要在这里配置项目所需要的依赖</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//项目自身所需要的一些配置</span></span><br><span class="line"><span class="keyword">allprojects</span> &#123;</span><br><span class="line">    <span class="keyword">repositories</span> &#123;</span><br><span class="line">        jcenter()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>app/build.gradle #module构建文件</strong></li>
+</ul>
+<p>模块（module）中的构建文件，对当前模块生效。开发过程中最需要注重的一个文件，应用的相关特性都在这里进行配置。</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//表示该module是一个应用（application）模块，应用了com.android.application插件；</span></span><br><span class="line"><span class="comment">//（如果是一个android library，那么这里的是apply plugin:'com.android.library'）</span></span><br><span class="line">apply plugin: <span class="string">'com.android.application'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//安卓项目相关的配置，后续章节将进行更为详细的介绍</span></span><br><span class="line">android &#123;</span><br><span class="line">    <span class="comment">//编译项目所用的SDK版本(即编译时的API版本)，com.android.support的版本需要与这个一致</span></span><br><span class="line">    <span class="comment">//建议（总是）采用最新版本</span></span><br><span class="line">    compileSdkVersion <span class="number">23</span></span><br><span class="line">    <span class="comment">//构建工具版本</span></span><br><span class="line">    buildToolsVersion <span class="string">"23.0.3"</span></span><br><span class="line"></span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        <span class="comment">//安装时，依据该ID区分是否为同一个应用</span></span><br><span class="line">        applicationId <span class="string">"com.wiky.supporttest"</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//最低支持的系统版本（必须&gt;=所有依赖库所支持的最低版本）</span></span><br><span class="line">        minSdkVersion <span class="number">9</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//举例说明其作用：假设我们compileSdkVersion采用了23（6.0），但是项目暂时还未对6.0的特性（如运行时权限）做相应的处理，</span></span><br><span class="line">        <span class="comment">//那么可以设置targetSdkVersion的版本低于23。这样，应用仍可以正常运行在6.0的机子上（当然也就不具有运行时权限的特性）。</span></span><br><span class="line">        targetSdkVersion <span class="number">23</span></span><br><span class="line">        versionCode <span class="number">1</span></span><br><span class="line">        versionName <span class="string">"1.0"</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// buildTypes是构建类型，常用的有release和debug两种，可以在这里面启用混淆，启用zipAlign以及配置签名信息等。后面再具体介绍</span></span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled <span class="keyword">false</span></span><br><span class="line">            proguardFiles getDefaultProguardFile(<span class="string">'proguard-android.txt'</span>), <span class="string">'proguard-rules.pro'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//该module所需的依赖库配置</span></span><br><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">    <span class="keyword">compile</span> <span class="keyword">fileTree</span>(dir: <span class="string">'libs'</span>, <span class="keyword">include</span>: [<span class="string">'*.jar'</span>])</span><br><span class="line">    testCompile <span class="string">'junit:junit:4.12'</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="string">'com.android.support:appcompat-v7:23.3.0'</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>settings.gradle #工程配置</strong></li>
+</ul>
+<p>这个文件是全局的项目配置文件，里面主要声明一些需要加入 gradle 的 module，即告诉gradle项目中有哪些模块（module）需要处理，文件内容：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//如果有多个module的话，格式如：include ':app', ':otherModule',.....</span></span><br><span class="line"><span class="keyword">include</span> <span class="string">':app'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>gradle.properties #gradle相关的全局属性设置</strong></li>
+</ul>
+<p>在google开源的[iosched][1]项目中，可以看到他们利用了该文件配置了一些builde.gradle中需要用到的常（变）量， 如com.android.support. 的版本号以及签名信息相关的配置。</p>
+<ul>
+<li><strong>gradle/wrapper/gradle-wrapper.properties</strong></li>
+</ul>
+<p>它允许你的机器在不需要安装运行的情况下就能运行Gradle脚本（我们在下载AS后可以直接开始使用gradle、开发项目，而无需另外下载及安装gradle，主要归功于这一特性），而且更重要的是它确保了build脚本运行在指定版本的Gradle。它会从中央仓库中自动下载Gradle，解压到你的文件系统，然后用来build。</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#Mon Dec <span class="number">28</span> <span class="number">10</span>:<span class="number">00</span>:<span class="number">20</span> PST <span class="number">2015</span></span><br><span class="line">distributionBase=GRADLE_USER_HOME  <span class="comment">// 在环境变量中配置，默认：C:\Users\Administrator\</span></span><br><span class="line">distributionPath=wrapper<span class="regexp">/dists /</span><span class="regexp">/ 如果上面的环境变量已配置，下载目录：GRADLE_USER_HOME\.gradle\wrapper\dists\</span></span><br><span class="line"><span class="regexp">zipStoreBase=GRADLE_USER_HOME</span></span><br><span class="line"><span class="regexp">zipStorePath=wrapper/</span>dists</span><br><span class="line">distributionUrl=https\:<span class="comment">//services.gradle.org/distributions/gradle-3.3-all.zip // 使用的gradle版本，及其仓库地址。我们也可以指定本地目录。</span></span><br></pre></td></tr></table></figure>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/Android/Adapter的优化写法.html" class="archive-article-date">
-  	<time datetime="2016-11-14T14:29:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-14</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/Android/Adapter的优化写法.html">Adapter的优化写法</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -169,7 +318,7 @@
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -182,164 +331,126 @@
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/Android/Gradle-1-AS工程目录及文件说明.html" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/Android/Broadcast-Receiver.html" class="archive-article-date">
-  	<time datetime="2016-11-14T14:29:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-14</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/Android/Gradle-2-统一依赖管理.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Gradle 2 - 统一依赖管理
+        
+      </div>
+    </a>
+  
+  
+    <a href="/Android/Dagger2-的初步了解和使用.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Dagger2 的初步了解和使用</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/Android/Broadcast-Receiver.html">Broadcast Receiver</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Android//" class="article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Gradle-和-Android-Studio-工程目录："><span class="toc-number">1.</span> <span class="toc-text">Gradle 和 Android Studio 工程目录：</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/Android/Android异常之FC.html" class="archive-article-date">
-  	<time datetime="2016-11-03T05:38:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-03</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/Android/Android异常之FC.html">Android异常之FC</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Android//" class="article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
+        
+    </div>
+</aside>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/Android/Android异常之ANR.html" class="archive-article-date">
-  	<time datetime="2016-11-03T05:36:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-03</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/Android/Android异常之ANR.html">Android异常之ANR</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Android//" class="article-tag-list-link color3">Android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -362,8 +473,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
