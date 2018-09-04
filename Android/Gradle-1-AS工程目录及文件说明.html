@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Gradle 和 Android Studio 工程目录：          app  Android App目录    app.iml AS识别项目的配置文件    build 模块构建输出目录（代码编译后生成的文件存放的位置、生成的Apk文件等）    build.gradle module构建脚本    libs 相关库文件目录    proguard-rules.pro proguard">
+<meta name="description" content="Gradle 和 Android Studio 工程目录：          app  Android App目录    app.iml AS识别项目的配置文件    build 模块构建输出目录（代码编译后生成的文件存放的位置、生成的Apk文件等）    build.gradle module构建脚本    libs 相关库文件目录    proguard-rules.pro proguard混">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Gradle 1 - AS工程目录及文件说明">
 <meta property="og:url" content="http://yoursite.com/Android/Gradle-1-AS工程目录及文件说明.html">
 <meta property="og:site_name" content="ghnor&#39;s Blog">
-<meta property="og:description" content="Gradle 和 Android Studio 工程目录：          app  Android App目录    app.iml AS识别项目的配置文件    build 模块构建输出目录（代码编译后生成的文件存放的位置、生成的Apk文件等）    build.gradle module构建脚本    libs 相关库文件目录    proguard-rules.pro proguard">
+<meta property="og:description" content="Gradle 和 Android Studio 工程目录：          app  Android App目录    app.iml AS识别项目的配置文件    build 模块构建输出目录（代码编译后生成的文件存放的位置、生成的Apk文件等）    build.gradle module构建脚本    libs 相关库文件目录    proguard-rules.pro proguard混">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-11-30T07:24:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gradle 1 - AS工程目录及文件说明">
-<meta name="twitter:description" content="Gradle 和 Android Studio 工程目录：          app  Android App目录    app.iml AS识别项目的配置文件    build 模块构建输出目录（代码编译后生成的文件存放的位置、生成的Apk文件等）    build.gradle module构建脚本    libs 相关库文件目录    proguard-rules.pro proguard">
+<meta name="twitter:description" content="Gradle 和 Android Studio 工程目录：          app  Android App目录    app.iml AS识别项目的配置文件    build 模块构建输出目录（代码编译后生成的文件存放的位置、生成的Apk文件等）    build.gradle module构建脚本    libs 相关库文件目录    proguard-rules.pro proguard混">
 
 
 
@@ -342,8 +342,7 @@
       
 
       
-        <a id="more"></a>
-<h2 id="Gradle-和-Android-Studio-工程目录："><a href="#Gradle-和-Android-Studio-工程目录：" class="headerlink" title="Gradle 和 Android Studio 工程目录："></a>Gradle 和 Android Studio 工程目录：</h2><table>
+        <h2 id="Gradle-和-Android-Studio-工程目录："><a href="#Gradle-和-Android-Studio-工程目录：" class="headerlink" title="Gradle 和 Android Studio 工程目录："></a>Gradle 和 Android Studio 工程目录：</h2><table>
 <thead>
 <tr>
 <th style="text-align:left"></th>
@@ -468,6 +467,7 @@
 </ul>
 <p>它允许你的机器在不需要安装运行的情况下就能运行Gradle脚本（我们在下载AS后可以直接开始使用gradle、开发项目，而无需另外下载及安装gradle，主要归功于这一特性），而且更重要的是它确保了build脚本运行在指定版本的Gradle。它会从中央仓库中自动下载Gradle，解压到你的文件系统，然后用来build。</p>
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#Mon Dec <span class="number">28</span> <span class="number">10</span>:<span class="number">00</span>:<span class="number">20</span> PST <span class="number">2015</span></span><br><span class="line">distributionBase=GRADLE_USER_HOME  <span class="comment">// 在环境变量中配置，默认：C:\Users\Administrator\</span></span><br><span class="line">distributionPath=wrapper<span class="regexp">/dists /</span><span class="regexp">/ 如果上面的环境变量已配置，下载目录：GRADLE_USER_HOME\.gradle\wrapper\dists\</span></span><br><span class="line"><span class="regexp">zipStoreBase=GRADLE_USER_HOME</span></span><br><span class="line"><span class="regexp">zipStorePath=wrapper/</span>dists</span><br><span class="line">distributionUrl=https\:<span class="comment">//services.gradle.org/distributions/gradle-3.3-all.zip // 使用的gradle版本，及其仓库地址。我们也可以指定本地目录。</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
 
       
     </div>

@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="&amp;lt;meta-data&amp;gt;是提供组件额外的数据用的，它本身就是一个键值对，可以自定义名称和值。它可以包含在&amp;lt;activity&amp;gt;、&amp;lt;application&amp;gt;、&amp;lt;service&amp;gt;和&amp;lt;receiver&amp;gt;中。 配置123&amp;lt;meta-data android:name=&quot;string&quot;     android:resource=&quot;resourc">
+<meta name="description" content="&amp;lt;meta-data&amp;gt;是提供组件额外的数据用的，它本身就是一个键值对，可以自定义名称和值。它可以包含在&amp;lt;activity&amp;gt;、&amp;lt;application&amp;gt;、&amp;lt;service&amp;gt;和&amp;lt;receiver&amp;gt;中。 配置123&amp;lt;meta-data android:name=&quot;string&quot;     android:resource=&quot;resource">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Manifest中meta-data元素的配置与获取">
 <meta property="og:url" content="http://yoursite.com/Android/Manifest中meta-data元素的配置与获取.html">
 <meta property="og:site_name" content="ghnor&#39;s Blog">
-<meta property="og:description" content="&amp;lt;meta-data&amp;gt;是提供组件额外的数据用的，它本身就是一个键值对，可以自定义名称和值。它可以包含在&amp;lt;activity&amp;gt;、&amp;lt;application&amp;gt;、&amp;lt;service&amp;gt;和&amp;lt;receiver&amp;gt;中。 配置123&amp;lt;meta-data android:name=&quot;string&quot;     android:resource=&quot;resourc">
+<meta property="og:description" content="&amp;lt;meta-data&amp;gt;是提供组件额外的数据用的，它本身就是一个键值对，可以自定义名称和值。它可以包含在&amp;lt;activity&amp;gt;、&amp;lt;application&amp;gt;、&amp;lt;service&amp;gt;和&amp;lt;receiver&amp;gt;中。 配置123&amp;lt;meta-data android:name=&quot;string&quot;     android:resource=&quot;resource">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-11-30T06:27:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Manifest中meta-data元素的配置与获取">
-<meta name="twitter:description" content="&amp;lt;meta-data&amp;gt;是提供组件额外的数据用的，它本身就是一个键值对，可以自定义名称和值。它可以包含在&amp;lt;activity&amp;gt;、&amp;lt;application&amp;gt;、&amp;lt;service&amp;gt;和&amp;lt;receiver&amp;gt;中。 配置123&amp;lt;meta-data android:name=&quot;string&quot;     android:resource=&quot;resourc">
+<meta name="twitter:description" content="&amp;lt;meta-data&amp;gt;是提供组件额外的数据用的，它本身就是一个键值对，可以自定义名称和值。它可以包含在&amp;lt;activity&amp;gt;、&amp;lt;application&amp;gt;、&amp;lt;service&amp;gt;和&amp;lt;receiver&amp;gt;中。 配置123&amp;lt;meta-data android:name=&quot;string&quot;     android:resource=&quot;resource">
 
 
 
@@ -342,8 +342,7 @@
       
 
       
-        <a id="more"></a>
-<p><code>&lt;meta-data&gt;</code>是提供组件额外的数据用的，它本身就是一个键值对，可以自定义名称和值。<br>它可以包含在<code>&lt;activity&gt;</code>、<code>&lt;application&gt;</code>、<code>&lt;service&gt;</code>和<code>&lt;receiver&gt;</code>中。</p>
+        <p><code>&lt;meta-data&gt;</code>是提供组件额外的数据用的，它本身就是一个键值对，可以自定义名称和值。<br>它可以包含在<code>&lt;activity&gt;</code>、<code>&lt;application&gt;</code>、<code>&lt;service&gt;</code>和<code>&lt;receiver&gt;</code>中。</p>
 <h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta-data</span> <span class="attr">android:name</span>=<span class="string">"string"</span></span></span><br><span class="line"><span class="tag">     <span class="attr">android:resource</span>=<span class="string">"resource specification"</span></span></span><br><span class="line"><span class="tag">     <span class="attr">android:value</span>=<span class="string">"string"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
 <p>一般的值可以通过value属性来指定，但是如果要指定一个资源的id,则需要使用resource属性来配置。</p>
 <p>例如：</p>
@@ -359,6 +358,8 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">	ComponentName cn=<span class="keyword">new</span> ComponentName(<span class="keyword">this</span>, MetaDataService.class);</span><br><span class="line">	ServiceInfo info=<span class="keyword">this</span>.getPackageManager()</span><br><span class="line">			 .getServiceInfo(cn, PackageManager.GET_META_DATA);</span><br><span class="line">	String value = info.metaData.getString(<span class="string">"service_meta_data"</span>);</span><br><span class="line">	Log.d(<span class="string">"Service TAG"</span>, <span class="string">" value == "</span> + value);</span><br><span class="line">&#125; <span class="keyword">catch</span> (PackageManager.NameNotFoundException e) &#123;</span><br><span class="line">	e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="在-lt-receiver-gt-元素下配置-lt-mate-data-gt-元素"><a href="#在-lt-receiver-gt-元素下配置-lt-mate-data-gt-元素" class="headerlink" title="在&lt;receiver...&gt;元素下配置&lt;mate-data...&gt;元素"></a>在<code>&lt;receiver...&gt;</code>元素下配置<code>&lt;mate-data...&gt;</code>元素</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">receiver</span> <span class="attr">android:name</span>=<span class="string">"MetaDataReceiver"</span>&gt;</span></span><br><span class="line">    .....</span><br><span class="line">    <span class="tag">&lt;<span class="name">meta-data</span> <span class="attr">android:name</span>=<span class="string">"receiver_meta_data"</span> <span class="attr">android:value</span>=<span class="string">"xxxxxxx"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">receiver</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">	ComponentName cn=<span class="keyword">new</span> ComponentName(<span class="keyword">this</span>, MetaDataReceiver.class);</span><br><span class="line">	ActivityInfo info=context.getPackageManager()</span><br><span class="line">            .getReceiverInfo(cn, PackageManager.GET_META_DATA);</span><br><span class="line">	String value = info.metaData.getString(<span class="string">"receiver_meta_data"</span>);</span><br><span class="line">	Log.d(<span class="string">"Receiver TAG"</span>, <span class="string">" value == "</span> + value);</span><br><span class="line">&#125; <span class="keyword">catch</span> (PackageManager.NameNotFoundException e) &#123;</span><br><span class="line">	e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+
       
     </div>
     

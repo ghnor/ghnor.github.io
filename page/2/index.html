@@ -341,9 +341,7 @@
 
       
         
-          
-            <a id="more"></a>
-<h2 id="引入jar包"><a href="#引入jar包" class="headerlink" title="引入jar包"></a>引入jar包</h2><h4 id="方式一："><a href="#方式一：" class="headerlink" title="方式一："></a>方式一：</h4><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">  <span class="keyword">compile</span> <span class="keyword">fileTree</span>(dir: <span class="string">'libs'</span>, <span class="keyword">include</span>: [<span class="string">'*.jar'</span>]) <span class="comment">// 即添加所有在libs文件夹中的jar</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <h2 id="引入jar包"><a href="#引入jar包" class="headerlink" title="引入jar包"></a>引入jar包</h2><h4 id="方式一："><a href="#方式一：" class="headerlink" title="方式一："></a>方式一：</h4><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">  <span class="keyword">compile</span> <span class="keyword">fileTree</span>(dir: <span class="string">'libs'</span>, <span class="keyword">include</span>: [<span class="string">'*.jar'</span>]) <span class="comment">// 即添加所有在libs文件夹中的jar</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="方式二："><a href="#方式二：" class="headerlink" title="方式二："></a>方式二：</h4><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">  <span class="keyword">compile</span> files(<span class="string">'xxx.jar'</span>) <span class="comment">// 添加某个jar包作为依赖</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>除此之外，<code>compile fileTree(dir: &#39;libs&#39;, include: [&#39;*.jar&#39;])</code>能够将dir表示的路径下符合include表示的后缀名的文件全部作为依赖：</p>
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">compile</span> <span class="keyword">fileTree</span>(dir: [<span class="string">'libs'</span>, <span class="string">'xxx'</span>], <span class="keyword">include</span>: [<span class="string">'*.jar'</span>, <span class="string">'.xxx'</span>])</span><br></pre></td></tr></table></figure>
@@ -359,8 +357,13 @@
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">	...</span><br><span class="line">	<span class="keyword">repositories</span> &#123;</span><br><span class="line">		...</span><br><span class="line">		<span class="keyword">flatDir</span> &#123;</span><br><span class="line">			dirs <span class="string">'libs'</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">	...</span><br><span class="line">	<span class="keyword">compile</span>(name: <span class="string">'arr name'</span>, ext: <span class="string">'aar'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="方式二：-1"><a href="#方式二：-1" class="headerlink" title="方式二："></a>方式二：</h4><p>选择Android Studio的File -&gt; New -&gt; New Module…，再选择Import .JAR/.AAR Package，导入后再在依赖中添加该module</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Android/Gradle-3-引入依赖.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -499,9 +502,7 @@
 
       
         
-          
-            <a id="more"></a>
-<p>避免在依赖包出新版本时，需要对每个module中的build.gradle文件都进行修改（如appcompat-v7包），使用这种方式即只需一次修改。</p>
+          <p>避免在依赖包出新版本时，需要对每个module中的build.gradle文件都进行修改（如appcompat-v7包），使用这种方式即只需一次修改。</p>
 <h2 id="方法一：添加-config-gradle"><a href="#方法一：添加-config-gradle" class="headerlink" title="方法一：添加 config.gradle"></a>方法一：添加 config.gradle</h2><p>在项目的根目录创建一个gradle配置文件config.gradle，格式如下(内容根据需要进行修改)：</p>
 <p>项目中所有的依赖只要在这个文件中统一做一次修改即可。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ext &#123;</span><br><span class="line">    supportVersion = &apos;25.3.1&apos;</span><br><span class="line"></span><br><span class="line">    android = [ compileSdkVersion: 25 ,</span><br><span class="line">                buildToolsVersion: &quot;25.0.2&quot;,</span><br><span class="line">                applicationId    : &quot;com.gradle.test&quot;,</span><br><span class="line">                minSdkVersion    : 15,</span><br><span class="line">                targetSdkVersion : 25,</span><br><span class="line">                versionCode      : 1,</span><br><span class="line">                versionName      : &quot;1.0&quot; ]</span><br><span class="line"></span><br><span class="line">    dependencies = [</span><br><span class="line">            //android.support</span><br><span class="line">            &quot;appcompat-v7&quot;      : &quot;com.android.support:appcompat-v7:$&#123;supportVersion&#125;&quot;,</span><br><span class="line">            &quot;design&quot;            : &quot;com.android.support:design:$&#123;supportVersion&#125;&quot;,</span><br><span class="line">            &quot;recyclerview-v7&quot;   : &quot;com.android.support:recyclerview-v7:$&#123;supportVersion&#125;&quot;,</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -521,8 +522,13 @@
 <p>修改app\build.gradle：</p>
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">buildToolsVersion build_tools_version</span><br><span class="line">...</span><br><span class="line"><span class="keyword">compile</span> <span class="string">"com.android.support:appcompat-v7:$&#123;supportVersion&#125;"</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <p>这种方法有一个问题就是，比如说build.gradle中compileSdkVersion的数值本身应该是int类型的，但是如果从gradle.properties中读取的话，默认是string类型，所以build.gradle文件中原先值类型为int的参数需要在后面加上<code>as int</code>。</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Android/Gradle-2-统一依赖管理.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -661,9 +667,7 @@
 
       
         
-          
-            <a id="more"></a>
-<p>在Material Design中，推荐使用Toolbar代替之前3.0中的Actionbar，以提供更灵活的视图展现。<br>使用<code>AppCompatActivity.setSupportActionBar(Toolbar)</code>之后，Toolbar就可以接管Actionbar的功能，例如option menu。<br>实质上继承于ViewGroup，可以在标题栏上显示任意内容，宽高也可以任意设置。</p>
+          <p>在Material Design中，推荐使用Toolbar代替之前3.0中的Actionbar，以提供更灵活的视图展现。<br>使用<code>AppCompatActivity.setSupportActionBar(Toolbar)</code>之后，Toolbar就可以接管Actionbar的功能，例如option menu。<br>实质上继承于ViewGroup，可以在标题栏上显示任意内容，宽高也可以任意设置。</p>
 <p>同时也预先提供了一些设置项：</p>
 <h4 id="设置导航按钮（Navigation-Button）："><a href="#设置导航按钮（Navigation-Button）：" class="headerlink" title="设置导航按钮（Navigation Button）："></a>设置导航按钮（Navigation Button）：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app:navigationIcon=&quot;&quot;</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">toolbar.setNavigationIcon();</span><br></pre></td></tr></table></figure>
@@ -717,8 +721,13 @@
 <p>  但是如果Fragment具有更高的优先级的，就无解了。</p>
 </li>
 </ul>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Android/Material-Design-2-Toolbar.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -857,9 +866,7 @@
 
       
         
-          
-            <a id="more"></a>
-<h2 id="Gradle-和-Android-Studio-工程目录："><a href="#Gradle-和-Android-Studio-工程目录：" class="headerlink" title="Gradle 和 Android Studio 工程目录："></a>Gradle 和 Android Studio 工程目录：</h2><table>
+          <h2 id="Gradle-和-Android-Studio-工程目录："><a href="#Gradle-和-Android-Studio-工程目录：" class="headerlink" title="Gradle 和 Android Studio 工程目录："></a>Gradle 和 Android Studio 工程目录：</h2><table>
 <thead>
 <tr>
 <th style="text-align:left"></th>
@@ -984,8 +991,13 @@
 </ul>
 <p>它允许你的机器在不需要安装运行的情况下就能运行Gradle脚本（我们在下载AS后可以直接开始使用gradle、开发项目，而无需另外下载及安装gradle，主要归功于这一特性），而且更重要的是它确保了build脚本运行在指定版本的Gradle。它会从中央仓库中自动下载Gradle，解压到你的文件系统，然后用来build。</p>
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#Mon Dec <span class="number">28</span> <span class="number">10</span>:<span class="number">00</span>:<span class="number">20</span> PST <span class="number">2015</span></span><br><span class="line">distributionBase=GRADLE_USER_HOME  <span class="comment">// 在环境变量中配置，默认：C:\Users\Administrator\</span></span><br><span class="line">distributionPath=wrapper<span class="regexp">/dists /</span><span class="regexp">/ 如果上面的环境变量已配置，下载目录：GRADLE_USER_HOME\.gradle\wrapper\dists\</span></span><br><span class="line"><span class="regexp">zipStoreBase=GRADLE_USER_HOME</span></span><br><span class="line"><span class="regexp">zipStorePath=wrapper/</span>dists</span><br><span class="line">distributionUrl=https\:<span class="comment">//services.gradle.org/distributions/gradle-3.3-all.zip // 使用的gradle版本，及其仓库地址。我们也可以指定本地目录。</span></span><br></pre></td></tr></table></figure>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Android/Gradle-1-AS工程目录及文件说明.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1124,9 +1136,7 @@
 
       
         
-          
-            <a id="more"></a>
-<h2 id="NFC相关AndroidManifest配置"><a href="#NFC相关AndroidManifest配置" class="headerlink" title="NFC相关AndroidManifest配置"></a>NFC相关AndroidManifest配置</h2><p>权限：<code>&lt;uses-permissionandroid:name=&quot;Android.permission.NFC&quot;/&gt;</code></p>
+          <h2 id="NFC相关AndroidManifest配置"><a href="#NFC相关AndroidManifest配置" class="headerlink" title="NFC相关AndroidManifest配置"></a>NFC相关AndroidManifest配置</h2><p>权限：<code>&lt;uses-permissionandroid:name=&quot;Android.permission.NFC&quot;/&gt;</code></p>
 <p>特殊功能限制，让你的应用在googleplay上被声明使用者必须拥有nfc功能：<code>&lt;uses-feature android:name=&quot;android.hardware.nfc&quot;android:required=&quot;true&quot;/&gt;</code></p>
 <h2 id="Android-NFC-开发中的几个类"><a href="#Android-NFC-开发中的几个类" class="headerlink" title="Android NFC 开发中的几个类"></a>Android NFC 开发中的几个类</h2><table>
 <thead>
@@ -1244,8 +1254,13 @@
 <p>或者，可以从Intent中获取Tag 对象，tag对象中包含了数据和数据类型：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);</span><br></pre></td></tr></table></figure>
 <p>参考：<br><a href="http://blog.csdn.net/zoeice/article/details/9714867" target="_blank" rel="noopener">NFC基础</a><br><a href="http://blog.csdn.net/kehrwang/article/details/9904161" target="_blank" rel="noopener">Android Beam 详细实现步骤</a><br><a href="http://blog.csdn.net/qq_16064871/article/details/50166841" target="_blank" rel="noopener">android NFC开发</a><br><a href="https://github.com/fangmd/NFC_Demo/blob/master/app/src/main/java/com/doublefang/nfcdemo/tech/FeliCa.java" target="_blank" rel="noopener">NFC_Demo</a></p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Android/NFC基础.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1384,9 +1399,7 @@
 
       
         
-          
-            <a id="more"></a>
-<blockquote>
+          <blockquote>
 <p>原文：<a href="http://blog.csdn.net/ccpat/article/details/46834089" target="_blank" rel="noopener">Android inpreferredconfig参数分析</a></p>
 </blockquote>
 <h3 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h3><p>BitmapFactory.Options.inPreferredConfig的可选值有四个，分别为ALPHA_8，RGB_565，ARGB_4444，ARGB_8888。它们的含义列举如下:</p>
@@ -1443,8 +1456,13 @@
 <li><p>绝大多数情况下RGB565选项都不满足</p>
 </li>
 </ol>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Android/inPreferredConfig参数.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1583,9 +1601,7 @@
 
       
         
-          
-            <a id="more"></a>
-<p>初始化Socket</p>
+          <p>初始化Socket</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Socket so = <span class="keyword">new</span> Socket(HOST, PORT);</span><br></pre></td></tr></table></figure>
 <p>发送数据</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!socket.isClosed() &amp;&amp; !socket.isOutputShutdown()) &#123;</span><br><span class="line">        OutputStream os = socket.getOutputStream();</span><br><span class="line">        String message = <span class="string">"xxxxxx"</span>;</span><br><span class="line">        os.write(message.getBytes());</span><br><span class="line">        os.flush();</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -1595,7 +1611,13 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socket.connect(<span class="keyword">new</span> InetSocketAddress(HOST, PORT), <span class="number">300</span>); <span class="comment">//单位：ms</span></span><br></pre></td></tr></table></figure>
 <p>设置响应超时时间</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socket.setSoTimeout(<span class="number">300</span>); <span class="comment">//单位：ms</span></span><br></pre></td></tr></table></figure>
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Android/Socket的简单使用.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1734,9 +1756,7 @@
 
       
         
-          
-            <a id="more"></a>
-<p>在build.grade中添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">compile &apos;com.android.support:appcompat-v7:version&apos;</span><br><span class="line">compile &apos;com.android.support:design:version&apos;</span><br></pre></td></tr></table></figure></p>
+          <p>在build.grade中添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">compile &apos;com.android.support:appcompat-v7:version&apos;</span><br><span class="line">compile &apos;com.android.support:design:version&apos;</span><br></pre></td></tr></table></figure></p>
 <p>从5.0 API-21开始支持Material Desigh主题，如果要直接使用，那么需要设置应用的minSdkVersion = 21<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">android:Theme.Material</span><br><span class="line">android:Theme.Material.Light</span><br><span class="line">android:Theme.Material.Light.DarkActionBar</span><br></pre></td></tr></table></figure></p>
 <p>如果需要兼容低版本，在Support包提供了兼容主题<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Theme.AppCompat</span><br><span class="line">Theme.AppCompat.Light</span><br><span class="line">Theme.AppCompat.Light.DarkActionBar</span><br></pre></td></tr></table></figure></p>
 <h2 id="在color-mxl中定义需要的颜色"><a href="#在color-mxl中定义需要的颜色" class="headerlink" title="在color.mxl中定义需要的颜色"></a>在color.mxl中定义需要的颜色</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">color</span> <span class="attr">name</span>=<span class="string">"colorPrimary"</span>&gt;</span>#3F51B5<span class="tag">&lt;/<span class="name">color</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">color</span> <span class="attr">name</span>=<span class="string">"colorPrimaryDark"</span>&gt;</span>#303F9F<span class="tag">&lt;/<span class="name">color</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">color</span> <span class="attr">name</span>=<span class="string">"colorAccent"</span>&gt;</span>#FF4081<span class="tag">&lt;/<span class="name">color</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></table></figure>
@@ -1744,8 +1764,13 @@
 <p>在res目录下，创建一个values-v21目录，再创建一个styles.xml：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"AppTheme.NoActionBar"</span> <span class="attr">parent</span>=<span class="string">"AppTheme"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="xml">	<span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"windowActionBar"</span>&gt;</span>false<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="xml">	<span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"windowNoTitle"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="xml">	<span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowDrawsSystemBarBackgrounds"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="xml">	<span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:statusBarColor"</span>&gt;</span>?colorPrimaryDark<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <h2 id="在AndroidManifest-xml中设置主题"><a href="#在AndroidManifest-xml中设置主题" class="headerlink" title="在AndroidManifest.xml中设置主题"></a>在AndroidManifest.xml中设置主题</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">application</span></span></span><br><span class="line"><span class="tag">	<span class="attr">android:allowBackup</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">	<span class="attr">android:icon</span>=<span class="string">"@mipmap/ic_launcher"</span></span></span><br><span class="line"><span class="tag">	<span class="attr">android:label</span>=<span class="string">"@string/app_name"</span></span></span><br><span class="line"><span class="tag">	<span class="attr">android:supportsRtl</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">	<span class="attr">android:theme</span>=<span class="string">"@style/AppTheme.NoActionBar"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">activity</span> </span></span><br><span class="line"><span class="tag">		<span class="attr">android:name</span>=<span class="string">".MainActivity"</span></span></span><br><span class="line"><span class="tag">		<span class="attr">android:theme</span>=<span class="string">"@style/AppTheme"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"android.intent.action.MAIN"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">			<span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"android.intent.category.LAUNCHER"</span> /&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">activity</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">activity</span> <span class="attr">android:name</span>=<span class="string">".toolbar.ToolbarActivity"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">application</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>直接给application设置AppTheme.NoActionBar主题，默认其他Activity的标题栏都采用自定义的样式，在Material Design中，建议使用Toolbar。<br>在需要系统ActionBar时，就单独给Activity设置AppTheme主题。</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Android/Material-Design-1-主题样式.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1884,9 +1909,7 @@
 
       
         
-          
-            <a id="more"></a>
-<h2 id="安装启动"><a href="#安装启动" class="headerlink" title="安装启动"></a>安装启动</h2><p>需要的工具：  </p>
+          <h2 id="安装启动"><a href="#安装启动" class="headerlink" title="安装启动"></a>安装启动</h2><p>需要的工具：  </p>
 <ol>
 <li><a href="http://mirrors.jenkins-ci.org/war/latest/jenkins.war" target="_blank" rel="noopener">jenkins.war</a>  </li>
 <li>Gradle  </li>
@@ -1905,8 +1928,13 @@
 <h2 id="全局工具配置"><a href="#全局工具配置" class="headerlink" title="全局工具配置"></a>全局工具配置</h2><p>系统管理 –&gt; Global Tool Configuration，配置我们自己的JDK和Gradle的路径。</p>
 <h2 id="开始构建"><a href="#开始构建" class="headerlink" title="开始构建"></a>开始构建</h2><p>新建 –&gt; 输入项目名 –&gt; 选择&lt;构建一个自由风格的软件项目&gt; –&gt; 点击ok</p>
 <p>源码管理 –&gt; 选择各位自己的CVS（这里我用的是SVN，所以选择Subversion）。</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Android/Jenkins构建Android项目.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2045,9 +2073,7 @@
 
       
         
-          
-            <a id="more"></a>
-<p><code>&lt;meta-data&gt;</code>是提供组件额外的数据用的，它本身就是一个键值对，可以自定义名称和值。<br>它可以包含在<code>&lt;activity&gt;</code>、<code>&lt;application&gt;</code>、<code>&lt;service&gt;</code>和<code>&lt;receiver&gt;</code>中。</p>
+          <p><code>&lt;meta-data&gt;</code>是提供组件额外的数据用的，它本身就是一个键值对，可以自定义名称和值。<br>它可以包含在<code>&lt;activity&gt;</code>、<code>&lt;application&gt;</code>、<code>&lt;service&gt;</code>和<code>&lt;receiver&gt;</code>中。</p>
 <h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta-data</span> <span class="attr">android:name</span>=<span class="string">"string"</span></span></span><br><span class="line"><span class="tag">     <span class="attr">android:resource</span>=<span class="string">"resource specification"</span></span></span><br><span class="line"><span class="tag">     <span class="attr">android:value</span>=<span class="string">"string"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
 <p>一般的值可以通过value属性来指定，但是如果要指定一个资源的id,则需要使用resource属性来配置。</p>
 <p>例如：</p>
@@ -2063,7 +2089,13 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">	ComponentName cn=<span class="keyword">new</span> ComponentName(<span class="keyword">this</span>, MetaDataService.class);</span><br><span class="line">	ServiceInfo info=<span class="keyword">this</span>.getPackageManager()</span><br><span class="line">			 .getServiceInfo(cn, PackageManager.GET_META_DATA);</span><br><span class="line">	String value = info.metaData.getString(<span class="string">"service_meta_data"</span>);</span><br><span class="line">	Log.d(<span class="string">"Service TAG"</span>, <span class="string">" value == "</span> + value);</span><br><span class="line">&#125; <span class="keyword">catch</span> (PackageManager.NameNotFoundException e) &#123;</span><br><span class="line">	e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="在-lt-receiver-gt-元素下配置-lt-mate-data-gt-元素"><a href="#在-lt-receiver-gt-元素下配置-lt-mate-data-gt-元素" class="headerlink" title="在&lt;receiver...&gt;元素下配置&lt;mate-data...&gt;元素"></a>在<code>&lt;receiver...&gt;</code>元素下配置<code>&lt;mate-data...&gt;</code>元素</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">receiver</span> <span class="attr">android:name</span>=<span class="string">"MetaDataReceiver"</span>&gt;</span></span><br><span class="line">    .....</span><br><span class="line">    <span class="tag">&lt;<span class="name">meta-data</span> <span class="attr">android:name</span>=<span class="string">"receiver_meta_data"</span> <span class="attr">android:value</span>=<span class="string">"xxxxxxx"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">receiver</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">	ComponentName cn=<span class="keyword">new</span> ComponentName(<span class="keyword">this</span>, MetaDataReceiver.class);</span><br><span class="line">	ActivityInfo info=context.getPackageManager()</span><br><span class="line">            .getReceiverInfo(cn, PackageManager.GET_META_DATA);</span><br><span class="line">	String value = info.metaData.getString(<span class="string">"receiver_meta_data"</span>);</span><br><span class="line">	Log.d(<span class="string">"Receiver TAG"</span>, <span class="string">" value == "</span> + value);</span><br><span class="line">&#125; <span class="keyword">catch</span> (PackageManager.NameNotFoundException e) &#123;</span><br><span class="line">	e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/Android/Manifest中meta-data元素的配置与获取.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>

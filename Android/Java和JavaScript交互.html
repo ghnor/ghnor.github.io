@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="步骤： WebView开启JavaScript脚本执行   WebView设置供JavaScript调用的交互接口   客户端和网页端编写调用对方的代码。  JavaScript调用Java调用格式：window.jsInterfaceName.methodName(parameterValues)本例中，jsInterfaceName 是 control；methodName 是 toastM">
+<meta name="description" content="步骤： WebView开启JavaScript脚本执行   WebView设置供JavaScript调用的交互接口   客户端和网页端编写调用对方的代码。  JavaScript调用Java调用格式：window.jsInterfaceName.methodName(parameterValues)本例中，jsInterfaceName 是 control；methodName 是 toastMe">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java和JavaScript交互">
 <meta property="og:url" content="http://yoursite.com/Android/Java和JavaScript交互.html">
 <meta property="og:site_name" content="ghnor&#39;s Blog">
-<meta property="og:description" content="步骤： WebView开启JavaScript脚本执行   WebView设置供JavaScript调用的交互接口   客户端和网页端编写调用对方的代码。  JavaScript调用Java调用格式：window.jsInterfaceName.methodName(parameterValues)本例中，jsInterfaceName 是 control；methodName 是 toastM">
+<meta property="og:description" content="步骤： WebView开启JavaScript脚本执行   WebView设置供JavaScript调用的交互接口   客户端和网页端编写调用对方的代码。  JavaScript调用Java调用格式：window.jsInterfaceName.methodName(parameterValues)本例中，jsInterfaceName 是 control；methodName 是 toastMe">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2016-12-04T06:24:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java和JavaScript交互">
-<meta name="twitter:description" content="步骤： WebView开启JavaScript脚本执行   WebView设置供JavaScript调用的交互接口   客户端和网页端编写调用对方的代码。  JavaScript调用Java调用格式：window.jsInterfaceName.methodName(parameterValues)本例中，jsInterfaceName 是 control；methodName 是 toastM">
+<meta name="twitter:description" content="步骤： WebView开启JavaScript脚本执行   WebView设置供JavaScript调用的交互接口   客户端和网页端编写调用对方的代码。  JavaScript调用Java调用格式：window.jsInterfaceName.methodName(parameterValues)本例中，jsInterfaceName 是 control；methodName 是 toastMe">
 
 
 
@@ -342,8 +342,7 @@
       
 
       
-        <a id="more"></a>
-<h1 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h1><ol>
+        <h1 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h1><ol>
 <li>WebView开启JavaScript脚本执行  </li>
 <li>WebView设置供JavaScript调用的交互接口  </li>
 <li>客户端和网页端编写调用对方的代码。</li>
@@ -376,6 +375,7 @@
 <p>3.　JS中的具体实现<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">function cfm() &#123;</span><br><span class="line">	confirm("")</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function pmt() &#123;</span><br><span class="line">   prompt("","");</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function onAlert()</span><br><span class="line">&#123;</span><br><span class="line">	alert("这是网页中的alert方法，如果重写了mWebView的onAlert方法，该方法不会执行");</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>实现原理就是在页面中触发的方法被webView中设置的WebChromeClient给拦截了，从而执行了WebChromeClient中重写的onXxx()方法，没有执行页面中相应的onXxx()方法，这是方式相对简单，而且安全。</p>
 <h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p><a href="https://github.com/pedant/safe-java-js-webview-bridge" target="_blank" rel="noopener">为WebView中的Java与JavaScript提供【安全可靠】的多样互通方案</a></p>
+<a id="more"></a>
 
       
     </div>

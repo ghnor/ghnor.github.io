@@ -342,8 +342,7 @@
       
 
       
-        <a id="more"></a>
-<p>初始化Socket</p>
+        <p>初始化Socket</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Socket so = <span class="keyword">new</span> Socket(HOST, PORT);</span><br></pre></td></tr></table></figure>
 <p>发送数据</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!socket.isClosed() &amp;&amp; !socket.isOutputShutdown()) &#123;</span><br><span class="line">        OutputStream os = socket.getOutputStream();</span><br><span class="line">        String message = <span class="string">"xxxxxx"</span>;</span><br><span class="line">        os.write(message.getBytes());</span><br><span class="line">        os.flush();</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -353,6 +352,8 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socket.connect(<span class="keyword">new</span> InetSocketAddress(HOST, PORT), <span class="number">300</span>); <span class="comment">//单位：ms</span></span><br></pre></td></tr></table></figure>
 <p>设置响应超时时间</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socket.setSoTimeout(<span class="number">300</span>); <span class="comment">//单位：ms</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+
       
     </div>
     
