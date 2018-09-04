@@ -344,6 +344,7 @@
       
         <h1 id="Dagger2？"><a href="#Dagger2？" class="headerlink" title="Dagger2？"></a>Dagger2？</h1><p>Dagger 是 Java 平台的依赖注入库。在 J2EE 开发上流行甚广的 Spring 就是一个依赖注入库。此外还有 Google 的 Guice 和 Square 的 Dagger1。但它们都是是通过在运行时读取注解来实现依赖注入的，依赖的生成和注入需要依靠 Java 的反射机制，这对于对性能非常敏感的 Android 来说是一个硬伤。</p>
 <p>Dagger 同样使用注解来实现依赖注入，但它利用 APT(Annotation Process Tool) 在编译时生成辅助类，这些类继承特定父类或实现特定接口，程序在运行时 Dagger 加载这些辅助类，调用相应接口完成依赖生成和注入。Dagger 对于程序的性能影响非常小，因此更加适用于 Android 应用的开发。</p>
+<a id="more"></a>
 <h1 id="开始之前"><a href="#开始之前" class="headerlink" title="开始之前"></a>开始之前</h1><p>在了解 Dagger2 之前，请务必先通晓两个概念：  </p>
 <ol>
 <li><a href="http://a.codekk.com/detail/Android/%E6%89%94%E7%89%A9%E7%BA%BF/%E5%85%AC%E5%85%B1%E6%8A%80%E6%9C%AF%E7%82%B9%E4%B9%8B%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5" target="_blank" rel="noopener">依赖注入（Dependency Injection : DI）</a>：面向对象编程的一种模式，最大的作用是解耦。  </li>

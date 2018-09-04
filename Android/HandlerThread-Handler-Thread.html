@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Handler会关联一个单独的线程和消息队列。Handler默认关联主线程，虽然要提供Runnable参数 ，但默认是直接调用Runnable中的run()方法。也就是默认下会在主线程执行，如果在这里面的操作会有阻塞，界面也会卡住。如果要在其他线程执行，可以使用HandlerThread。HandlerThread继承于Thread，所以它本质就是个Thread。与普通Thread的差别就在于，主">
+<meta name="description" content="Handler会关联一个单独的线程和消息队列。">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HandlerThread - Handler - Thread">
 <meta property="og:url" content="http://yoursite.com/Android/HandlerThread-Handler-Thread.html">
 <meta property="og:site_name" content="ghnor&#39;s Blog">
-<meta property="og:description" content="Handler会关联一个单独的线程和消息队列。Handler默认关联主线程，虽然要提供Runnable参数 ，但默认是直接调用Runnable中的run()方法。也就是默认下会在主线程执行，如果在这里面的操作会有阻塞，界面也会卡住。如果要在其他线程执行，可以使用HandlerThread。HandlerThread继承于Thread，所以它本质就是个Thread。与普通Thread的差别就在于，主">
+<meta property="og:description" content="Handler会关联一个单独的线程和消息队列。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-11-30T07:24:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HandlerThread - Handler - Thread">
-<meta name="twitter:description" content="Handler会关联一个单独的线程和消息队列。Handler默认关联主线程，虽然要提供Runnable参数 ，但默认是直接调用Runnable中的run()方法。也就是默认下会在主线程执行，如果在这里面的操作会有阻塞，界面也会卡住。如果要在其他线程执行，可以使用HandlerThread。HandlerThread继承于Thread，所以它本质就是个Thread。与普通Thread的差别就在于，主">
+<meta name="twitter:description" content="Handler会关联一个单独的线程和消息队列。">
 
 
 
@@ -342,7 +342,9 @@
       
 
       
-        <p>Handler会关联一个单独的线程和消息队列。<br>Handler默认关联主线程，虽然要提供Runnable参数 ，但默认是直接调用Runnable中的run()方法。也就是默认下会在主线程执行，如果在这里面的操作会有阻塞，界面也会卡住。<br>如果要在其他线程执行，可以使用HandlerThread。<br>HandlerThread继承于Thread，所以它本质就是个Thread。与普通Thread的差别就在于，主要的作用是建立了一个线程，并且创立了消息队列，有来自己的looper,可以让我们在自己的线程中分发和处理消息。</p>
+        <p>Handler会关联一个单独的线程和消息队列。  </p>
+<a id="more"></a>
+<p>Handler默认关联主线程，虽然要提供Runnable参数 ，但默认是直接调用Runnable中的run()方法。也就是默认下会在主线程执行，如果在这里面的操作会有阻塞，界面也会卡住。<br>如果要在其他线程执行，可以使用HandlerThread。<br>HandlerThread继承于Thread，所以它本质就是个Thread。与普通Thread的差别就在于，主要的作用是建立了一个线程，并且创立了消息队列，有来自己的looper,可以让我们在自己的线程中分发和处理消息。</p>
 <h1 id="HandlerThread的使用"><a href="#HandlerThread的使用" class="headerlink" title="HandlerThread的使用"></a>HandlerThread的使用</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Handler handler = new Handler() &#123;</span></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="comment">//&#125;</span></span><br><span class="line">HandlerThread uIhandlerThread = <span class="keyword">new</span> HandlerThread(<span class="string">"update"</span>);</span><br><span class="line">uIhandlerThread.start();</span><br><span class="line"><span class="comment">//Handler UIhandler = new Handler(uIhandlerThread.getLooper());</span></span><br><span class="line">Handler uIhandler = <span class="keyword">new</span> Handler(uIhandlerThread.getLooper(), <span class="keyword">new</span> Callback() &#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</span><br><span class="line">	Bundle b = msg.getData();</span><br><span class="line">	<span class="keyword">int</span> age = b.getInt(<span class="string">"age"</span>);</span><br><span class="line">	String name = b.getString(<span class="string">"name"</span>);</span><br><span class="line">	System.out.println(<span class="string">"age is "</span> + age + <span class="string">", name is"</span> + name);</span><br><span class="line">	System.out.println(<span class="string">"Handler---&gt;"</span> + Thread.currentThread().getId());</span><br><span class="line">	System.out.println(<span class="string">"handlerMessage"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>当要停止uIhandlerThread执行时用：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (uIhandlerThread != <span class="keyword">null</span>) &#123;</span><br><span class="line">	pointThread.quit();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h1 id="Handler的应用"><a href="#Handler的应用" class="headerlink" title="Handler的应用"></a>Handler的应用</h1><h2 id="定义handler"><a href="#定义handler" class="headerlink" title="定义handler"></a>定义handler</h2><p>在主线程使用handler只需要实例化即可。<br>在非主线程中使用时，需要先实例化一个子线程的Looper对象。</p>
@@ -366,7 +368,6 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Thread thread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		....</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br><span class="line">thread.start();</span><br></pre></td></tr></table></figure>
 <h2 id="实例化Runnable"><a href="#实例化Runnable" class="headerlink" title="实例化Runnable"></a>实例化Runnable</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Runnable r = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		....</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">new</span> Thread(r).start();</span><br></pre></td></tr></table></figure>
 <h1 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h1><p><a href="http://blog.csdn.net/guolin_blog/article/details/9991569" target="_blank" rel="noopener">Android异步消息处理机制完全解析，带你从源码的角度彻底理解</a><br><a href="http://blog.csdn.net/lmj623565791/article/details/38377229" target="_blank" rel="noopener">Android 异步消息处理机制 让你深入理解 Looper、Handler、Message三者关系</a><br><a href="http://blog.csdn.net/lmj623565791/article/details/47079737" target="_blank" rel="noopener">Android HandlerThread 完全解析</a>  </p>
-<a id="more"></a>
 
       
     </div>
@@ -397,8 +398,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/Android/Material-Design-4-AppBarLayout.html" rel="next" title="Material Design 4 - AppBarLayout">
-                <i class="fa fa-chevron-left"></i> Material Design 4 - AppBarLayout
+              <a href="/Android/Material-Design-5-CollapsingToolbarLayout.html" rel="next" title="Material Design 5 - CollapsingToolbarLayout">
+                <i class="fa fa-chevron-left"></i> Material Design 5 - CollapsingToolbarLayout
               </a>
             
           </div>
@@ -407,8 +408,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/Android/Material-Design-5-CollapsingToolbarLayout.html" rel="prev" title="Material Design 5 - CollapsingToolbarLayout">
-                Material Design 5 - CollapsingToolbarLayout <i class="fa fa-chevron-right"></i>
+              <a href="/Android/Material-Design-6-FloatActionButton、Snackbar.html" rel="prev" title="Material Design 6 - FloatActionButton、Snackbar">
+                Material Design 6 - FloatActionButton、Snackbar <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
