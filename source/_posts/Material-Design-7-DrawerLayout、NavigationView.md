@@ -1,4 +1,5 @@
 ---
+moreLoc: 1
 path: 'Android/Material Design 7 - DrawerLayout、NavigationView.md'
 title: 'Material Design 7 - DrawerLayout、NavigationView'
 date: 2017-11-30T15:24:06.000Z
@@ -8,8 +9,6 @@ tags:
 categories:
     - Android
 ---
-
-<!--more-->
 
 用以实现Android中的抽屉样式，在Google自己推出BottomNavigation之前，抽屉样式的交互可谓Material Design的标杆。
 
@@ -248,3 +247,7 @@ View headerView = navigationView.getHeaderView(0);
 ```java
 navigationView.setItemIconTintList(null);
 ```
+
+
+<!--more-->
+

@@ -1,4 +1,5 @@
 ---
+moreLoc: 6
 path: Android/Android内存泄露总结.md
 title: Android内存泄露总结
 date: 2016-10-26T22:19:00.000Z
@@ -8,8 +9,6 @@ tags:
 categories:
     - Android
 ---
-
-<!--more-->
 
 > [内存泄露从入门到精通三部曲之基础知识篇](http://bugly.qq.com/bbs/forum.php?mod=viewthread&tid=21&highlight=%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E7%AF%87)  
 > [内存泄露从入门到精通三部曲之排查方法篇](http://bugly.qq.com/bbs/forum.php?mod=viewthread&tid=62&highlight=%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E6%8E%92%E6%9F%A5%E6%96%B9%E6%B3%95%E7%AF%87)  
@@ -254,3 +253,4 @@ protected void onCreate(Bundle state) {
 * Allocation Tracker
 * Heap Viewer
 * LeakCanary
+

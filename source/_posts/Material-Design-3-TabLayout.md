@@ -1,4 +1,5 @@
 ---
+moreLoc: 1
 path: 'Android/Material Design 3 - TabLayout.md'
 title: 'Material Design 3 - TabLayout'
 date: 2017-11-30T15:24:02.000Z
@@ -8,8 +9,6 @@ tags:
 categories:
     - Android
 ---
-
-<!--more-->
 
 TabLayout用以实现Android上常见的页面切换效果。
 
@@ -185,3 +184,7 @@ public static class TabFragment extends Fragment {
 ```
 * `android:theme="@style/AppTheme.AppBarOverlay"`上一篇提过，是定义在`styles.xml`中的。  
 设置之后，背景颜色就会变成`styles.xml`中的`colorPrimary`颜色，字体颜色就会变成白色，非常方便。
+
+
+<!--more-->
+

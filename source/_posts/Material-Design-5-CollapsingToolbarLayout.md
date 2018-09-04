@@ -1,4 +1,5 @@
 ---
+moreLoc: 1
 path: 'Android/Material Design 5 - CollapsingToolbarLayout.md'
 title: 'Material Design 5 - CollapsingToolbarLayout'
 date: 2017-11-30T15:24:04.000Z
@@ -8,8 +9,6 @@ tags:
 categories:
     - Android
 ---
-
-<!--more-->
 
 CollapsingToolbarLayout通常用来在布局中包裹一个Toolbar，同时作为AppBarLayout的直接子View，才可以实现“折叠效果”的标题栏。
 
@@ -151,3 +150,7 @@ ToolBar被折叠到顶部固定时候的背景。
 * CoordinatorLayout的直接子View必须是一个可滑动的控件，并且内部有内容可以滑动。同时需要设置`app:layout_behavior`。
 * Toolbar的高度必须固定，不能设置为"wrap_content"，否则Toolbar不会滑动，也没有折叠效果。
 * 需要注意的是这里几次设置`android:fitsSystemWindows="true"`，分别在`CoordinatorLayout`、`AppBarLayout`、`ImageView`。这样之后达到的效果就是这张图片的内容可以延伸到状态栏。
+
+
+<!--more-->
+

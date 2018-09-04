@@ -1,4 +1,5 @@
 ---
+moreLoc: 1
 path: 'Android/Material Design 4 - AppBarLayout.md'
 title: 'Material Design 4 - AppBarLayout'
 date: 2017-11-30T15:24:03.000Z
@@ -8,8 +9,6 @@ tags:
 categories:
     - Android
 ---
-
-<!--more-->
 
 AppBarLayout其实就是一个垂直方向的LinearLayout，可以实现Material Design中标题栏的滚动效果。
 
@@ -108,3 +107,7 @@ android:minHeight="?attr/actionBarSize"
 
 在滚动的过程中，一次滚动的距离不一定足够Toolbar完全地隐藏或显示。  
 设置snap之后，就会给view添加一个弹性滚动的效果，会自动地根据滚动的距离，完成完整的隐藏、折叠或者显示的效果。
+
+
+<!--more-->
+

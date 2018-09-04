@@ -1,4 +1,5 @@
 ---
+moreLoc: 7
 path: 'Android/源码分析 - Router @chenenyu.md'
 title: '源码分析 - Router @chenenyu'
 date: 2018-08-29T14:58:00.000Z
@@ -8,8 +9,6 @@ tags:
 categories:
     - Android
 ---
-
-<!--more-->
 
 > [项目地址：Router @chenenyu](https://github.com/chenenyu/Router)
 
@@ -416,3 +415,4 @@ RouterRequest的内容分别赋给Intent，再把Intent丢给Chain（即：`real
 有个地方挺重要的，但是没说，就是写了注解之后是怎么保存成一张路由表的。
 
 这其实是apt的内容，很多框架都会用到，ButterKnife、EventBus等等，不是Router的重点内容。
+

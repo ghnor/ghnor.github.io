@@ -1,4 +1,5 @@
 ---
+moreLoc: 1
 path: Android/Jenkins构建Android项目.md
 title: Jenkins构建Android项目
 date: 2017-05-15T18:01:00.000Z
@@ -8,8 +9,6 @@ tags:
 categories:
     - Android
 ---
-
-<!--more-->
 
 ## 安装启动
 
@@ -58,4 +57,8 @@ categories:
 新建 --> 输入项目名 --> 选择<构建一个自由风格的软件项目> --> 点击ok
 
 源码管理 --> 选择各位自己的CVS（这里我用的是SVN，所以选择Subversion）。
+
+
+
+<!--more-->
 

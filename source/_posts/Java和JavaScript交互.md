@@ -1,4 +1,5 @@
 ---
+moreLoc: 1
 path: Android/Java和JavaScript交互.md
 title: Java和JavaScript交互
 date: 2016-11-03T10:53:00.000Z
@@ -8,8 +9,6 @@ tags:
 categories:
     - Android
 ---
-
-<!--more-->
 
 # 步骤：
 1. WebView开启JavaScript脚本执行  
@@ -176,3 +175,7 @@ function onAlert()
 
 # 其他
 [为WebView中的Java与JavaScript提供【安全可靠】的多样互通方案](https://github.com/pedant/safe-java-js-webview-bridge)
+
+
+<!--more-->
+

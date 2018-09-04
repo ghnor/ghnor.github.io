@@ -1,4 +1,5 @@
 ---
+moreLoc: 3
 path: Android/Android异常之ANR.md
 title: Android异常之ANR
 date: 2016-11-03T13:36:00.000Z
@@ -8,8 +9,6 @@ tags:
 categories:
     - Android
 ---
-
-<!--more-->
 
 ANR：Application Not Responding，即应用无响应。
 
@@ -61,3 +60,4 @@ Service在特定的时间内无法处理完成
 * AsyncTask：onPreExecute()、onProgressUpdate()、onPostExecute()、onCancel()
 
 * Mainthread handler：handleMessage()、post(runnable r)
+

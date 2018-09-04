@@ -1,4 +1,5 @@
 ---
+moreLoc: 1
 path: Android/NFC基础.md
 title: NFC基础
 date: 2017-11-30T14:27:00.000Z
@@ -8,8 +9,6 @@ tags:
 categories:
     - Android
 ---
-
-<!--more-->
 
 ## NFC相关AndroidManifest配置
 
@@ -178,3 +177,6 @@ Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 [Android Beam 详细实现步骤](http://blog.csdn.net/kehrwang/article/details/9904161)  
 [android NFC开发](http://blog.csdn.net/qq_16064871/article/details/50166841)  
 [NFC_Demo](https://github.com/fangmd/NFC_Demo/blob/master/app/src/main/java/com/doublefang/nfcdemo/tech/FeliCa.java)
+
+<!--more-->
+

@@ -1,4 +1,5 @@
 ---
+moreLoc: 3
 path: 'Android/Android Gradle权威指南 1 - Gradle入门.md'
 title: 'Android Gradle权威指南 1 - Gradle入门'
 date: 2017-12-09T23:31:00.000Z
@@ -9,8 +10,6 @@ categories:
     - Android
 ---
 
-<!--more-->
-
 ## Gradle Wrapper
 
 是对Gradle的一层包装，封装了统一的Gradle版本和配置。
@@ -20,3 +19,4 @@ categories:
 ```
 
 ```
+

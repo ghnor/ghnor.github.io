@@ -1,4 +1,5 @@
 ---
+moreLoc: 6
 path: Android/CoordinatorLayout与Behavior的一己之见.md
 title: CoordinatorLayout与Behavior的一己之见
 date: 2016-10-10T20:11:00.000Z
@@ -8,8 +9,6 @@ tags:
 categories:
     - Android
 ---
-
-<!--more-->
 
 # 前言
 
@@ -428,3 +427,4 @@ public boolean onNestedFling(CoordinatorLayout coordinatorLayout, View child, Vi
 [sidhu眼中的CoordinatorLayout.Behavior（三）](https://segmentfault.com/a/1190000006666005)  
 [Material Design系列，自定义Behavior支持所有View](http://blog.csdn.net/yanzhenjie1003/article/details/52205665)  
 [CoordinatorLayout的使用如此简单](http://blog.csdn.net/huachao1001/article/details/51554608)  
+

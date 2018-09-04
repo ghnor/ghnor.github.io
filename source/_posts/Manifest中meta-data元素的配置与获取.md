@@ -1,4 +1,5 @@
 ---
+moreLoc: 1
 path: Android/Manifest中meta-data元素的配置与获取.md
 title: Manifest中meta-data元素的配置与获取
 date: 2017-03-18T19:36:00.000Z
@@ -8,8 +9,6 @@ tags:
 categories:
     - Android
 ---
-
-<!--more-->
 
 `<meta-data>`是提供组件额外的数据用的，它本身就是一个键值对，可以自定义名称和值。  
 它可以包含在`<activity>`、`<application>`、`<service>`和`<receiver>`中。
@@ -125,3 +124,6 @@ try {
 	e.printStackTrace();
 }
 ```
+
+<!--more-->
+

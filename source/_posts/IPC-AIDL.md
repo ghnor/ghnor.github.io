@@ -1,4 +1,5 @@
 ---
+moreLoc: 1
 path: 'Android/IPC - AIDL.md'
 title: 'IPC - AIDL'
 date: 2018-04-24T22:44:00.000Z
@@ -8,8 +9,6 @@ tags:
 categories:
     - Android
 ---
-
-<!--more-->
 
 本文主要是《Android开发艺术探索》中AIDL一章的笔记。
 
@@ -453,3 +452,7 @@ iBinder.linkToDeath(mDeathRecipient, 0);
 linkToDeath的第二个参数是个标记位，直接设为0即可。
 
 当Binder死亡的时候客户端就会收到通知。另外，通过Binder的isBinderAlive方法也可以判断Binder是否死亡。
+
+
+<!--more-->
+

@@ -1,4 +1,5 @@
 ---
+moreLoc: 1
 path: Android/Socket的简单使用.md
 title: Socket的简单使用
 date: 2017-11-30T14:27:00.000Z
@@ -8,8 +9,6 @@ tags:
 categories:
     - Android
 ---
-
-<!--more-->
 
 初始化Socket
 
@@ -61,3 +60,6 @@ socket.connect(new InetSocketAddress(HOST, PORT), 300); //单位：ms
 ```java
 socket.setSoTimeout(300); //单位：ms
 ```
+
+<!--more-->
+

@@ -1,4 +1,5 @@
 ---
+moreLoc: 1
 path: 'Android/Gradle 1 - AS工程目录及文件说明.md'
 title: 'Gradle 1 - AS工程目录及文件说明'
 date: 2017-11-30T15:24:00.000Z
@@ -8,8 +9,6 @@ tags:
 categories:
     - Android
 ---
-
-<!--more-->
 
 ## Gradle 和 Android Studio 工程目录：
 
@@ -137,4 +136,8 @@ distributionUrl=https\://services.gradle.org/distributions/gradle-3.3-all.zip //
 ```
 
 
+
+
+
+<!--more-->
 

@@ -1,4 +1,5 @@
 ---
+moreLoc: 1
 path: 'Android/Gradle 3 - 引入依赖.md'
 title: 'Gradle 3 - 引入依赖'
 date: 2017-11-30T15:24:02.000Z
@@ -8,8 +9,6 @@ tags:
 categories:
     - Android
 ---
-
-<!--more-->
 
 ## 引入jar包
 
@@ -104,3 +103,7 @@ dependencies {
 #### 方式二：
 
 选择Android Studio的File -> New -> New Module...，再选择Import .JAR/.AAR Package，导入后再在依赖中添加该module
+
+
+<!--more-->
+

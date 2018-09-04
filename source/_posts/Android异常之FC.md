@@ -1,4 +1,5 @@
 ---
+moreLoc: 5
 path: Android/Android异常之FC.md
 title: Android异常之FC
 date: 2016-11-03T13:38:00.000Z
@@ -8,8 +9,6 @@ tags:
 categories:
     - Android
 ---
-
-<!--more-->
 
 尽管很消极，但是程序的crash是很难被避免的。如果能够知道程序crash的原因，就可以修复问题。
 
@@ -74,3 +73,4 @@ public class CrashHandler implements UncaughtExceptionHandler {
 CrashHandler crashHandler = CrashHandler.getInstance(); 
 crashHandler.init(getApplicationContext());
 ```
+

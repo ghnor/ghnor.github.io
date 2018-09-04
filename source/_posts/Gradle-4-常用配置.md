@@ -1,4 +1,5 @@
 ---
+moreLoc: 1
 path: 'Android/Gradle 4 - 常用配置.md'
 title: 'Gradle 4 - 常用配置'
 date: 2017-11-30T15:24:03.000Z
@@ -8,8 +9,6 @@ tags:
 categories:
     - Android
 ---
-
-<!--more-->
 
 app/build.gradle
 
@@ -228,3 +227,7 @@ buildTypes {
 在你的 gradle 内容 buildTypes 或者 productFlavors 下面，如 release 体内写上类似：
 resValue “string”, “AppName”, “Tel4Drakeet”
 意为把名为 AppName 的 string value 值改为 Tel4Drakeet
+
+
+<!--more-->
+
