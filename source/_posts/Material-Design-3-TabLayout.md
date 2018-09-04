@@ -2,8 +2,8 @@
 moreLoc: 1
 path: 'Android/Material Design 3 - TabLayout.md'
 title: 'Material Design 3 - TabLayout'
-date: 2017-11-30T15:24:02.000Z
-updated: 2017-11-30T15:24:02.000Z
+date: 2017-11-24T15:24:02.000Z
+updated: 2017-11-24T15:24:02.000Z
 tags:
     - Android
 categories:

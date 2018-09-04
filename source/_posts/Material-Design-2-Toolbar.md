@@ -2,8 +2,8 @@
 moreLoc: 1
 path: 'Android/Material Design 2 - Toolbar.md'
 title: 'Material Design 2 - Toolbar'
-date: 2017-11-30T15:24:01.000Z
-updated: 2017-11-30T15:24:01.000Z
+date: 2017-11-23T15:24:01.000Z
+updated: 2017-11-23T15:24:01.000Z
 tags:
     - Android
 categories:

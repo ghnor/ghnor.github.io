@@ -2,8 +2,8 @@
 moreLoc: 1
 path: 'Android/Material Design 4 - AppBarLayout.md'
 title: 'Material Design 4 - AppBarLayout'
-date: 2017-11-30T15:24:03.000Z
-updated: 2017-11-30T15:24:03.000Z
+date: 2017-11-25T15:24:03.000Z
+updated: 2017-11-25T15:24:03.000Z
 tags:
     - Android
 categories:

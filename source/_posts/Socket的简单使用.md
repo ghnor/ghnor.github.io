@@ -2,8 +2,8 @@
 moreLoc: 1
 path: Android/Socket的简单使用.md
 title: Socket的简单使用
-date: 2017-11-30T14:27:00.000Z
-updated: 2017-11-30T14:27:00.000Z
+date: 2017-03-02T14:27:00.000Z
+updated: 2017-03-02T14:27:00.000Z
 tags:
     - Android
 categories:

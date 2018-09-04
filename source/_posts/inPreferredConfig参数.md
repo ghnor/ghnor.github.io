@@ -2,8 +2,8 @@
 moreLoc: 1
 path: Android/inPreferredConfig参数.md
 title: inPreferredConfig参数
-date: 2017-11-30T14:27:00.000Z
-updated: 2017-11-30T14:27:00.000Z
+date: 2017-03-30T14:27:00.000Z
+updated: 2017-03-30T14:27:00.000Z
 tags:
     - Android
 categories:

@@ -2,8 +2,8 @@
 moreLoc: 1
 path: 'Android/Material Design 6 - FloatActionButton、Snackbar.md'
 title: 'Material Design 6 - FloatActionButton、Snackbar'
-date: 2017-11-30T15:24:05.000Z
-updated: 2017-11-30T15:24:05.000Z
+date: 2017-11-27T15:24:05.000Z
+updated: 2017-11-27T15:24:05.000Z
 tags:
     - Android
 categories:

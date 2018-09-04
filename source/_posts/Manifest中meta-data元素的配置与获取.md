@@ -3,7 +3,7 @@ moreLoc: 1
 path: Android/Manifest中meta-data元素的配置与获取.md
 title: Manifest中meta-data元素的配置与获取
 date: 2017-03-18T19:36:00.000Z
-updated: 2017-11-30T14:27:00.000Z
+updated: 2017-03-18T19:36:00.000Z
 tags:
     - Android
 categories:

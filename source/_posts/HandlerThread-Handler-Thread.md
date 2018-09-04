@@ -2,8 +2,8 @@
 moreLoc: 1
 path: 'Android/HandlerThread - Handler - Thread.md'
 title: 'HandlerThread - Handler - Thread'
-date: 2017-11-30T15:24:04.000Z
-updated: 2017-11-30T15:24:04.000Z
+date: 2017-12-04T15:24:04.000Z
+updated: 2017-12-04T15:24:04.000Z
 tags:
     - Android
 categories:

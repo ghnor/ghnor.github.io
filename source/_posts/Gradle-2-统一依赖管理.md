@@ -2,8 +2,8 @@
 moreLoc: 1
 path: 'Android/Gradle 2 - 统一依赖管理.md'
 title: 'Gradle 2 - 统一依赖管理'
-date: 2017-11-30T15:24:01.000Z
-updated: 2017-11-30T15:24:01.000Z
+date: 2017-12-01T15:25:01.000Z
+updated: 2017-12-01T15:25:01.000Z
 tags:
     - Android
 categories:
