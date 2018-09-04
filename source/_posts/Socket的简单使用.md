@@ -12,6 +12,9 @@ categories:
 
 初始化Socket
 
+<!--more-->
+
+
 ```java
 Socket so = new Socket(HOST, PORT);
 ```
@@ -60,6 +63,3 @@ socket.connect(new InetSocketAddress(HOST, PORT), 300); //单位：ms
 ```java
 socket.setSoTimeout(300); //单位：ms
 ```
-
-<!--more-->
-

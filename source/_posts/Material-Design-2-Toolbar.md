@@ -11,6 +11,9 @@ categories:
 ---
 
 在Material Design中，推荐使用Toolbar代替之前3.0中的Actionbar，以提供更灵活的视图展现。  
+
+<!--more-->
+
 使用`AppCompatActivity.setSupportActionBar(Toolbar)`之后，Toolbar就可以接管Actionbar的功能，例如option menu。  
 实质上继承于ViewGroup，可以在标题栏上显示任意内容，宽高也可以任意设置。
 
@@ -248,7 +251,4 @@ public boolean onOptionsItemSelected(MenuItem item) {
 	所以，如果业务上Activity具有更高的优先级，可以通过`return true;`，拦截试图传递到Fragment的事件。
 
 	但是如果Fragment具有更高的优先级的，就无解了。
-
-
-<!--more-->
 

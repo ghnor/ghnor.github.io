@@ -12,6 +12,9 @@ categories:
 
 ## 安装启动
 
+<!--more-->
+
+
 需要的工具：  
 1. [jenkins.war](http://mirrors.jenkins-ci.org/war/latest/jenkins.war)  
 2. Gradle  
@@ -58,7 +61,4 @@ categories:
 
 源码管理 --> 选择各位自己的CVS（这里我用的是SVN，所以选择Subversion）。
 
-
-
-<!--more-->
 

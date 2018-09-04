@@ -11,6 +11,9 @@ categories:
 ---
 
 # 步骤：
+
+<!--more-->
+
 1. WebView开启JavaScript脚本执行  
 2. WebView设置供JavaScript调用的交互接口  
 3. 客户端和网页端编写调用对方的代码。
@@ -175,7 +178,4 @@ function onAlert()
 
 # 其他
 [为WebView中的Java与JavaScript提供【安全可靠】的多样互通方案](https://github.com/pedant/safe-java-js-webview-bridge)
-
-
-<!--more-->
 

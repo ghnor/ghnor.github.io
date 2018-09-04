@@ -12,6 +12,9 @@ categories:
 
 避免在依赖包出新版本时，需要对每个module中的build.gradle文件都进行修改（如appcompat-v7包），使用这种方式即只需一次修改。
 
+<!--more-->
+
+
 ## 方法一：添加 config.gradle
 
 在项目的根目录创建一个gradle配置文件config.gradle，格式如下(内容根据需要进行修改)：
@@ -189,7 +192,4 @@ compile "com.android.support:appcompat-v7:${supportVersion}"
 ```
 
 这种方法有一个问题就是，比如说build.gradle中compileSdkVersion的数值本身应该是int类型的，但是如果从gradle.properties中读取的话，默认是string类型，所以build.gradle文件中原先值类型为int的参数需要在后面加上`as int`。
-
-
-<!--more-->
 

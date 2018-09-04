@@ -12,6 +12,9 @@ categories:
 
 app/build.gradle
 
+<!--more-->
+
+
 ```gradle
 android {
     defaultConfig {
@@ -227,7 +230,4 @@ buildTypes {
 在你的 gradle 内容 buildTypes 或者 productFlavors 下面，如 release 体内写上类似：
 resValue “string”, “AppName”, “Tel4Drakeet”
 意为把名为 AppName 的 string value 值改为 Tel4Drakeet
-
-
-<!--more-->
 

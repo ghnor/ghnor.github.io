@@ -11,6 +11,9 @@ categories:
 ---
 
 在build.grade中添加：
+
+<!--more-->
+
 ```
 compile 'com.android.support:appcompat-v7:version'
 compile 'com.android.support:design:version'
@@ -83,7 +86,4 @@ Theme.AppCompat.Light.DarkActionBar
 ```
 直接给application设置AppTheme.NoActionBar主题，默认其他Activity的标题栏都采用自定义的样式，在Material Design中，建议使用Toolbar。  
 在需要系统ActionBar时，就单独给Activity设置AppTheme主题。
-
-
-<!--more-->
 

@@ -12,6 +12,9 @@ categories:
 
 ## NFC相关AndroidManifest配置
 
+<!--more-->
+
+
 权限：`<uses-permissionandroid:name="Android.permission.NFC"/>`
 
 特殊功能限制，让你的应用在googleplay上被声明使用者必须拥有nfc功能：`<uses-feature android:name="android.hardware.nfc"android:required="true"/>`
@@ -177,6 +180,3 @@ Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 [Android Beam 详细实现步骤](http://blog.csdn.net/kehrwang/article/details/9904161)  
 [android NFC开发](http://blog.csdn.net/qq_16064871/article/details/50166841)  
 [NFC_Demo](https://github.com/fangmd/NFC_Demo/blob/master/app/src/main/java/com/doublefang/nfcdemo/tech/FeliCa.java)
-
-<!--more-->
-

@@ -12,6 +12,9 @@ categories:
 
 ViewHolder不再单纯是View的容器，也承担了View实例化的操作。
 
+<!--more-->
+
+
 ```java
 public class CustomAdapter extends BaseAdapter {
 
@@ -61,6 +64,3 @@ public class CustomAdapter extends BaseAdapter {
     }
 }
 ```
-
-<!--more-->
-

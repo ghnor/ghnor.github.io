@@ -12,6 +12,9 @@ categories:
 
 ## 引入jar包
 
+<!--more-->
+
+
 #### 方式一：
 
 ```gradle
@@ -103,7 +106,4 @@ dependencies {
 #### 方式二：
 
 选择Android Studio的File -> New -> New Module...，再选择Import .JAR/.AAR Package，导入后再在依赖中添加该module
-
-
-<!--more-->
 

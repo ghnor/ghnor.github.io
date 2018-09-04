@@ -14,6 +14,9 @@ ANR：Application Not Responding，即应用无响应。
 
 可以通过 /data/anr/traces.txt 文件查看ANR信息。
 
+<!--more-->
+
+
 ### ANR一般有三种类型
 
 1. KeyDispatchTimeout(5 seconds)  

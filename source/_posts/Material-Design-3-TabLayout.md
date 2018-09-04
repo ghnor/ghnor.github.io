@@ -12,6 +12,9 @@ categories:
 
 TabLayout用以实现Android上常见的页面切换效果。
 
+<!--more-->
+
+
 ## 属性说明
 * 下方滚动的下划线颜色
 ```
@@ -184,7 +187,4 @@ public static class TabFragment extends Fragment {
 ```
 * `android:theme="@style/AppTheme.AppBarOverlay"`上一篇提过，是定义在`styles.xml`中的。  
 设置之后，背景颜色就会变成`styles.xml`中的`colorPrimary`颜色，字体颜色就会变成白色，非常方便。
-
-
-<!--more-->
 

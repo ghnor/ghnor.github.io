@@ -18,6 +18,9 @@ categories:
 Router.build("test").go(this);
 ```
 
+<!--more-->
+
+
 就从这个调用开始看，跟着走一遍。
 
 Router.build入口真正的调用类是RealRouter。

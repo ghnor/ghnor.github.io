@@ -16,6 +16,9 @@ categories:
 
 Android提供了处理这类问题的方法，当crash发生时，系统会调用`UncaughtExceptionHandler`的`uncaughtException`方法。
 
+<!--more-->
+
+
 ### 实现Thread.UncaughtExceptionHandler接口拦截异常全局异常
 ```java
 public class CrashHandler implements UncaughtExceptionHandler {

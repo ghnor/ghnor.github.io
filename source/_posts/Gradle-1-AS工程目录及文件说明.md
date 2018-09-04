@@ -12,6 +12,9 @@ categories:
 
 ## Gradle 和 Android Studio 工程目录：
 
+<!--more-->
+
+
 |  |  |  |
 | :--- | :--- | :--- |
 | app |  | Android App目录 |
@@ -137,7 +140,4 @@ distributionUrl=https\://services.gradle.org/distributions/gradle-3.3-all.zip //
 
 
 
-
-
-<!--more-->
 

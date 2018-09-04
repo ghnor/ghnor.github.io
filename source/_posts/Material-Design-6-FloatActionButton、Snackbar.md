@@ -12,6 +12,9 @@ categories:
 
 # FloatActionButton
 
+<!--more-->
+
+
 一个变相的ImageView。
 
 ## 属性介绍
@@ -120,7 +123,4 @@ protected void onCreate(@Nullable Bundle savedInstanceState) {
 	});
 }
 ```
-
-
-<!--more-->
 

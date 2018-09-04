@@ -16,6 +16,9 @@ Dagger 是 Java 平台的依赖注入库。在 J2EE 开发上流行甚广的 Spr
 
 Dagger 同样使用注解来实现依赖注入，但它利用 APT(Annotation Process Tool) 在编译时生成辅助类，这些类继承特定父类或实现特定接口，程序在运行时 Dagger 加载这些辅助类，调用相应接口完成依赖生成和注入。Dagger 对于程序的性能影响非常小，因此更加适用于 Android 应用的开发。
 
+<!--more-->
+
+
 # 开始之前
 
 在了解 Dagger2 之前，请务必先通晓两个概念：  
