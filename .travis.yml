@@ -11,7 +11,7 @@ node_js: stable
 # install:
 
 before_script:
-  - export TZ='Asia/Shanghai' # 更改时区
+  - export TZ='Asia/Shanghai'  # 更改时区
   - npm install yamljs
   - git clone https://${GITHUB_REF}  # GITHUB_REF是最下面配置的仓库地址
   - cd ghnor.github.io
@@ -23,11 +23,11 @@ script:
 
 after_script:
   - cd ghnor.github.io
-  - git config user.name "ghnor"  #修改name
-  - git config user.email "ghnor.gmail.com"  #修改email
+  - git config user.name "ghnor"  # 修改name
+  - git config user.email "ghnor.gmail.com"  # 修改email
   - git add .
   - git commit -m "Travis CI Auto Build at `date +"%Y-%m-%d %H:%M"`"  # 提交记录包含时间 跟上面更改时区配合
-  - git push --force --quiet "https://${GITHUB_TOKEN}@${GITHUB_REF}"  #Travis_Token是在Travis中配置环境变量的名称
+  - git push --force --quiet "https://${GITHUB_TOKEN}@${GITHUB_REF}"  # GITHUB_TOKEN是在Travis中配置环境变量的名称
 
 # after_success or after_failure
 # OPTIONAL before_deploy
