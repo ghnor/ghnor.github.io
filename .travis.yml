@@ -20,29 +20,13 @@ script:
   - hexo generate  #生成
 
 after_script:
-  # - git clone https://${GITHUB_REF}  # GITHUB_REF
-  # - cd .deploy_git
-  # - git checkout master
-  # - cd ../
-  # - mkdir _public/
-  - ls -a
-  - git branch -a
   - git clone https://${GITHUB_REF} _public  # GITHUB_REF
-  # - mv .git/ _public/   # 这一步之前的操作是为了保留master分支的提交记录，不然每次git init的话只有1条commit
-  - ls -a
   - cd _public
   - git branch -a
   - git checkout -t origin/master
-  - ls -a
   - cd ../
   - mv _public/.git/ public/
-  - cd public
-  - ls -a
-  # - git init
-  # - ls -a
-  # - git remote -v
-  # - git remote remove origin
-  # - git remote add origin https://${GITHUB_REF}
+  - cd public  # 这一步之前的操作是为了保留master分支的提交记录，不然每次git init的话只有1条commit
   - git config user.name "ghnor"  #修改name
   - git config user.email "ghnor.me@gmail.com"  #修改email
   - git add .
