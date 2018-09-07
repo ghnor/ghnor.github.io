@@ -8,16 +8,16 @@
     - Android
   categories:
     - Android
--
-  moreLoc: 3
-  path: Android/Android Gradle权威指南 1 - Gradle入门.md
-  title: Android Gradle权威指南 1 - Gradle入门
-  date: 2017-12-09 23:31:00
-  updated: 2017-12-09 23:31:00
-  tags:
-    - Android
-  categories:
-    - Android
+# -
+#   moreLoc: 3
+#   path: Android/Android Gradle权威指南 1 - Gradle入门.md
+#   title: Android Gradle权威指南 1 - Gradle入门
+#   date: 2017-12-09 23:31:00
+#   updated: 2017-12-09 23:31:00
+#   tags:
+#     - Android
+#   categories:
+#     - Android
 -
   moreLoc: 6
   path: Android/Android内存泄露总结.md
