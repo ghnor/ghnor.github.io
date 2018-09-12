@@ -81,27 +81,25 @@ kotlin() //输出：Hello Kotlin!
 kotlin1("Kotlin") //输出：Kotlin
 ```
 
+闭包、lambda表达式，有一万种说法，在不同的语言中，类似的写法类似的功能，有的叫闭包（Closure），有的叫lambda表达式，有的叫块（Block）。
 
+我一直对其非常迷惑，在查资料的过程中，又发现了一种新名词——函数字面量。
 
-闭包、lambda表达式，有一万种说法，在不同的语言中，类似的写法类似的功能，有的叫闭包（Closure），有的叫lambda表达时候，有的叫块（Block）。
+在函数式编程语言中，函数就跟变量一样，有其类型和值，是某个类的实例化对象。函数的值就是函数字面量。
 
-我一直对其非常，在查资料的过程中，又发现了一种新名词——函数字面量。
-
-我理解它是把函数表达式赋值给一个变量，也就是把函数表达式声明为某种类型的实例，这个变量就是函数字面量。
-
-比如，Groovy的闭包的是Closure类的实例，如果类型需要强制声明，那么上面的例子就从
+Groovy的闭包的是Closure类的实例，如果类型需要强制声明，那么上面Groovy的例子就从：
 
 ```Groovy
 def groovy = { println "Hello Groovy!" }
 ```
 
-变成了
+变成了：
 
 ```Groovy
 Closure groovy = { println "Hello Groovy!" }
 ```
 
-同样的，换成Kotlin的话，lambda表达式就是一组`函数类型`的实例。
+Kotlin的lambda表达式就是一组`函数类型`的实例。
 
 一组`函数类型`就是比如`() -> Unit`、`(String, Int) -> Boolean`这种。
 
@@ -117,9 +115,9 @@ var kotlin = { println("Hello Kotlin!") }
 var kotlin: () -> Unit = { println("Hello Kotlin!") }
 ```
 
-上面的groovy和kotlin变量被赋值了一段代码块，这就是函数字面量。
+上面的groovy和kotlin变量被赋值了一段代码块，这一段代码块就是函数字面量。
 
-在Kotlin中，`函数类型`的实例有两类：
+在Kotlin中，`函数类型`的实例有两类（其实不止，但这里就说这两种）：
 
 1. Lambda 表达式: `{ a, b -> a + b }`
 
@@ -131,10 +129,28 @@ var kotlin: () -> Unit = { println("Hello Kotlin!") }
 
     我就是故意跟上面Kotlin的Lambda表达式写的一样，这俩狗日的其实就是一样的。
 
-2. 不好意思，Groovy的匿名函数跟
-
 写到这里，主要想表达的是，一个闭包跟一个普通函数特别类似，感觉只有语法的区别。闭包的关键字是`->`，而函数的关键字是`fun`；闭包把参数放在`{}`里面，用`->`分隔，而函数把参数放在`{}`外面，用`()`包裹。
 
-##
+## 高阶函数
 
-继续看高阶函数，主要这里
+接收其他函数作为参数，或者返回一个函数，这样的函数称为高阶函数。
+
+上面说了，不论是Kotlin中函数类型，还是Groovy中的闭包，都是一种类，Lambda表达式或匿名函数和闭包都是此类的实例化对象。
+
+那么其可以作为函数的参数就是理所当然的事情了。
+
+先看Groovy：
+
+```Groovy
+def groovy(closure) {
+    closure()
+}
+```
+
+再看Kotlin：
+
+```Kotlin
+var kotlin(x: () -> Unit) {
+    x()
+}
+```
