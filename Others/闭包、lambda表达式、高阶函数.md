@@ -1,12 +1,10 @@
 写这篇，主要因为我本身是Android的程序员，在学习Groovy和Kotlin的过程中，对Groovy的闭包，Kotlin的lambda表达式，高阶函数这部分，总是没有直观的理解。
 
-所以这里辩证地去看两门语言
+特别是高阶函数，JS有一个特性一直让我很着迷，在JS中函数也是对象，所以可以很自然地理解JS的高阶函数。
 
-## 定义一个函数（方法）
+## 函数（方法）、闭包、Lambda表达式
 
 ## 函数（方法）
-
-### 函数（方法）定义
 
 **Groovy：**
 
@@ -24,8 +22,6 @@ fun kotlinMethod(x: String) {
 }
 ```
 
-### 函数调用
-
 ## 定义一个闭包
 
 **Groovy：**
@@ -42,19 +38,23 @@ var kotlinClosure = { x: String -> println(x) }
 
 ## 调用闭包
 
+无论是Groovy的闭包还是Kotlin的Lambda表达式和匿名函数，跟普通的函数一样，都是可以直接执行和返回结果的。
+
 **Groovy：**
 
 ```Groovy
+groovyMethod("Groovy")
+
 groovyClosure("Groovy")
-groovyClosure.call("Groovy")
-// 输出：Groovy
+groovyClosure.call("Groovy") //xxx.call()是Groovy闭包的一种调用方式
 ```
 
 **Kotlin：**
 
 ```Kotlin
+kotlinMethod("Kotlin")
+
 kotlinClosure("Kotlin")
-// 输出：Kotlin
 ```
 
 ## 函数字面量
@@ -64,6 +64,8 @@ kotlinClosure("Kotlin")
 我一直对其非常迷惑，在查资料的过程中，又发现了一种新名词——函数字面量。
 
 在函数式编程语言中，函数就跟变量一样，有其类型和值，是某个类的实例化对象。函数的值就是函数字面量。
+
+同样地，常见的布尔值就是布尔字面量，整数值就是整数字面量，浮点数值就是浮点数字面量。
 
 有一个说法：函数字面量是实现高阶函数，即实现函数参数的一个手段。
 
@@ -105,7 +107,8 @@ var kotlinClosure: () -> Unit = { x: String -> println(x) }
 
     匿名函数可以把函数名作为变量名，把函数表达式赋值给该变量，上文Kotlin函数定义部分的函数完全可以修改成这样：
 
-    ```Kotlin kotlinMethod = fun (x: Int) {
+    ```Kotlin 
+    var kotlinMethod = fun (x: Int) {
         println(x)
     }
     ```
@@ -122,9 +125,13 @@ var kotlinClosure: () -> Unit = { x: String -> println(x) }
 
 ## 高阶函数
 
-接收其他函数作为参数，或者返回一个函数，这样的函数称为高阶函数。
+接受其他函数作为参数，或者返回一个函数，这样的函数称为高阶函数。
+
+这样的解释容易引起误解，因为JS的高阶函数确实将函数作为参数，Kotin也勉强可以这么理解，毕竟能够接受匿名函数作为参数，但是Groovy就不对，Groovy接受的是闭包。
 
 上面说了，不论是Kotlin中函数类型，还是Groovy中的闭包，都是一种类，Lambda表达式或匿名函数和闭包都是此类的实例化对象。
+
+也知道了函数字面量这个概念，为了方便描述，接下来
 
 那么其可以作为函数的参数就是理所当然的事情了。
 
@@ -139,11 +146,9 @@ def groovy(closure) {
 ```Groovy
 // 使用已定义的闭包
 groovy(groovyClosure)
-groovy groovyClosure // 省略括号
 
 // 直接写闭包
-groovy({ println "Hello Groovy!" })
-groovy { println "Hello Groovy!" } // 省略括号
+groovy({ println("Hello Groovy!") })
 ```
 
 再看Kotlin：
@@ -158,6 +163,22 @@ var kotlin(x: () -> Unit) {
 kotlin(kotlinMethod) // kotlinMethod是匿名函数
 
 kotlin({ println("Hello Kotlin!") })
+```
+
+### 有意思的写法
+
+Groovy和Kotlin的高阶函数都支持一种有意思的写法，如果函数的最后一个参数是闭包或者Lambda的话，可以省略括号。所以调用高阶函数的写法可以变成：
+
+**Groovy：**
+
+```Groovy
+groovy { println ("Hello Groovy!") }
+```
+
+**Kotlin：**
+
+```Kotlin
+kotlin { println("Hello Kotlin!") }
 ```
 
 ## 最后
