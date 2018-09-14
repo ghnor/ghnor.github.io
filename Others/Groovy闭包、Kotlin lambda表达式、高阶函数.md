@@ -1,4 +1,4 @@
-写这篇，主要因为我本身是Android的程序员，在学习Groovy和Kotlin的过程中，对Groovy的闭包，Kotlin的lambda表达式，高阶函数这部分，总是没有直观的理解。
+写这篇，主要因为我本身是Android的程序员，在学习Groovy和Kotlin的过程中，对Groovy的闭包，Kotlin的lambda表达式，高阶函数这部分，总是没有直观的概念，直觉上它们还是很magic的东西。所以尝试把它们放到一起，辩证地理解记忆这些概念和语法。
 
 ## 没错，它们都是对象
 
@@ -88,9 +88,7 @@ var kotlinClosure: () -> Unit = { x: String -> println(x) }
 
 换一个说法：接受其他函数字面量作为参数，或者返回函数字面量，称其为高阶函数。
 
-不论是Kotlin中的函数类型，还是Groovy中的闭包，都是一种类，Lambda表达式或匿名函数和闭包都是此类的实例化对象。
-
-那么其可以作为函数的参数就是理所当然的事情了。
+那么将变量作为函数的参数就是理所当然的事情了。
 
 先看Groovy：
 
@@ -125,7 +123,7 @@ kotlin(kotlinMethod) // kotlinMethod是匿名函数
 kotlin({ println("Hello Kotlin!") })
 ```
 
-### 有意思的写法
+**有意思的写法**
 
 Groovy和Kotlin的高阶函数都支持一种有意思的写法，如果函数的最后一个参数是闭包或者Lambda的话，可以省略括号。所以调用高阶函数的写法可以变成：
 
@@ -141,68 +139,10 @@ groovy { println ("Hello Groovy!") }
 kotlin { println("Hello Kotlin!") }
 ```
 
-
-## 函数（方法）、闭包、Lambda表达式
-
-## 函数（方法）
-
-**Groovy：**
-
-```Groovy
-def groovyMethod(x) {
-    println(x)
-}
-```
-
-**Kotlin：**
-
-```Kotlin
-fun kotlinMethod(x: String) {
-    println(x)
-}
-```
-
-## Groovy的闭包
-
-**Groovy：**
-
-```Groovy
-def groovyClosure = { x -> println(x) }
-```
-
-## Kotlin的Lambda表达式
-
-**Kotlin：**
-
-```Kotlin
-var kotlinClosure = { x: String -> println(x) }
-```
-
-## 调用闭包
-
-无论是Groovy的闭包还是Kotlin的Lambda表达式和匿名函数，跟普通的函数一样，都是可以直接执行和返回结果的。
-
-**Groovy：**
-
-```Groovy
-groovyMethod("Groovy")
-
-groovyClosure("Groovy")
-groovyClosure.call("Groovy") //xxx.call()是Groovy闭包的一种调用方式
-```
-
-**Kotlin：**
-
-```Kotlin
-kotlinMethod("Kotlin")
-
-kotlinClosure("Kotlin")
-```
-
 ## 最后
 
-写的很乱，其一，因为本身我没有弄清楚所谓闭包、Lambda表达式这种概念，到底是只是不同语言单纯说法不同，还是有概念的区别。甚至，因为遍历语言发展的过程，这些概念也一直在变化。
+如果说之前上文所述的很多概念在我脑海中还是各自为锯的知识孤岛，那么现在起码我可以把它们串联起来。尽管有很多的细枝末节还需要深入学习之后才能完善。
 
-其二，在两门语言对比学习的过程中，很难去把握比较的程度。闭包之于Groovy，Lambda表达式之于Kotlin，其实有很多细微的区别，比如有的能访问外部参数，有的不能，有的能直接修改外部变量，有的只是对外部变量的clone。对于函数，Groovy不支持可变数量的参数，而Kotlin可以。再者对于高阶函数，Groovy只能传递闭包，而Kotlin就可以传递匿名函数和Lambda表达式。很多的点，需要在
+（其实就在瞎jiba写）
 
-特别是高阶函数，JS有一个特性一直让我很着迷，即在JS中函数也是对象，所以可以很自然地理解JS的高阶函数。
+Over.
