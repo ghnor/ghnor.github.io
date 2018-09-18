@@ -108,18 +108,18 @@
 
 
 
-  <meta name="description" content="本文主要是《Android开发艺术探索》中AIDL一章的笔记。">
+  <meta name="description" content="本文主要是《Android开发艺术探索》中AIDL一章的笔记。 使用AIDL来进行进程间通信的流程，分为服务端和客户端两个方面。  创建AIDL接口文件  服务端  服务端首先创建一个Service用来监听客户端的连接请求，然后创建一个AIDL文件，将暴露给客户端的接口在AIDL文件中声明，最后在Service中实现这个AIDL接口。  客户端  客户端首先绑定服务端的Service，绑定成功后，">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="IPC - AIDL">
 <meta property="og:url" content="http://yoursite.com/Android/IPC-AIDL.html">
 <meta property="og:site_name" content="ghnor&#39;s Blog">
-<meta property="og:description" content="本文主要是《Android开发艺术探索》中AIDL一章的笔记。">
+<meta property="og:description" content="本文主要是《Android开发艺术探索》中AIDL一章的笔记。 使用AIDL来进行进程间通信的流程，分为服务端和客户端两个方面。  创建AIDL接口文件  服务端  服务端首先创建一个Service用来监听客户端的连接请求，然后创建一个AIDL文件，将暴露给客户端的接口在AIDL文件中声明，最后在Service中实现这个AIDL接口。  客户端  客户端首先绑定服务端的Service，绑定成功后，">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2018-05-14T13:12:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="IPC - AIDL">
-<meta name="twitter:description" content="本文主要是《Android开发艺术探索》中AIDL一章的笔记。">
+<meta name="twitter:description" content="本文主要是《Android开发艺术探索》中AIDL一章的笔记。 使用AIDL来进行进程间通信的流程，分为服务端和客户端两个方面。  创建AIDL接口文件  服务端  服务端首先创建一个Service用来监听客户端的连接请求，然后创建一个AIDL文件，将暴露给客户端的接口在AIDL文件中声明，最后在Service中实现这个AIDL接口。  客户端  客户端首先绑定服务端的Service，绑定成功后，">
 
 
 
@@ -412,7 +412,6 @@
 
       
         <p>本文主要是《Android开发艺术探索》中AIDL一章的笔记。</p>
-<a id="more"></a>
 <p><strong>使用AIDL来进行进程间通信的流程，分为服务端和客户端两个方面。</strong></p>
 <ol>
 <li><p>创建AIDL接口文件</p>
@@ -424,6 +423,7 @@
 <p> 客户端首先绑定服务端的Service，绑定成功后，将服务端返回的Binder对象转为AIDL接口。</p>
 </li>
 </ol>
+<a id="more"></a>
 <h2 id="基本的AIDL应用"><a href="#基本的AIDL应用" class="headerlink" title="基本的AIDL应用"></a>基本的AIDL应用</h2><h3 id="1-创建AIDL接口文件"><a href="#1-创建AIDL接口文件" class="headerlink" title="1. 创建AIDL接口文件"></a>1. 创建AIDL接口文件</h3><p><strong>AIDL支持的数据类型</strong></p>
 <ul>
 <li><p>基本数据类型（int、long、char、boolean、double等）；</p>
@@ -540,8 +540,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/Android/HandlerThread-Handler-Thread.html" rel="next" title="HandlerThread - Handler - Thread">
-                <i class="fa fa-chevron-left"></i> HandlerThread - Handler - Thread
+              <a href="/Android/Gradle-4-常用配置.html" rel="next" title="Gradle 4 - 常用配置">
+                <i class="fa fa-chevron-left"></i> Gradle 4 - 常用配置
               </a>
             
           </div>
