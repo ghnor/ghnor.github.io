@@ -2,8 +2,8 @@
   moreLoc: 1
   path: Android/Adapter的优化写法.md
   title: Adapter的优化写法
-  date: 2016-11-14 22:29:00
-  updated: 2016-11-14 22:29:00
+  date: 2016-05-14 22:29:00
+  updated: 2016-05-14 22:29:00
   tags:
     - Android
   categories:
@@ -22,7 +22,7 @@
   moreLoc: 6
   path: Android/Android内存泄露总结.md
   title: Android内存泄露总结
-  date: 2016-10-26 22:19:00
+  date: 2016-06-26 22:19:00
   updated: 2016-11-15 09:51:00
   tags:
     - Android
@@ -32,8 +32,8 @@
   moreLoc: 3
   path: Android/Android异常之ANR.md
   title: Android异常之ANR
-  date: 2016-11-03 13:36:00
-  updated: 2016-11-03 13:36:00
+  date: 2016-07-03 13:36:00
+  updated: 2016-07-03 13:36:00
   tags:
     - Android
   categories:
@@ -42,8 +42,8 @@
   moreLoc: 5
   path: Android/Android异常之FC.md
   title: Android异常之FC
-  date: 2016-11-03 13:38:00
-  updated: 2016-11-03 13:38:00
+  date: 2016-07-03 13:38:00
+  updated: 2016-07-03 13:38:00
   tags:
     - Android
   categories:
@@ -52,8 +52,8 @@
   moreLoc: 2
   path: Android/Broadcast Receiver.md
   title: Broadcast Receiver
-  date: 2016-11-14 22:29:00
-  updated: 2016-11-14 22:29:00
+  date: 2016-08-14 22:29:00
+  updated: 2016-08-14 22:29:00
   tags:
     - Android
   categories:
@@ -62,7 +62,7 @@
   moreLoc: 6
   path: Android/CoordinatorLayout与Behavior的一己之见.md
   title: CoordinatorLayout与Behavior的一己之见
-  date: 2017-10-10 20:11:00
+  date: 2017-11-10 20:11:00
   updated: 2017-12-04 14:24:00
   tags:
     - Android
@@ -72,8 +72,8 @@
   moreLoc: 5
   path: Android/Dagger2 的初步了解和使用.md
   title: Dagger2 的初步了解和使用
-  date: 2017-03-13 12:10:00
-  updated: 2017-03-13 12:10:00
+  date: 2017-10-13 12:10:00
+  updated: 2017-10-13 12:10:00
   tags:
     - Android
   categories:
@@ -119,17 +119,17 @@
   categories:
     - Android
 -
-  moreLoc: 1
+  moreLoc: 3
   path: Android/HandlerThread - Handler - Thread.md
   title: HandlerThread - Handler - Thread
-  date: 2017-12-04 15:24:04
-  updated: 2017-12-04 15:24:04
+  date: 2016-04-10 15:24:04
+  updated: 2016-04-10 15:24:04
   tags:
     - Android
   categories:
     - Android
 -
-  moreLoc: 1
+  moreLoc: 13
   path: Android/IPC - AIDL.md
   title: IPC - AIDL
   date: 2018-04-24 22:44:00
@@ -139,17 +139,17 @@
   categories:
     - Android
 -
-  moreLoc: 1
+  moreLoc: 4
   path: Android/Java和JavaScript交互.md
   title: Java和JavaScript交互
-  date: 2016-11-03 10:53:00
-  updated: 2016-12-04 14:24:00
+  date: 2016-06-03 10:53:00
+  updated: 2016-06-04 14:24:00
   tags:
     - Android
   categories:
     - Android
 -
-  moreLoc: 1
+  moreLoc: 8
   path: Android/Jenkins构建Android项目.md
   title: Jenkins构建Android项目
   date: 2017-05-15 18:01:00
@@ -159,11 +159,11 @@
   categories:
     - Android
 -
-  moreLoc: 1
+  moreLoc: 2
   path: Android/Manifest中meta-data元素的配置与获取.md
   title: Manifest中meta-data元素的配置与获取
-  date: 2017-03-18 19:36:00
-  updated: 2017-03-18 19:36:00
+  date: 2016-11-18 19:36:00
+  updated: 2016-11-18 19:36:00
   tags:
     - Android
   categories:
@@ -172,8 +172,8 @@
   moreLoc: 1
   path: Android/Material Design 1 - 主题样式.md
   title: Material Design 1 - 主题样式
-  date: 2017-11-22 20:30:00
-  updated: 2017-11-22 20:30:00
+  date: 2017-09-22 20:30:00
+  updated: 2017-09-22 20:30:00
   tags:
     - Android
   categories:
@@ -182,8 +182,8 @@
   moreLoc: 1
   path: Android/Material Design 2 - Toolbar.md
   title: Material Design 2 - Toolbar
-  date: 2017-11-23 15:24:01
-  updated: 2017-11-23 15:24:01
+  date: 2017-09-23 15:24:01
+  updated: 2017-09-23 15:24:01
   tags:
     - Android
   categories:
@@ -192,8 +192,8 @@
   moreLoc: 1
   path: Android/Material Design 3 - TabLayout.md
   title: Material Design 3 - TabLayout
-  date: 2017-11-24 15:24:02
-  updated: 2017-11-24 15:24:02
+  date: 2017-09-24 15:24:02
+  updated: 2017-09-24 15:24:02
   tags:
     - Android
   categories:
@@ -202,8 +202,8 @@
   moreLoc: 1
   path: Android/Material Design 4 - AppBarLayout.md
   title: Material Design 4 - AppBarLayout
-  date: 2017-11-25 15:24:03
-  updated: 2017-11-25 15:24:03
+  date: 2017-09-25 15:24:03
+  updated: 2017-09-25 15:24:03
   tags:
     - Android
   categories:
@@ -212,8 +212,8 @@
   moreLoc: 1
   path: Android/Material Design 5 - CollapsingToolbarLayout.md
   title: Material Design 5 - CollapsingToolbarLayout
-  date: 2017-11-26 15:24:04
-  updated: 2017-11-26 15:24:04
+  date: 2017-09-26 15:24:04
+  updated: 2017-09-26 15:24:04
   tags:
     - Android
   categories:
@@ -222,8 +222,8 @@
   moreLoc: 1
   path: Android/Material Design 6 - FloatActionButton、Snackbar.md
   title: Material Design 6 - FloatActionButton、Snackbar
-  date: 2017-11-27 15:24:05
-  updated: 2017-11-27 15:24:05
+  date: 2017-09-27 15:24:05
+  updated: 2017-09-27 15:24:05
   tags:
     - Android
   categories:
@@ -232,8 +232,8 @@
   moreLoc: 1
   path: Android/Material Design 7 - DrawerLayout、NavigationView.md
   title: Material Design 7 - DrawerLayout、NavigationView
-  date: 2017-11-28 15:24:06
-  updated: 2017-11-28 15:24:06
+  date: 2017-09-28 15:24:06
+  updated: 2017-09-28 15:24:06
   tags:
     - Android
   categories:
@@ -272,8 +272,8 @@
   moreLoc: 1
   path: Android/数字，日期格式化.md
   title: 数字，日期格式化
-  date: 2016-11-14 22:29:00
-  updated: 2016-11-14 22:29:00
+  date: 2016-09-14 22:29:00
+  updated: 2016-09-14 22:29:00
   tags:
     - Android
   categories:
