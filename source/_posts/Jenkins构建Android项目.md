@@ -1,5 +1,5 @@
 ---
-moreLoc: 1
+moreLoc: 8
 path: Android/Jenkins构建Android项目.md
 title: Jenkins构建Android项目
 date: 2017-05-15T18:01:00.000Z
@@ -12,15 +12,15 @@ categories:
 
 ## 安装启动
 
-<!--more-->
-
-
 需要的工具：  
 1. [jenkins.war](http://mirrors.jenkins-ci.org/war/latest/jenkins.war)  
 2. Gradle  
 3. JDK   
 
 环境部署自行百度。
+
+<!--more-->
+
 
 ### 启动服务
 

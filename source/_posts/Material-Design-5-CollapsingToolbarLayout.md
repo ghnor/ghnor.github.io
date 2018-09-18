@@ -2,8 +2,8 @@
 moreLoc: 1
 path: 'Android/Material Design 5 - CollapsingToolbarLayout.md'
 title: 'Material Design 5 - CollapsingToolbarLayout'
-date: 2017-11-26T15:24:04.000Z
-updated: 2017-11-26T15:24:04.000Z
+date: 2017-09-26T15:24:04.000Z
+updated: 2017-09-26T15:24:04.000Z
 tags:
     - Android
 categories:

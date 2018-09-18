@@ -2,8 +2,8 @@
 moreLoc: 2
 path: 'Android/Broadcast Receiver.md'
 title: 'Broadcast Receiver'
-date: 2016-11-14T22:29:00.000Z
-updated: 2016-11-14T22:29:00.000Z
+date: 2016-08-14T22:29:00.000Z
+updated: 2016-08-14T22:29:00.000Z
 tags:
     - Android
 categories:

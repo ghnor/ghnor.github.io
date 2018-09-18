@@ -1,5 +1,5 @@
 ---
-moreLoc: 1
+moreLoc: 13
 path: 'Android/IPC - AIDL.md'
 title: 'IPC - AIDL'
 date: 2018-04-24T22:44:00.000Z
@@ -12,9 +12,6 @@ categories:
 
 本文主要是《Android开发艺术探索》中AIDL一章的笔记。
 
-<!--more-->
-
-
 **使用AIDL来进行进程间通信的流程，分为服务端和客户端两个方面。**
 
 1. 创建AIDL接口文件
@@ -26,6 +23,9 @@ categories:
 3. 客户端
 
 	客户端首先绑定服务端的Service，绑定成功后，将服务端返回的Binder对象转为AIDL接口。
+
+<!--more-->
+
 	
 ## 基本的AIDL应用
 	
