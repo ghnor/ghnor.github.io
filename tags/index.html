@@ -113,7 +113,7 @@
 <meta property="og:url" content="http://yoursite.com/tags/index.html">
 <meta property="og:site_name" content="ghnor&#39;s Blog">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-18T02:04:44.430Z">
+<meta property="og:updated_time" content="2018-10-10T08:59:08.676Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ghnor&#39;s Blog">
 
@@ -629,6 +629,31 @@
 
 
 
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'AGgVdMlTuUMYa2IsFQ0QwDTD-gzGzoHsz',
+        appKey: 'MGKJHectAsdCXnOTzhbY0ayj',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
 
 
 
