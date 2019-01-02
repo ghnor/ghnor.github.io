@@ -73,3 +73,21 @@ deploy:
   repo: 
     github: git@github.com:ghnor/ghnor.github.io.git,master
     coding: git@git.coding.net:ghnor/ghnor.git,master
+
+theme_config:
+
+  menu:
+    home: / || home
+    #about: /about/ || user
+    tags: /tags/ || tags
+    categories: /categories/ || th
+    archives: /archives/ || archive
+    #schedule: /schedule/ || calendar
+    #sitemap: /sitemap.xml || sitemap
+    #commonweal: /404/ || heartbeat
+
+  # Schemes
+  # scheme: Muse
+  scheme: Mist
+  #scheme: Pisces
+  #scheme: Gemini
