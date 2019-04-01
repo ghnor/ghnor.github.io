@@ -240,6 +240,9 @@ SQLite在做CRDU操作时都默认开启了事务，然后把SQL语句翻译成�
 #### 使用SQLite做批量操作有什么好的方法吗？
 
 ### 11. Application 和 Activity 的 Context 之间的区别
+
+[Android Context 上下文 你必须知道的一切](https://blog.csdn.net/lmj623565791/article/details/40481055)
+
 ### 12. 动画
 ### 13. 对 SurfaceView 的了解
 ### 14. Serializable 和 Parcelable 的区别
@@ -272,12 +275,65 @@ SQLite在做CRDU操作时都默认开启了事务，然后把SQL语句翻译成�
 ### 28. ThreadLocal 原理、实现及如何保证 Local 属性
 ### 29. 自定义 View
 
+* ViewRoot：连接WindowManager(外界访问Window的入口)和DecorView（顶级View）的纽带，View的三大流程均是通过ViewRoot来完成的。
+* DecorView：DecorView是顶级View，本质就是一个FrameLayout包含了两个部分，标题栏和内容栏。内容栏id是content，也就是activity中setContentView所设置的部分，最终将布局添加到id为content的FrameLayout中
+
+#### View的绘制流程
+
+View的绘制流程是从ViewRoot的PerformTraversals方法开始的。
+
+performTraversals会依次调用performMeasure, performLayout, performDraw三个方法，这三个方法分别完成顶层View的measure,layout,draw方法，onMeasure又会调用所有子元素的measure过程，直到完成整个View树的遍历。同理，performLayout, performDraw的传递流程与performMeasure相似。唯一不同在于，performDraw的传递过程在draw方法中通过dispatchDraw实现，但没有本质区别。
+
+Measure过程后可以调用getMeasureWidth和getMeasureHeight方法获取View测量后的宽高，与getWidth和getHeight的区别是：getMeasuredHeight()返回的是原始测量高度，与屏幕无关，getHeight()返回的是在屏幕上显示的高度。实际上在当屏幕可以包裹内容的时候，他们的值是相等的，只有当view超出屏幕后，才能看出他们的区别。当超出屏幕后，getMeasuredHeight()等于getHeight()加上屏幕之外没有显示的高度。
+
+Layout过程确定View四个顶点的位置和实际的宽高。
+
+Draw过程确定View的显示，只有draw方法完成后View的内容才会出现在屏幕上。
+
 * 自定义 View 的流程？如何机型适配？
 * 自定义 View 的时怎么获取 View 的大小？
 * View 的事件传递分发机制？
-* requestLayout()，onLayout()，onDraw()，drawChild() 区别与联系？
-* invalidate() 和 postInvalidate() 的区别？
-* 如何计算一个 View 的嵌套层级？
+####  requestLayout()，onLayout()，onDraw()，drawChild() 区别与联系？
+#### invalidate() 和 postInvalidate() 以及 requestLayout() 的区别？
+
+invalidate()和postInvalidate()都会递归调用父View的invalidateChildInParent()方法，直到调用ViewRootImpl的invalidateChildInParent()方法，最终触发ViewRootImpl的performTraversals()方法，此时mLayoutRequestede为false，不会触发onMesaure()与onLayout()方法，有可能会触发onDraw()方法。
+
+共同点：都是调用onDraw()方法，然后去达到重绘view的目的。
+
+区别：invalidate()用于主线程，postInvalidate()用于子线程。
+
+requestLayout()也会递归调用父窗口的requestLayout()方法，直到触发ViewRootImpl的performTraversals()方法，此时mLayoutRequestede为true，会触发onMesaure()与onLayout()方法，不一定会触发onDraw()方法。
+
+当view确定自身已经不再适合现有的区域时，该view本身调用这个方法要求parent view(父类的视图)重新调用他的onMeasure、onLayout来重新设置自己位置。特别是当view的layoutparameter发生改变，并且它的值还没能应用到view上时，这时候适合调用这个方法requestLayout()。requestLayout调用onMeasure和onLayout，不一定调用onDraw()。
+
+#### requestLayout()何时不会触发onDraw()？
+
+如果没有改变控件的leftrighttopbottom就不会触发onDraw()，即没有改变View自身的大小。
+
+#### invalidate()在什么情况下不会触发onDraw()？
+
+在ViewGroup中，invalidate()默认不重新绘制子view。
+
+#### 如何让ViewGroup在invalidate()时会触发onDraw()？
+
+本质需要将ViewGroup的dirtyOpaque设置为false。
+
+* 在构造函数中调用setWillNotDraw(false);
+* 给ViewGroup设置背景。调用setBackground。
+
+#### 如何计算一个 View 的嵌套层级？
+####  onDraw()的顺序
+
+![绘制过程](https://upload-images.jianshu.io/upload_images/2354038-dec64dea3ad60a0d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/477/format/webp)
+
+![绘制顺序](https://upload-images.jianshu.io/upload_images/2354038-df280209213f573c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/479/format/webp)
+
+* 在 ViewGroup 的子类中重写除 dispatchDraw() 以外的绘制方法时，可能需要调用 setWillNotDraw(false)（出于效率的考虑，ViewGroup 默认会绕过 draw() 方法，换而直接执行 dispatchDraw() 以此来简化绘制流程，ScrollView 等已调用过）
+* 在重写的方法有多个选择时，优先选择 onDraw()（Andorid优化了无需绘制时自动跳过onDraw的重复执行，以提升开发效率）
+
+#### 双指缩放的实现？
+
+
 
 ### 30. 进程和 Application 的生命周期的关系？
 ### 31. SpareArray 的实现原理？Android中其他优化集合的实现？
@@ -285,19 +341,54 @@ SQLite在做CRDU操作时都默认开启了事务，然后把SQL语句翻译成�
 ### 33. Android 线程有没有上限
 ### 35. 图片
 
+* 对于图片显示：根据需要显示图片控件的大小对图片进行压缩显示。
+* 如果图片数量非常多：则会使用LruCache等缓存机制，将所有图片占据的内容维持在一个范围内
+* 单个图片非常巨大，并且还不允许压缩
+
 * 对 Bitmap 对象的了解
 * 图片加载原理？
 * 图片压缩原理？
 * 图片框架实现原理？LRUCache 原理？
 
+### 自定义View
+
+[安卓自定义View教程目录](http://www.gcssloop.com/customview/CustomViewIndex/)
+[Android应用自定义View绘制方法手册](https://blog.csdn.net/yanbober/article/details/50577855)
+
 ### 36. 开源项目
 
-*  EventBus 实现原理
-*  ButterKnife 实现原理
-*  Volley 实现原理
-*  okhttp 实现原理
-*  RxJava
-*  Retrofit
+####  EventBus 实现原理
+
+[EventBus 3.0初探: 入门使用及其使用 完全解析](https://www.jianshu.com/p/acfe78296bb5)  
+[EventBus 3.0进阶：源码及其设计模式 完全解析](https://www.jianshu.com/p/bda4ed3017ba)
+
+* 三要素
+  1. Event 事件。它可以是任意类型。
+  2. Subscriber 事件订阅者。在EventBus3.0之前我们必须定义以onEvent开头的那几个方法，分别是onEvent、onEventMainThread、onEventBackgroundThread和onEventAsync，而在3.0之后事件处理的方法名可以随意取，不过需要加上注解@subscribe()，并且指定线程模型，默认是POSTING。
+  3. Publisher 事件的发布者。我们可以在任意线程里发布事件，一般情况下，使用EventBus.getDefault()就可以得到一个EventBus对象，然后再调用post(Object)方法即可。
+* 四种线程模型
+  1. POSTING (默认) 表示事件处理函数的线程跟发布事件的线程在同一个线程。
+  2. MAIN 表示事件处理函数的线程在主线程(UI)线程，因此在这里不能进行耗时操作。
+  3. BACKGROUND 表示事件处理函数的线程在后台线程，因此不能进行UI操作。如果发布事件的线程是主线程(UI线程)，那么事件处理函数将会开启一个后台线程，如果果发布事件的线程是在后台线程，那么事件处理函数就使用该线程。
+  4. ASYNC 表示无论事件发布的线程是哪一个，事件处理函数始终会新建一个子线程运行，同样不能进行UI操作。
+
+####  ButterKnife 实现原理
+####  Volley 实现原理
+####  okhttp 实现原理
+   *  参数是如何组装的？
+
+#### RxJava
+
+RxJava 有四个基本概念：Observable (可观察者，即被观察者)、 Observer (观察者)、 subscribe (订阅)、事件。Observable 和 Observer 通过 subscribe() 方法实现订阅关系，从而 Observable 可以在需要的时候发出事件来通知 Observer。
+
+与传统观察者模式不同， RxJava 的事件回调方法除了普通事件 onNext() （相当于 onClick() / onEvent()）之外，还定义了两个特殊的事件：onCompleted() 和 onError()。
+
+* onCompleted(): 事件队列完结。RxJava 不仅把每个事件单独处理，还会把它们看做一个队列。RxJava 规定，当不会再有新的 onNext() 发出时，需要触发 onCompleted() 方法作为标志。
+* onError(): 事件队列异常。在事件处理过程中出异常时，onError() 会被触发，同时队列自动终止，不允许再有事件发出。
+在一个正确运行的事件序列中, onCompleted() 和 onError() 有且只有一个，并且是事件序列中的最后一个。
+* 需要注意的是，onCompleted() 和 onError() 二者也是互斥的，即在队列中调用了其中一个，就不应该再调用另一个。
+
+#### Retrofit
 
 ### 37. 服务器只提供数据接收接口，在多线程或多进程条件下，如何保证数据的有序到达
 ### 38. SQLite 数据库升级，数据迁移问题
@@ -305,6 +396,68 @@ SQLite在做CRDU操作时都默认开启了事务，然后把SQL语句翻译成�
 ### 40. CAS介绍，OAuth 授权机制
 ### 41. 谈谈你对安卓签名的理解
 ### 42. App 是如何沙箱化，为什么要这么做？
+
+### 版本适配
+
+#### 6.0
+
+动态权限
+
+#### 7.0
+
+* 应用间共享文件
+
+    > [Android 7.0 行为变更 通过FileProvider在应用间共享文件吧](https://blog.csdn.net/lmj623565791/article/details/72859156)
+
+* APK signature scheme v2
+
+  * 只勾选v1签名就是传统方案签署，但是在7.0上不会使用V2安全的验证方式。 
+  * 只勾选V2签名7.0以下会显示未安装，7.0上则会使用了V2安全的验证方式。 
+  * 同时勾选V1和V2则所有版本都没问题。
+
+* 后台优化
+
+    在Android 7.0中删除了三项隐式广播，以帮助优化内存使用和电量消耗。
+
+  * 在 Android 7.0上 应用不会收到 CONNECTIVITY_ACTION 广播，即使你在manifest清单文件中设置了请求接受这些事件的通知。 但，在前台运行的应用如果使用BroadcastReceiver 请求接收通知，则仍可以在主线程中侦听 CONNECTIVITY_CHANGE。
+  * 在 Android 7.0上应用无法发送或接收 ACTION_NEW_PICTURE 或ACTION_NEW_VIDEO 类型的广播。
+
+* 多语言特性
+* 通知栏适配
+
+  * [Android通知栏介绍与适配总结](https://iluhcm.com/2017/03/12/experience-of-adapting-to-android-notifications/)
+
+* WebView问题
+
+  * [Android 7.0 WebView 部分机型打不开](http://blog.csdn.net/u012347067/article/details/70829013)
+  * [Android 7.0 WebView 二级跳转后界面空白](http://www.jianshu.com/p/07b781795b78)
+
+* PopupWindow位置不正确
+
+#### 8.0
+
+* 关于权限，对6.0的修缮
+
+> 在 Android 8.0 之前，如果应用在运行时请求权限并且被授予该权限，系统会错误地将属于同一权限组并且在清单中注册的其他权限也一起授予应用。  
+对于针对 Android 8.0 的应用，此行为已被纠正。系统只会授予应用明确请求的权限。然而，一旦用户为应用授予某个权限，则所有后续对该权限组中权限的请求都将被自动批准。
+例如，假设某个应用在其清单中列出 `READ_EXTERNAL_STORAGE` 和 `WRITE_EXTERNAL_STORAGE`。应用请求 `READ_EXTERNAL_STORAGE`，并且用户授予了该权限。如果该应用针对的是 API 级别 24 或更低级别，系统还会同时授予 `WRITE_EXTERNAL_STORAGE`，因为该权限也属于同一 `STORAGE` 权限组并且也在清单中注册过。如果该应用针对的是 Android 8.0，则系统此时仅会授予 `READ_EXTERNAL_STORAGE`；不过，如果该应用后来又请求 `WRITE_EXTERNAL_STORAGE`，则系统会立即授予该权限，而不会提示用户。
+
+* 通知适配
+
+管理应用是否接收通知
+
+* 悬浮窗适配
+* 安装apk
+* 集合的处理
+* 后台执行限制
+
+#### 9.0
+
+* non-SDK接口的使用
+
+    Android P 引入了针对非 SDK 接口的新使用限制，无论是直接使用还是通过反射或 JNI 间接使用。 无论应用是引用非 SDK 接口还是尝试使用反射或 JNI 获取其句柄，均适用这些限制。
+
+* 挖孔屏适配
 
 ## Framework
 
@@ -333,6 +486,52 @@ SQLite在做CRDU操作时都默认开启了事务，然后把SQL语句翻译成�
 
 ## 性能优化
 
+[Android最佳性能实践(一)——合理管理内存](https://blog.csdn.net/guolin_blog/article/details/42238627)  
+[Android最佳性能实践(二)——分析内存的使用情况](https://blog.csdn.net/guolin_blog/article/details/42238633)  
+[Android最佳性能实践(三)——高性能编码优化](https://blog.csdn.net/guolin_blog/article/details/42318689)  
+[Android最佳性能实践(四)——布局优化技巧](https://blog.csdn.net/guolin_blog/article/details/43376527)
+
+### 内存优化
+
+* 节制地使用Service
+* 当界面不可见时释放内存
+* 当内存紧张时释放内存（onTrimMemory）
+* 避免在Bitmap上浪费内存
+* 使用优化过的数据集合
+* 知晓内存的开支情况
+* 谨慎使用抽象编程
+* 尽量避免使用依赖注入框架
+* 使用ProGuard简化代码
+
+### WebView优化
+
+### 启动优化
+
+[Android 性能优化(一) —— 启动优化提升60%](https://blog.csdn.net/qian520ao/article/details/81908505)
+
+#### 主题优化
+
+* 默认主题
+
+  有白屏时间
+
+* 使用透明主题
+
+  治标不治本，启动有延迟
+
+* 设置闪屏图片主题
+
+  用户体验比较好
+
+总的来说，这只是视觉上的优化。
+
+#### 代码优化
+
+首先可以通过adb命令和系统日志（displayed）统计启动时长。
+
+##### Application 优化
+##### 闪屏页业务优化
+
 ### 1. 如何对 Android 应用进行性能分析以及优化?
 ### 2. ANR 产生的原因是什么？怎么定位？
 ### 3. OOM 是什么？怎么解决？是否可以 try catch？
@@ -346,3 +545,9 @@ SQLite在做CRDU操作时都默认开启了事务，然后把SQL语句翻译成�
 ### 11. Bitmap 如何处理大图？如何预防 OOM？
 ### 12. 如何缩小 Apk 的体积?
 ### 13. 如何统计启动时长？
+
+## 动态化
+
+### 热修复的原理，你都了解过哪几种热修复框架
+
+[Android 主要的热修复方案原理分析](https://www.jianshu.com/p/d10aa991ca76)
