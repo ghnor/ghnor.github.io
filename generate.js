@@ -15,7 +15,6 @@ if (fs.existsSync(PATH)) {
 data.forEach(element => {
     let path = element.path;
     let title = element.title;
-    console.log(path + "   " + title); 
     let indexHexo = path.lastIndexOf("/");
     if (indexHexo === -1) {
         indexHexo = path.lastIndexOf("\\");
@@ -27,7 +26,6 @@ data.forEach(element => {
     fileName = fileName.replace(/\s*\-\s*/g, "-");
     fileName = fileName.replace(/\s+/g, "-");
     let pathHexo = PATH + fileName;
-    console.log("pathHexo--->"+pathHexo);
     let hexoHeader = "---\n";
     hexoHeader += YAML.stringify(element);
     hexoHeader += "---\n\n";
@@ -44,7 +42,6 @@ data.forEach(element => {
             dataStr += item + "\n";
         }
     }
-    console.log(dataStr);
     fs.appendFileSync(pathHexo, dataStr);
 })
 
