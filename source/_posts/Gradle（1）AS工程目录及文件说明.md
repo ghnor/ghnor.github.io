@@ -1,7 +1,7 @@
 ---
-moreLoc: 1
-path: 'Android/Gradle 1 - AS工程目录及文件说明.md'
-title: 'Gradle 1 - AS工程目录及文件说明'
+moreLoc: 23
+path: Android/Gradle（1）AS工程目录及文件说明.md
+title: Gradle（1）AS工程目录及文件说明
 date: 2017-11-30T15:24:00.000Z
 updated: 2017-11-30T15:24:00.000Z
 tags:
@@ -11,9 +11,6 @@ categories:
 ---
 
 ## Gradle 和 Android Studio 工程目录：
-
-<!--more-->
-
 
 |  |  |  |
 | :--- | :--- | :--- |
@@ -35,6 +32,9 @@ categories:
 | gradlew.bat |  | windows下的gradle wrapper可执行文件 |
 | local.properties |  | 配置Androod SDK位置文件 |
 | settings.gradle |  | 工程配置 |
+
+
+<!--more-->
 
 * **build.gradle #project构建文件**
 

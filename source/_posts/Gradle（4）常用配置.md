@@ -1,7 +1,7 @@
 ---
-moreLoc: 1
-path: 'Android/Gradle 4 - 常用配置.md'
-title: 'Gradle 4 - 常用配置'
+moreLoc: 2
+path: Android/Gradle（4）常用配置.md
+title: Gradle（4）常用配置
 date: 2017-12-03T15:27:03.000Z
 updated: 2017-12-03T15:27:03.000Z
 tags:
@@ -12,8 +12,8 @@ categories:
 
 app/build.gradle
 
-<!--more-->
 
+<!--more-->
 
 ```gradle
 android {

@@ -1,7 +1,7 @@
 ---
-moreLoc: 1
-path: 'Android/Gradle 3 - 引入依赖.md'
-title: 'Gradle 3 - 引入依赖'
+moreLoc: 2
+path: Android/Gradle（3）引入依赖.md
+title: Gradle（3）引入依赖
 date: 2017-12-02T15:26:02.000Z
 updated: 2017-12-02T15:26:02.000Z
 tags:
@@ -12,8 +12,8 @@ categories:
 
 ## 引入jar包
 
-<!--more-->
 
+<!--more-->
 
 #### 方式一：
 

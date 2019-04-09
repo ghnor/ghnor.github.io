@@ -1,7 +1,7 @@
 ---
 moreLoc: 5
-path: 'Android/Dagger2 的初步了解和使用.md'
-title: 'Dagger2 的初步了解和使用'
+path: Android/Dagger2的初步了解和使用.md
+title: Dagger2的初步了解和使用
 date: 2017-10-13T12:10:00.000Z
 updated: 2017-10-13T12:10:00.000Z
 tags:
