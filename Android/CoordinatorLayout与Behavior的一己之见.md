@@ -7,7 +7,7 @@
 
 总结来说，`Behavior`代理以下四种事件，其大致传递流程如下图：
   
-![](http://ohle0c848.bkt.clouddn.com/android/behavior-flux.png)
+![](https://shanghai-1252949174.cos.ap-shanghai.myqcloud.com/20190409/behavior-flux.png)
   
 事件流好像很高深莫测的样子...，再简化一点的说法：`CoordinatorLayout`中的某个或某几个方法被其他类调用，之后`CoordinatorLayout`再调用`Behavior`中的某个或某几个方法（=。=好像更抽象了）。  
 总之，让这四类事件现在脑子里有个印象就可以了。

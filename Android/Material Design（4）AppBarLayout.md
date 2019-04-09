@@ -55,13 +55,13 @@ AppBarLayout只有作为CoordinatorLayout的直接子View时，并同时在Coord
 
 所有想获得滚动行为的view都需要设置。
 
-![](http://ohle0c848.bkt.clouddn.com/android/appbarlayout-1.gif)
+![](https://shanghai-1252949174.cos.ap-shanghai.myqcloud.com/20190409/appbarlayout-1.gif)
 
 ### enterAlways
 
 从滚动开始，该view就会跟着向下滚动。
 
-![](http://ohle0c848.bkt.clouddn.com/android/appbarlayout-2.gif)
+![](https://shanghai-1252949174.cos.ap-shanghai.myqcloud.com/20190409/appbarlayout-2.gif)
 
 ### enterAlwaysCollapsed
 
@@ -78,7 +78,7 @@ android:minHeight="?attr/actionBarSize"
 app:layout_scrollFlags="scroll|enterAlwaysCollapsed|enterAlways"
 ```
 
-![](http://ohle0c848.bkt.clouddn.com/android/appbarlayout-3.gif)
+![](https://shanghai-1252949174.cos.ap-shanghai.myqcloud.com/20190409/appbarlayout-3.gif)
 
 ### exitUntilCollapsed
 
@@ -89,7 +89,7 @@ android:layout_height="150dp"
 android:minHeight="?attr/actionBarSize"
 ```
 
-![](http://ohle0c848.bkt.clouddn.com/android/appbarlayout-4.gif)
+![](https://shanghai-1252949174.cos.ap-shanghai.myqcloud.com/20190409/appbarlayout-4.gif)
 
 ### snap
 
