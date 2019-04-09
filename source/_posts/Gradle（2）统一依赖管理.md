@@ -1,5 +1,5 @@
 ---
-moreLoc: 2
+moreLoc: 29
 path: Android/Gradle（2）统一依赖管理.md
 title: Gradle（2）统一依赖管理
 date: 2017-12-01T15:25:01.000Z
@@ -11,9 +11,6 @@ categories:
 ---
 
 避免在依赖包出新版本时，需要对每个module中的build.gradle文件都进行修改（如appcompat-v7包），使用这种方式即只需一次修改。
-
-
-<!--more-->
 
 ## 方法一：添加 config.gradle
 
@@ -41,6 +38,9 @@ ext {
     ]
 }
 ```
+
+
+<!--more-->
 
 其次在根目录的build.gradle文件中添加内容`apply from: "config.gradle"`
 

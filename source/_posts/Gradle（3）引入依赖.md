@@ -1,5 +1,5 @@
 ---
-moreLoc: 2
+moreLoc: 24
 path: Android/Gradle（3）引入依赖.md
 title: Gradle（3）引入依赖
 date: 2017-12-02T15:26:02.000Z
@@ -11,9 +11,6 @@ categories:
 ---
 
 ## 引入jar包
-
-
-<!--more-->
 
 #### 方式一：
 
@@ -36,6 +33,9 @@ dependencies {
 ```gradle
 compile fileTree(dir: ['libs', 'xxx'], include: ['*.jar', '.xxx'])
 ```
+
+
+<!--more-->
 
 ## 引入其他远程仓库
 
