@@ -69,7 +69,7 @@
   categories:
     - Android
 -
-  moreLoc: 2
+  moreLoc: 29
   path: Android/Gradle（2）统一依赖管理.md
   title: Gradle（2）统一依赖管理
   date: 2017-12-01 15:25:01
@@ -79,7 +79,7 @@
   categories:
     - Android
 -
-  moreLoc: 2
+  moreLoc: 24
   path: Android/Gradle（3）引入依赖.md
   title: Gradle（3）引入依赖
   date: 2017-12-02 15:26:02
