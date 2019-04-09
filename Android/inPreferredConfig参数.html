@@ -96,25 +96,25 @@
 
 
 
-  <meta name="description" content="引入jar包">
+  <meta name="description" content="原文：Android inpreferredconfig参数分析">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Gradle 3 - 引入依赖">
-<meta property="og:url" content="http://yoursite.com/Android/Gradle-3-引入依赖.html">
+<meta property="og:title" content="inPreferredConfig参数">
+<meta property="og:url" content="http://yoursite.com/Android/inPreferredConfig参数.html">
 <meta property="og:site_name" content="ghnor&#39;s Blog">
-<meta property="og:description" content="引入jar包">
+<meta property="og:description" content="原文：Android inpreferredconfig参数分析">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-02T07:26:02.000Z">
+<meta property="og:updated_time" content="2017-03-30T06:27:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Gradle 3 - 引入依赖">
-<meta name="twitter:description" content="引入jar包">
+<meta name="twitter:title" content="inPreferredConfig参数">
+<meta name="twitter:description" content="原文：Android inpreferredconfig参数分析">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/Android/Gradle-3-引入依赖.html"/>
+  <link rel="canonical" href="http://yoursite.com/Android/inPreferredConfig参数.html"/>
 
 
 
@@ -124,7 +124,7 @@
   };
 </script>
 
-  <title>Gradle 3 - 引入依赖 | ghnor's Blog</title>
+  <title>inPreferredConfig参数 | ghnor's Blog</title>
   
 
 
@@ -327,7 +327,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/Android/Gradle-3-引入依赖.html"/>
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/Android/inPreferredConfig参数.html"/>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ghnor"/>
@@ -344,7 +344,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Gradle 3 - 引入依赖
+          <h1 class="post-title" itemprop="name headline">inPreferredConfig参数
 
               
             
@@ -370,7 +370,7 @@
                 
               
 
-              <time title="创建时间：2017-12-02 15:26:02" itemprop="dateCreated datePublished" datetime="2017-12-02T15:26:02+08:00">2017-12-02</time>
+              <time title="创建时间：2017-03-30 14:27:00" itemprop="dateCreated datePublished" datetime="2017-03-30T14:27:00+08:00">2017-03-30</time>
             
 
             
@@ -422,23 +422,64 @@
       
 
       
-        <h2 id="引入jar包"><a href="#引入jar包" class="headerlink" title="引入jar包"></a>引入jar包</h2><a id="more"></a>
-<h4 id="方式一："><a href="#方式一：" class="headerlink" title="方式一："></a>方式一：</h4><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">  <span class="keyword">compile</span> <span class="keyword">fileTree</span>(dir: <span class="string">'libs'</span>, <span class="keyword">include</span>: [<span class="string">'*.jar'</span>]) <span class="comment">// 即添加所有在libs文件夹中的jar</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="方式二："><a href="#方式二：" class="headerlink" title="方式二："></a>方式二：</h4><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">  <span class="keyword">compile</span> files(<span class="string">'xxx.jar'</span>) <span class="comment">// 添加某个jar包作为依赖</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>除此之外，<code>compile fileTree(dir: &#39;libs&#39;, include: [&#39;*.jar&#39;])</code>能够将dir表示的路径下符合include表示的后缀名的文件全部作为依赖：</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">compile</span> <span class="keyword">fileTree</span>(dir: [<span class="string">'libs'</span>, <span class="string">'xxx'</span>], <span class="keyword">include</span>: [<span class="string">'*.jar'</span>, <span class="string">'.xxx'</span>])</span><br></pre></td></tr></table></figure>
-<h2 id="引入其他远程仓库"><a href="#引入其他远程仓库" class="headerlink" title="引入其他远程仓库"></a>引入其他远程仓库</h2><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">repositories</span> &#123;</span><br><span class="line">	<span class="comment">// 远程仓库地址</span></span><br><span class="line">	maven &#123; url = <span class="string">'https://dl.bintray.com/yuancloud/maven/'</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">	<span class="comment">// 远程仓库</span></span><br><span class="line">	<span class="keyword">compile</span> <span class="string">'cn.yuancloud.app:superadapter:1.1'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="引入so库"><a href="#引入so库" class="headerlink" title="引入so库"></a>引入so库</h2><p>默认包路径：app\src\main\jniLibs\</p>
-<p>放在这个里面的话，系统编译时自动为我们打包。</p>
-<p>也可以更改这个默认路径，修改app\build.gradle：</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sourceSets</span> &#123;</span><br><span class="line">	main &#123;</span><br><span class="line">		jniLibs.srcDirs = [<span class="string">'libs'</span>]</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>设置其路径跟jar包一样，放在app\libs\下。</p>
-<h2 id="引入module"><a href="#引入module" class="headerlink" title="引入module"></a>引入module</h2><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">	<span class="keyword">compile</span> <span class="keyword">project</span>(<span class="string">':library name'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="引入aar包"><a href="#引入aar包" class="headerlink" title="引入aar包"></a>引入aar包</h2><h4 id="方式一：-1"><a href="#方式一：-1" class="headerlink" title="方式一："></a>方式一：</h4><p>首先将需要的arr包放在app\libs\下。</p>
-<p>修改app\build.gradle，分别添加：</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">	...</span><br><span class="line">	<span class="keyword">repositories</span> &#123;</span><br><span class="line">		...</span><br><span class="line">		<span class="keyword">flatDir</span> &#123;</span><br><span class="line">			dirs <span class="string">'libs'</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">	...</span><br><span class="line">	<span class="keyword">compile</span>(name: <span class="string">'arr name'</span>, ext: <span class="string">'aar'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="方式二：-1"><a href="#方式二：-1" class="headerlink" title="方式二："></a>方式二：</h4><p>选择Android Studio的File -&gt; New -&gt; New Module…，再选择Import .JAR/.AAR Package，导入后再在依赖中添加该module</p>
+        <blockquote>
+<p>原文：<a href="http://blog.csdn.net/ccpat/article/details/46834089" target="_blank" rel="noopener">Android inpreferredconfig参数分析</a></p>
+</blockquote>
+<a id="more"></a>
+<h3 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h3><p>BitmapFactory.Options.inPreferredConfig的可选值有四个，分别为ALPHA_8，RGB_565，ARGB_4444，ARGB_8888。它们的含义列举如下:</p>
+<table>
+<thead>
+<tr>
+<th>参数取值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ALPHA_8</td>
+<td>图片中每个像素用一个字节（8位）存储，该字节存储的是图片8位的透明度值</td>
+</tr>
+<tr>
+<td>RGB_565</td>
+<td>图片中每个像素用两个字节（16位）存储，两个字节中高5位表示红色通道，中间6位表示绿色通道，低5位表示蓝色通道</td>
+</tr>
+<tr>
+<td>ARGB_4444</td>
+<td>图片中每个像素用两个字节（16位）存储，Alpha，R，G，B四个通道每个通道用4位表示</td>
+</tr>
+<tr>
+<td>ARGB_8888</td>
+<td>图片中每个像素用四个字节（32位）存储，Alpha，R，G，B四个通道每个通道用8位表示</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ALPHA_8模式</strong></p>
+<p>ALPHA_8模式表示的图片信息中只包含Alpha透明度信息，不包含任何颜色信息，所以ALPHA_8模式只能用在一些特殊场景。</p>
+<p><strong>RGB_565模式</strong></p>
+<p>显然RGB_565模式不能表示所有的RGB颜色，它能表示的颜色数只有32 × 64 × 32 = 65536种，远远小于24位真彩色所能表示的颜色数（256 × 257 × 256 = 16677216）。当图片中某个像素的颜色不在RGB_565模式表示的颜色范围内时，会使用相近的颜色来表示。</p>
+<p><strong>ARGB_4444模式</strong></p>
+<p>ARGB_4444已被Android标记为@Deprecated，以下是Android Bitmap类中截取的关于ARGB_4444的注释，可以看到Android推荐使用ARGB_8888来代替ARGB_4444，原因是ARGB_4444表示出来的图片质量太差，而且在KITKAT（Android4.4）及其以上版本，使用ARGB_4444参数会直接在代码中被忽略，用ARGB_8888替代。所以ARGB_4444参数基本没有使用的必要了。 </p>
+<p><strong>ARGB_8888模式</strong></p>
+<p>ARGB_8888模式用8位来表示透明度，有256个透明度等级，用24位来表示R，G，B三个颜色通道，能够完全表示32位真彩色，但同时这种模式占用的内存空间也最大，是RGB_565模式的两倍，是ALPHA_8模式的4倍。</p>
+<h3 id="作用说明"><a href="#作用说明" class="headerlink" title="作用说明"></a>作用说明</h3><p><del><em>如果不需要透明度信息，就将其设置为RGB_565，可以减少一半的内存？</em></del></p>
+<p>如果inPreferredConfig不为null，解码器会尝试使用此参数指定的颜色模式来对图片进行解码，如果inPreferredConfig为null或者在解码时无法满足此参数指定的颜色模式，解码器会自动根据原始图片的特征以及当前设备的屏幕位深，选取合适的颜色模式来解码，例如，如果图片中包含透明度，那么对该图片解码时使用的配置就需要支持透明度，默认会使用ARGB_8888来解码。</p>
+<p>也就是说inPreferredConfig指定的配置并非是一个强制选项，而是建议的（preferred）选项，Android在实际解码时会参考此参数的配置，但如果此配置不满足，Android会重新选取一个合适的配置来对图片进行解码。</p>
+<p><strong>当出现不满足情况时，使用的合适配置是如何选取的？</strong></p>
+<ol>
+<li><p>如果inPreferredConfig为null，解码时使用的颜色模式会根据图片源文件的类型进行选取，如果图片文件的颜色模式为CMYK，或RGB565，则选取RGB_565。如果是其他类型，则选取ARGB_8888。</p>
+</li>
+<li><p>如果inPreferredConfig指定的选项在解码时无法满足，并不会再根据图片文件的类型来选取合适的选项，而是直接使用ARGB_8888选项来解码。例如，图片源文件为RGB566编码的BMP图片，使用ALPHA_8选项来解码时属于不满足的情况，这时会选取ARGB_8888选项来解码，而不是选取RGB565。和inPreferredConfig为null时选取的“合适的”选项并不相同。</p>
+</li>
+</ol>
+<p><strong>什么情况下使用什么样的配置会出现不满足的情况？</strong></p>
+<ol>
+<li><p>所有情况下ARGB_8888配置都可以满足</p>
+</li>
+<li><p>所有情况下ALPHA_8配置都不满足</p>
+</li>
+<li><p>绝大多数情况下RGB565选项都不满足</p>
+</li>
+</ol>
 
       
     </div>
@@ -475,8 +516,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/Android/Gradle-2-统一依赖管理.html" rel="next" title="Gradle 2 - 统一依赖管理">
-                <i class="fa fa-chevron-left"></i> Gradle 2 - 统一依赖管理
+              <a href="/Android/Manifest中meta-data元素的配置与获取.html" rel="next" title="Manifest中meta-data元素的配置与获取">
+                <i class="fa fa-chevron-left"></i> Manifest中meta-data元素的配置与获取
               </a>
             
           </div>
@@ -485,8 +526,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/Android/Gradle-4-常用配置.html" rel="prev" title="Gradle 4 - 常用配置">
-                Gradle 4 - 常用配置 <i class="fa fa-chevron-right"></i>
+              <a href="/Android/Material-Design（1）主题样式.html" rel="prev" title="Material Design（1）主题样式">
+                Material Design（1）主题样式 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -557,7 +598,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -572,7 +613,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">1</span>
+                      
+                    
+                    <span class="site-state-item-count">2</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -587,7 +630,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">1</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -623,7 +674,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引入jar包"><span class="nav-number">1.</span> <span class="nav-text">引入jar包</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方式一："><span class="nav-number">1.0.1.</span> <span class="nav-text">方式一：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方式二："><span class="nav-number">1.0.2.</span> <span class="nav-text">方式二：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引入其他远程仓库"><span class="nav-number">2.</span> <span class="nav-text">引入其他远程仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引入so库"><span class="nav-number">3.</span> <span class="nav-text">引入so库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引入module"><span class="nav-number">4.</span> <span class="nav-text">引入module</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引入aar包"><span class="nav-number">5.</span> <span class="nav-text">引入aar包</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方式一：-1"><span class="nav-number">5.0.1.</span> <span class="nav-text">方式一：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方式二：-1"><span class="nav-number">5.0.2.</span> <span class="nav-text">方式二：</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数说明"><span class="nav-number">1.</span> <span class="nav-text">参数说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作用说明"><span class="nav-number">2.</span> <span class="nav-text">作用说明</span></a></li></ol></div>
             
 
           </div>

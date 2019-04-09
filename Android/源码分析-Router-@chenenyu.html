@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="项目地址：Router @chenenyu  最简单的一次调用： 1Router.build(&quot;test&quot;).go(this);">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="源码分析 - Router @chenenyu">
+<meta property="og:url" content="http://yoursite.com/Android/源码分析-Router-@chenenyu.html">
+<meta property="og:site_name" content="ghnor&#39;s Blog">
+<meta property="og:description" content="项目地址：Router @chenenyu  最简单的一次调用： 1Router.build(&quot;test&quot;).go(this);">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-08-29T06:58:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="源码分析 - Router @chenenyu">
+<meta name="twitter:description" content="项目地址：Router @chenenyu  最简单的一次调用： 1Router.build(&quot;test&quot;).go(this);">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/Android/源码分析-Router-@chenenyu.html"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>源码分析 - Router @chenenyu | ghnor's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ghnor's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">生命吻我以痛，却要我报之以歌。</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/Android/源码分析-Router-@chenenyu.html"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ghnor"/>
+      <meta itemprop="description" content=""/>
+      <meta itemprop="image" content="/images/avatar.gif"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ghnor's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">源码分析 - Router @chenenyu
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-08-29 14:58:00" itemprop="dateCreated datePublished" datetime="2018-08-29T14:58:00+08:00">2018-08-29</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p><a href="https://github.com/chenenyu/Router" target="_blank" rel="noopener">项目地址：Router @chenenyu</a></p>
+</blockquote>
+<p>最简单的一次调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Router.build(<span class="string">"test"</span>).go(<span class="keyword">this</span>);</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>就从这个调用开始看，跟着走一遍。</p>
+<p>Router.build入口真正的调用类是RealRouter。</p>
+<p>RealRouter.build接受两种入参，Uri（String也会被包装为Uri）和RouterRequest。</p>
+<p>入参是Uri时，AbsRouter（RealRouter的父类）会把Uri包装为RouterRequest。同时新建Bundle，key是Router.RAW_URI，value是前面的Uri。并把bundle设置给request（setExtras）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> IRouter <span class="title">build</span><span class="params">(Uri uri)</span> </span>&#123;</span><br><span class="line">    mRouteRequest = <span class="keyword">new</span> RouteRequest(uri);</span><br><span class="line">    Bundle bundle = <span class="keyword">new</span> Bundle();</span><br><span class="line">    bundle.putString(Router.RAW_URI, uri == <span class="keyword">null</span> ? <span class="keyword">null</span> : uri.toString());</span><br><span class="line">    mRouteRequest.setExtras(bundle);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接着去走RealRouter中的go方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">go</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">    Intent intent = getIntent(context);</span><br><span class="line">    <span class="keyword">if</span> (intent != <span class="keyword">null</span>) &#123;</span><br><span class="line">        Bundle options = mRouteRequest.getActivityOptionsBundle();</span><br><span class="line">        <span class="keyword">if</span> (context <span class="keyword">instanceof</span> Activity) &#123;</span><br><span class="line">            ActivityCompat.startActivityForResult((Activity) context, intent,</span><br><span class="line">                    mRouteRequest.getRequestCode(), options);</span><br><span class="line">            <span class="keyword">if</span> (mRouteRequest.getEnterAnim() &gt;= <span class="number">0</span> &amp;&amp; mRouteRequest.getExitAnim() &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">                ((Activity) context).overridePendingTransition(</span><br><span class="line">                        mRouteRequest.getEnterAnim(), mRouteRequest.getExitAnim());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);</span><br><span class="line">            <span class="comment">// The below api added in v4:25.1.0</span></span><br><span class="line">            <span class="comment">// ContextCompat.startActivity(context, intent, options);</span></span><br><span class="line">            <span class="keyword">if</span> (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.JELLY_BEAN) &#123;</span><br><span class="line">                context.startActivity(intent, options);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                context.startActivity(intent);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第一行就拿到了Intent对象，之后就执行startActivity方法，此时就已经跳转到其他Activity了。</p>
+<p>那么就看getIntent方法到底做了哪些事情。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Intent <span class="title">getIntent</span><span class="params">(@NonNull Object source)</span> </span>&#123;</span><br><span class="line">    List&lt;RouteInterceptor&gt; interceptors = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    Collections.addAll(interceptors, mBaseValidator, mIntentValidator,</span><br><span class="line">            mIntentProcessor, mAppInterceptorsHandler);</span><br><span class="line">    RealInterceptorChain chain = <span class="keyword">new</span> RealInterceptorChain(source, mRouteRequest, interceptors);</span><br><span class="line">    RouteResponse response = chain.process();</span><br><span class="line">    callback(response);</span><br><span class="line">    <span class="keyword">return</span> (Intent) response.getResult();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先声明一个新的list实例，interceptors。</p>
+<p>mBaseValidator、mIntentValidator、mIntentProcessor、mAppInterceptorsHandler塞到interceptors里面。</p>
+<p>把context、routerRequest、interceptors作为入参，生成一个RealInterceptorChain类的实例化对象chain。</p>
+<p>调用chain的process方法，返回RouteResponse。</p>
+<p>再把RouteResponse作为入参，调用callback。</p>
+<p>最后返回response.getResult。</p>
+<p>先看chain的process方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> RouteResponse <span class="title">process</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (index &gt;= interceptors.size()) &#123;</span><br><span class="line">        RouteResponse response = RouteResponse.assemble(RouteStatus.SUCCEED, <span class="keyword">null</span>);</span><br><span class="line">        <span class="keyword">if</span> (targetObject != <span class="keyword">null</span>) &#123;</span><br><span class="line">            response.setResult(targetObject);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            response.setStatus(RouteStatus.FAILED);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> response;</span><br><span class="line">    &#125;</span><br><span class="line">    RouteInterceptor interceptor = interceptors.get(index++);</span><br><span class="line">    <span class="keyword">return</span> interceptor.intercept(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>单看这里是会觉得if判断莫名其妙，chain对象首次生成，index肯定是0，interceptors.get(0)取出来的是mBaseValidator对象。</p>
+<p>那么继续看mBaseValidator的intercept方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> RouteResponse <span class="title">intercept</span><span class="params">(Chain chain)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> chain.process();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后会递归调用chain的process方法。然后从interceptors中拿第二个interceptor，也就是mIntentValidator，去执行intercept方法。</p>
+<p>那么上面的if判断就看懂了，经过多次递归调用之后，全部的interceptor都执行过之后，就把结果包装成Response的实例化对象返回。</p>
+<p>当然，如果是自定义的RouteInterceptor，比如说判断用户是否已经登录，发现没登录，不让跳转Activity的话，最后返回<code>return chain.intercept();</code>就可以了。</p>
+<p>那么这个所谓的targetObject对象从何而来呢。</p>
+<p>看一下IntentProcessor的intercept方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> RouteResponse <span class="title">intercept</span><span class="params">(Chain chain)</span> </span>&#123;</span><br><span class="line">    RealInterceptorChain realChain = (RealInterceptorChain) chain;</span><br><span class="line">    RouteRequest request = chain.getRequest();</span><br><span class="line">    List&lt;AbsMatcher&gt; matcherList = MatcherRegistry.getMatcher();</span><br><span class="line">    List&lt;AbsImplicitMatcher&gt; implicitMatcherList = MatcherRegistry.getImplicitMatcher();</span><br><span class="line">    Set&lt;Map.Entry&lt;String, Class&lt;?&gt;&gt;&gt; entries = AptHub.routeTable.entrySet();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先拿到matcherList和implicitMatcherList。这两个list是在MatcherRegistry初始化的时候添加进去的。</p>
+<p>再拿到routeTable，它就是路由表，里头就是Map键值对。</p>
+<p>每次在activity或者fragment上写了注解之后，就会由apt生成一个路由表。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Route</span>(value = <span class="string">"test"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面这样的就是<code>map.put(&quot;test&quot;, TestActivity.class);</code>，key是注解的内容，value是Activity的class对象。</p>
+<p>接着看下一部分，如果这个路由表是空：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> RouteResponse <span class="title">intercept</span><span class="params">(Chain chain)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (AbsImplicitMatcher implicitMatcher : implicitMatcherList) &#123;</span><br><span class="line">        <span class="keyword">if</span> (implicitMatcher.match(chain.getContext(), request.getUri(), <span class="keyword">null</span>, request)) &#123;</span><br><span class="line">            RLog.i(String.format(<span class="string">"&#123;uri=%s, matcher=%s&#125;"</span>,</span><br><span class="line">                    chain.getRequest().getUri(), implicitMatcher.getClass().getCanonicalName()));</span><br><span class="line">            realChain.setTargetClass(<span class="keyword">null</span>);</span><br><span class="line">            Object result = implicitMatcher.generate(chain.getContext(), request.getUri(), <span class="keyword">null</span>);</span><br><span class="line">            <span class="keyword">if</span> (result <span class="keyword">instanceof</span> Intent) &#123;</span><br><span class="line">                intent = (Intent) result;</span><br><span class="line">                assembleIntent(intent, request);</span><br><span class="line">                realChain.setTargetObject(intent);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> RouteResponse.assemble(RouteStatus.FAILED, String.format(</span><br><span class="line">                        <span class="string">"The matcher can't generate an intent for uri: %s"</span>,</span><br><span class="line">                        request.getUri().toString()));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此时用的就是Intent的隐式跳转。</p>
+<p>首先判断了AbsImplicitMatcher的match方法。</p>
+<p>AbsImplicitMatcher有两个子类实现了match方法，分别是：</p>
+<ol>
+<li>ImplicitMatcher：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">match</span><span class="params">(Context context, Uri uri, @Nullable String route, RouteRequest routeRequest)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (uri.toString().toLowerCase().startsWith(<span class="string">"http://"</span>)</span><br><span class="line">            || uri.toString().toLowerCase().startsWith(<span class="string">"https://"</span>)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(</span><br><span class="line">            <span class="keyword">new</span> Intent(Intent.ACTION_VIEW, uri), PackageManager.MATCH_DEFAULT_ONLY);</span><br><span class="line">    <span class="keyword">if</span> (resolveInfo != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">// bundle parser</span></span><br><span class="line">        <span class="keyword">if</span> (uri.getQuery() != <span class="keyword">null</span>) &#123;</span><br><span class="line">            parseParams(uri, routeRequest);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>BrowserMatcher：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">match</span><span class="params">(Context context, Uri uri, @Nullable String route, RouteRequest routeRequest)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (uri.toString().toLowerCase().startsWith(<span class="string">"http://"</span>)</span><br><span class="line">            || uri.toString().toLowerCase().startsWith(<span class="string">"https://"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>只看第一个，先判断当前的Uri是否有可跳转的Activity类。</p>
+<p>如果有，执行parseParams方法。parseParams方法的实现在AbsMatcher中。</p>
+<p>主要是把Uri的请求参数，都写进Bundle中，同时将Bundle传给RouteRequest。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">parseParams</span><span class="params">(Uri uri, RouteRequest routeRequest)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (uri.getQuery() != <span class="keyword">null</span>) &#123;</span><br><span class="line">        Bundle bundle = routeRequest.getExtras();</span><br><span class="line">        <span class="keyword">if</span> (bundle == <span class="keyword">null</span>) &#123;</span><br><span class="line">            bundle = <span class="keyword">new</span> Bundle();</span><br><span class="line">            routeRequest.setExtras(bundle);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Set&lt;String&gt; keys = uri.getQueryParameterNames();</span><br><span class="line">        Iterator&lt;String&gt; keyIterator = keys.iterator();</span><br><span class="line">        <span class="keyword">while</span> (keyIterator.hasNext()) &#123;</span><br><span class="line">            String key = keyIterator.next();</span><br><span class="line">            List&lt;String&gt; values = uri.getQueryParameters(key);</span><br><span class="line">            <span class="keyword">if</span> (values.size() &gt; <span class="number">1</span>) &#123;</span><br><span class="line">                bundle.putStringArray(key, values.toArray(<span class="keyword">new</span> String[<span class="number">0</span>]));</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (values.size() == <span class="number">1</span>) &#123;</span><br><span class="line">                bundle.putString(key, values.get(<span class="number">0</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>match方法结束了，假设已经返回了true，继续走IntentProcessor的intercept方法。</p>
+<p>看到<code>realChain.setTargetClass(null);</code>，上面说了，此时相当于Intent的隐式跳转，所以没有具体的class对象。</p>
+<p>之后会执行AbsImplicitMatcher的generate方法：</p>
+<p>实例化了Intent对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">generate</span><span class="params">(Context context, Uri uri, @Nullable Class&lt;?&gt; target)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Intent(Intent.ACTION_VIEW, uri);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再执行assembleIntent方法，主要是把RouterRequest的各种参数赋值给Intent。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">assembleIntent</span><span class="params">(Intent intent, RouteRequest request)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (request.getExtras() != <span class="keyword">null</span> &amp;&amp; !request.getExtras().isEmpty()) &#123;</span><br><span class="line">        intent.putExtras(request.getExtras());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (request.getFlags() != <span class="number">0</span>) &#123;</span><br><span class="line">        intent.addFlags(request.getFlags());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (request.getData() != <span class="keyword">null</span>) &#123;</span><br><span class="line">        intent.setData(request.getData());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (request.getType() != <span class="keyword">null</span>) &#123;</span><br><span class="line">        intent.setType(request.getType());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (request.getAction() != <span class="keyword">null</span>) &#123;</span><br><span class="line">        intent.setAction(request.getAction());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>紧接着<code>realChain.setTargetObject(intent);</code>，这里chain终于拿到了TargetObject，也就是Intent对象。</p>
+<p>那么这一次就走完了。接着会回到RealInterceptorChain执行下一次process方法，也就是下一个Interceptor的intercept方法。</p>
+<p>上面说了一点，这一部分走的是Intent的隐式跳转，那么显式跳转呢。</p>
+<p>继续看：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (Map.Entry&lt;String, Class&lt;?&gt;&gt; entry : entries) &#123;</span><br><span class="line">    <span class="keyword">if</span> (matcher.match(chain.getContext(), request.getUri(), entry.getKey(), request)) &#123;</span><br><span class="line">        RLog.i(String.format(<span class="string">"&#123;uri=%s, matcher=%s&#125;"</span>,</span><br><span class="line">                chain.getRequest().getUri(), matcher.getClass().getCanonicalName()));</span><br><span class="line">        realChain.setTargetClass(entry.getValue());</span><br><span class="line">        Object result = matcher.generate(chain.getContext(), request.getUri(), entry.getValue());</span><br><span class="line">        <span class="keyword">if</span> (result <span class="keyword">instanceof</span> Intent) &#123;</span><br><span class="line">            intent = (Intent) result;</span><br><span class="line">            assembleIntent(intent, request);</span><br><span class="line">            realChain.setTargetObject(intent);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> RouteResponse.assemble(RouteStatus.FAILED, String.format(</span><br><span class="line">                    <span class="string">"The matcher can't generate an intent for uri: %s"</span>,</span><br><span class="line">                    request.getUri().toString()));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">break</span> MATCHER;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>匹配显式Intent的Matcher也有两个：</p>
+<ol>
+<li>SchemeMatcher</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">match</span><span class="params">(Context context, Uri uri, @Nullable String route, RouteRequest routeRequest)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (isEmpty(route)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Uri routeUri = Uri.parse(route);</span><br><span class="line">    <span class="keyword">if</span> (uri.isAbsolute() &amp;&amp; routeUri.isAbsolute()) &#123; <span class="comment">// scheme != null</span></span><br><span class="line">        <span class="keyword">if</span> (!uri.getScheme().equals(routeUri.getScheme())) &#123;</span><br><span class="line">            <span class="comment">// http != https</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (isEmpty(uri.getAuthority()) &amp;&amp; isEmpty(routeUri.getAuthority())) &#123;</span><br><span class="line">            <span class="comment">// host1 == host2 == empty</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// google.com == google.com:443 (include port)</span></span><br><span class="line">        <span class="keyword">if</span> (!isEmpty(uri.getAuthority()) &amp;&amp; !isEmpty(routeUri.getAuthority())</span><br><span class="line">                &amp;&amp; uri.getAuthority().equals(routeUri.getAuthority())) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!cutSlash(uri.getPath()).equals(cutSlash(routeUri.getPath()))) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// bundle parser</span></span><br><span class="line">            <span class="keyword">if</span> (uri.getQuery() != <span class="keyword">null</span>) &#123;</span><br><span class="line">                parseParams(uri, routeRequest);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>DirectMatcher</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">match</span><span class="params">(Context context, Uri uri, @Nullable String route, RouteRequest routeRequest)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> !isEmpty(route) &amp;&amp; uri.toString().equals(route);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>跟之前隐式Intent的Matcher功能大致相同，只是匹配的规则不同。</p>
+<p>匹配到之后的方法也基本一样，此时跳转就有了具体的Class对象。</p>
+<p>把Class对象（比如：MyTestActivity.class）丢给Chain（即：<code>realChain.setTargetClass(entry.getValue());</code>）。</p>
+<p>RouterRequest的内容分别赋给Intent，再把Intent丢给Chain（即：<code>realChain.setTargetObject(intent);</code>）。</p>
+<p>这次调用的流程的就到此结束了。</p>
+<h2 id="Matcher以及它的子类方法主要作用"><a href="#Matcher以及它的子类方法主要作用" class="headerlink" title="Matcher以及它的子类方法主要作用"></a>Matcher以及它的子类方法主要作用</h2><ol>
+<li><p>match方法：尝试匹配目标Activity或者Fragment。</p>
+</li>
+<li><p>parseParams方法：Uri里的参数包装成Bundle，通过RouteRequest的setExtras方法丢给RouteRequest；</p>
+</li>
+<li><p>generate方法：生成Intent实例或者Fragment实例。此时已经知道要跳转哪个Activity或者Fragment，但是还不知道要传递哪些参数。</p>
+</li>
+</ol>
+<h2 id="RouteInterceptor介绍"><a href="#RouteInterceptor介绍" class="headerlink" title="RouteInterceptor介绍"></a>RouteInterceptor介绍</h2><p>在RealInterceptorChain的process方法，会递归调用RouteInterceptor的intercept方法。</p>
+<p>上面只介绍了IntentProcessor，其他还有三个。</p>
+<p>分别是：</p>
+<ol>
+<li><p>BaseValidator：判断Context对象的合法性，是不是Context、Activity、Fragment等。因为getIntent方法会暴露给外界，所以无法保证入参的类型。</p>
+</li>
+<li><p>IntentValidator：判断Matcher的列表是否为空。</p>
+</li>
+<li><p>IntentProcessor：生成需要的Intent。上面Matcher的方法主要在这里执行，生成了Intent实例之后，会从RouteRequest中拿Bundle，赋给Intent。同时把这个Intent实例丢给Chain。Chain之后会把这个Intent包装成RouteReponse。RealRouter又从RouteResponse里拿Intent，然后才真正跳到目标Activity。</p>
+</li>
+<li><p>AppInterceptorsHandler：主要是对自定义添加的RouteInterceptor做处理，包括以注解形式添加和Router的addInterceptors方法添加。</p>
+</li>
+</ol>
+<p>到目前为止说的都是getIntent，也就跳Acvitity的时候。</p>
+<p>还有一种是getFragment，拿到Fragment实例对象。流程一样，RouteInterceptor如下：</p>
+<ol>
+<li><p>BaseValidator：同上。</p>
+</li>
+<li><p>FragmentValidator：这里判断显示匹配的Matcher列表是否为空。</p>
+</li>
+<li><p>FragmentProcessor：跟上面IntentProcessor有点类似，但这里生成的是Fragment实例。也会从RouteRequest中拿Bundle，赋给Fragment。再把Fragment实例丢给Chain，由Chain包装为RouteResponse。RealRouter的getFragment方法就是直接从RouteResponse中取出这个Fragment而已。</p>
+</li>
+<li><p>AppInterceptorsHandler：同上。</p>
+</li>
+</ol>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>有个地方挺重要的，但是没说，就是写了注解之后是怎么保存成一张路由表的。</p>
+<p>这其实是apt的内容，很多框架都会用到，ButterKnife、EventBus等等，不是Router的重点内容。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Android/Gradle（4）常用配置.html" rel="next" title="Gradle（4）常用配置">
+                <i class="fa fa-chevron-left"></i> Gradle（4）常用配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Others/有点不一样的Hexo自动部署方案.html" rel="prev" title="有点不一样的Hexo自动部署方案">
+                有点不一样的Hexo自动部署方案 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ghnor</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Matcher以及它的子类方法主要作用"><span class="nav-number">1.</span> <span class="nav-text">Matcher以及它的子类方法主要作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RouteInterceptor介绍"><span class="nav-number">2.</span> <span class="nav-text">RouteInterceptor介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">3.</span> <span class="nav-text">最后</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ghnor</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.7.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -104,12 +104,12 @@
 <meta property="og:site_name" content="ghnor&#39;s Blog">
 <meta property="og:description" content="前言许多文章都是将CoordinatorLayout、AppbarLayout、CollapsingToolbarLayout、Toolbar等放在一起介绍，容易误解为这几个布局一定要互相搭配，且仅仅适用于这些场景中。其实不然，其中最重要的是CoordinatorLayout，我把它称为协调布局。协调什么布局呢？自然是嵌套在其内部的Child View。CoordinatorLayout充当了一个">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://ohle0c848.bkt.clouddn.com/android/behavior-flux.png">
+<meta property="og:image" content="https://shanghai-1252949174.cos.ap-shanghai.myqcloud.com/20190409/behavior-flux.png">
 <meta property="og:updated_time" content="2017-12-04T06:24:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CoordinatorLayout与Behavior的一己之见">
 <meta name="twitter:description" content="前言许多文章都是将CoordinatorLayout、AppbarLayout、CollapsingToolbarLayout、Toolbar等放在一起介绍，容易误解为这几个布局一定要互相搭配，且仅仅适用于这些场景中。其实不然，其中最重要的是CoordinatorLayout，我把它称为协调布局。协调什么布局呢？自然是嵌套在其内部的Child View。CoordinatorLayout充当了一个">
-<meta name="twitter:image" content="http://ohle0c848.bkt.clouddn.com/android/behavior-flux.png">
+<meta name="twitter:image" content="https://shanghai-1252949174.cos.ap-shanghai.myqcloud.com/20190409/behavior-flux.png">
 
 
 
@@ -443,7 +443,7 @@
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>许多文章都是将<code>CoordinatorLayout</code>、<code>AppbarLayout</code>、<code>CollapsingToolbarLayout</code>、<code>Toolbar</code>等放在一起介绍，容易误解为这几个布局一定要互相搭配，且仅仅适用于这些场景中。<br>其实不然，其中最重要的是<code>CoordinatorLayout</code>，我把它称为协调布局。协调什么布局呢？自然是嵌套在其内部的Child View。<br><code>CoordinatorLayout</code>充当了一个中间层的角色，一边接收其他组件的事件，一边将接收到的事件通知给内部的其他组件。<br><code>Behavior</code>就是<code>CoordinatorLayout</code>传递事件的媒介，<code>Behavior</code> 定义了 <code>CoordinatorLayout</code> 中<strong>直接子 View</strong>的行为规范，决定了当收到不同事件时，应该做怎样的处理。  </p>
 <a id="more"></a>
 <p>总结来说，<code>Behavior</code>代理以下四种事件，其大致传递流程如下图：</p>
-<p><img src="http://ohle0c848.bkt.clouddn.com/android/behavior-flux.png" alt=""></p>
+<p><img src="https://shanghai-1252949174.cos.ap-shanghai.myqcloud.com/20190409/behavior-flux.png" alt=""></p>
 <p>事件流好像很高深莫测的样子…，再简化一点的说法：<code>CoordinatorLayout</code>中的某个或某几个方法被其他类调用，之后<code>CoordinatorLayout</code>再调用<code>Behavior</code>中的某个或某几个方法（=。=好像更抽象了）。<br>总之，让这四类事件现在脑子里有个印象就可以了。</p>
 <p>接着先介绍一下自定义Behavior的通用流程。为什么是通用流程呢？因为上面提到了有四种事件流，根据不同的事件流，是要重写不同的方法的，会在下面一一说明。</p>
 <h1 id="自定义Behavior的通用流程"><a href="#自定义Behavior的通用流程" class="headerlink" title="自定义Behavior的通用流程"></a>自定义Behavior的通用流程</h1><p><strong>1. 重写构造方法</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomBehavior</span> <span class="keyword">extends</span> <span class="title">CoordinatorLayout</span>.<span class="title">Behavior</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomBehavior</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -541,8 +541,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/Android/Dagger2-的初步了解和使用.html" rel="next" title="Dagger2 的初步了解和使用">
-                <i class="fa fa-chevron-left"></i> Dagger2 的初步了解和使用
+              <a href="/Android/Dagger2的初步了解和使用.html" rel="next" title="Dagger2的初步了解和使用">
+                <i class="fa fa-chevron-left"></i> Dagger2的初步了解和使用
               </a>
             
           </div>
@@ -551,8 +551,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/Android/Gradle-1-AS工程目录及文件说明.html" rel="prev" title="Gradle 1 - AS工程目录及文件说明">
-                Gradle 1 - AS工程目录及文件说明 <i class="fa fa-chevron-right"></i>
+              <a href="/Android/Gradle（1）AS工程目录及文件说明.html" rel="prev" title="Gradle（1）AS工程目录及文件说明">
+                Gradle（1）AS工程目录及文件说明 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -623,7 +623,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -638,7 +638,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">1</span>
+                      
+                    
+                    <span class="site-state-item-count">2</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -653,7 +655,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">1</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

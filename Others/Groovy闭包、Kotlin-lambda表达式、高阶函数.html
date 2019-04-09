@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="写这篇，主要因为我本身是Android的程序员，在学习Groovy和Kotlin的过程中，对Groovy的闭包，Kotlin的lambda表达式，高阶函数这部分，总是没有直观的概念，直觉上它们还是很magic的东西。所以尝试把它们放到一起，辩证地理解记忆这些概念和语法。 没错，它们都是对象首先Groovy闭包和Kotlin Lambda表达式写法都一样： 1&amp;#123;parameters -&amp;g">
+<meta name="keywords" content="Kotlin,Groovy">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Groovy闭包、Kotlin lambda表达式、高阶函数">
+<meta property="og:url" content="http://yoursite.com/Others/Groovy闭包、Kotlin-lambda表达式、高阶函数.html">
+<meta property="og:site_name" content="ghnor&#39;s Blog">
+<meta property="og:description" content="写这篇，主要因为我本身是Android的程序员，在学习Groovy和Kotlin的过程中，对Groovy的闭包，Kotlin的lambda表达式，高阶函数这部分，总是没有直观的概念，直觉上它们还是很magic的东西。所以尝试把它们放到一起，辩证地理解记忆这些概念和语法。 没错，它们都是对象首先Groovy闭包和Kotlin Lambda表达式写法都一样： 1&amp;#123;parameters -&amp;g">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-09-14T14:29:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Groovy闭包、Kotlin lambda表达式、高阶函数">
+<meta name="twitter:description" content="写这篇，主要因为我本身是Android的程序员，在学习Groovy和Kotlin的过程中，对Groovy的闭包，Kotlin的lambda表达式，高阶函数这部分，总是没有直观的概念，直觉上它们还是很magic的东西。所以尝试把它们放到一起，辩证地理解记忆这些概念和语法。 没错，它们都是对象首先Groovy闭包和Kotlin Lambda表达式写法都一样： 1&amp;#123;parameters -&amp;g">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/Others/Groovy闭包、Kotlin-lambda表达式、高阶函数.html"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Groovy闭包、Kotlin lambda表达式、高阶函数 | ghnor's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ghnor's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">生命吻我以痛，却要我报之以歌。</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/Others/Groovy闭包、Kotlin-lambda表达式、高阶函数.html"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ghnor"/>
+      <meta itemprop="description" content=""/>
+      <meta itemprop="image" content="/images/avatar.gif"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ghnor's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Groovy闭包、Kotlin lambda表达式、高阶函数
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-14 22:29:42" itemprop="dateCreated datePublished" datetime="2018-09-14T22:29:42+08:00">2018-09-14</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Others/" itemprop="url" rel="index"><span itemprop="name">Others</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>写这篇，主要因为我本身是Android的程序员，在学习Groovy和Kotlin的过程中，对Groovy的闭包，Kotlin的lambda表达式，高阶函数这部分，总是没有直观的概念，直觉上它们还是很magic的东西。所以尝试把它们放到一起，辩证地理解记忆这些概念和语法。</p>
+<h2 id="没错，它们都是对象"><a href="#没错，它们都是对象" class="headerlink" title="没错，它们都是对象"></a>没错，它们都是对象</h2><p>首先Groovy闭包和Kotlin Lambda表达式写法都一样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;parameters -&gt; statements&#125;</span><br></pre></td></tr></table></figure>
+<p><code>-&gt;</code>关键字前面的parameters是参数，后面的statements是表达式。</p>
+<a id="more"></a>
+<p>Groovy的闭包的是Closure类的实例，如果类型需要强制声明，那么定义Groovy闭包的写法就从：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> groovyClosure = &#123; x -&gt; println(x) &#125;</span><br></pre></td></tr></table></figure>
+<p>变成了：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Closure groovyClosure = &#123; x -&gt; println(x) &#125;</span><br></pre></td></tr></table></figure>
+<p>Kotlin的lambda表达式是一组<code>函数类型</code>的实例。一组<code>函数类型</code>就是比如<code>() -&gt; Unit</code>、<code>(String, Int) -&gt; Boolean</code>这种。</p>
+<p>同样地，如果类型需要强制声明，定义Kotlin Lambda表达式的写法就从：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> kotlinClosure = &#123; x: String -&gt; println(x) &#125;</span><br></pre></td></tr></table></figure>
+<p>变成了：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> kotlinClosure: () -&gt; <span class="built_in">Unit</span> = &#123; x: String -&gt; println(x) &#125;</span><br></pre></td></tr></table></figure>
+<p>在Kotlin中，<code>函数类型</code>的实例有两类（其实不止，但这里只先说这两类）：</p>
+<ol>
+<li><p>Lambda 表达式: <code>{ a, b -&gt; a + b }</code></p>
+</li>
+<li><p>匿名函数(Anonymous Function): <code>fun(s: String): Int { return s.toIntOrNull() ?: 0 }</code></p>
+<p> 定义正经函数是这么写的：</p>
+ <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">kotlinMethod</span><span class="params">(x: <span class="type">String</span>)</span></span> &#123;</span><br><span class="line">    println(x)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 把函数名作为变量名，把函数表达式赋值给该变量，就是匿名函数：</p>
+ <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> kotlinMethod = <span class="function"><span class="title">fun</span> <span class="params">(x: <span class="type">Int</span>)</span></span> &#123;</span><br><span class="line">    println(x)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 二者写法在功能性上是完全等价的。当然，也有一些其他区别，因为是变量，所以就算方法是支持重载的，改成匿名函数后，函数参数有变化，也不能取一样的名字了。</p>
+</li>
+</ol>
+<p>在Groovy中，闭包（Closure）的实例只有一类：</p>
+<ol>
+<li><p><code>{ a, b -&gt; a + b }</code></p>
+<p> 我就是故意跟上面Kotlin的Lambda表达式写的一样，这俩狗日的其实就是一样的。</p>
+</li>
+</ol>
+<h2 id="函数字面量"><a href="#函数字面量" class="headerlink" title="函数字面量"></a>函数字面量</h2><p>闭包、lambda表达式，有一万种说法，在不同的语言中，类似的写法类似的功能，有的叫闭包（Closure），有的叫lambda表达式，有的叫块（Block）。</p>
+<p>我一直对其非常迷惑，在查资料的过程中，又发现了一种新名词——函数字面量。</p>
+<p>在函数式编程语言中，函数就跟变量一样，有其类型和值，是某个类的实例化对象。函数的值就是函数字面量。</p>
+<p>同样地，常见的布尔值就是布尔字面量，整数值就是整数字面量，浮点数值就是浮点数字面量。</p>
+<p>上面的groovyClosure和kotlinClosure变量被赋值了一段代码块，就是函数字面量。</p>
+<p>有一个说法：函数字面量是实现高阶函数，即实现函数参数的一个手段。</p>
+<h2 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h2><p>接受其他函数作为参数，或者返回一个函数，这样的函数称为高阶函数。</p>
+<p>这样的解释容易引起误解，因为JS的高阶函数确实将函数作为参数，Kotin也勉强可以这么理解，毕竟能够接受匿名函数作为参数，但是Groovy就不对，Groovy接受的是闭包。</p>
+<p>换一个说法：接受其他函数字面量作为参数，或者返回函数字面量，称其为高阶函数。</p>
+<p>那么将变量作为函数的参数就是理所当然的事情了。</p>
+<p>先看Groovy：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> groovy(closure) &#123;</span><br><span class="line">    closure()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用已定义的闭包</span></span><br><span class="line">groovy(groovyClosure)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 直接写闭包</span></span><br><span class="line">groovy(&#123; println(<span class="string">"Hello Groovy!"</span>) &#125;)</span><br></pre></td></tr></table></figure>
+<p>再看Kotlin：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> kotlin(x: () -&gt; <span class="built_in">Unit</span>) &#123;</span><br><span class="line">    x()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用已定义的函数类型</span></span><br><span class="line">kotlin(kotlinClosure) <span class="comment">// kotlinClosure是Lambda表达式</span></span><br><span class="line">kotlin(kotlinMethod) <span class="comment">// kotlinMethod是匿名函数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 直接写函数类型</span></span><br><span class="line">kotlin(&#123; println(<span class="string">"Hello Kotlin!"</span>) &#125;)</span><br></pre></td></tr></table></figure>
+<p><strong>有意思的写法</strong></p>
+<p>Groovy和Kotlin的高阶函数都支持一种有意思的写法，如果函数的最后一个参数是闭包或者Lambda的话，可以省略括号。所以调用高阶函数的写法可以变成：</p>
+<p><strong>Groovy：</strong></p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">groovy &#123; println (<span class="string">"Hello Groovy!"</span>) &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Kotlin：</strong></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kotlin &#123; println(<span class="string">"Hello Kotlin!"</span>) &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>如果说之前上文所述的很多概念在我脑海中还是各自为锯的知识孤岛，那么现在起码我可以把它们串联起来。尽管有很多的细枝末节还需要深入学习之后才能完善。</p>
+<p>（其实就在瞎jiba写）</p>
+<p>Over.</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kotlin/" rel="tag"># Kotlin</a>
+          
+            <a href="/tags/Groovy/" rel="tag"># Groovy</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Others/有点不一样的Hexo自动部署方案.html" rel="next" title="有点不一样的Hexo自动部署方案">
+                <i class="fa fa-chevron-left"></i> 有点不一样的Hexo自动部署方案
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ghnor</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#没错，它们都是对象"><span class="nav-number">1.</span> <span class="nav-text">没错，它们都是对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数字面量"><span class="nav-number">2.</span> <span class="nav-text">函数字面量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高阶函数"><span class="nav-number">3.</span> <span class="nav-text">高阶函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">4.</span> <span class="nav-text">最后</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ghnor</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.7.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=6.7.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=6.7.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
