@@ -1,5 +1,5 @@
 ---
-moreLoc: 1
+moreLoc: 2
 path: Android/inPreferredConfig参数.md
 title: inPreferredConfig参数
 date: 2017-03-30T14:27:00.000Z
@@ -12,8 +12,8 @@ categories:
 
 > 原文：[Android inpreferredconfig参数分析](http://blog.csdn.net/ccpat/article/details/46834089)
 
-<!--more-->
 
+<!--more-->
 
 ### 参数说明
 

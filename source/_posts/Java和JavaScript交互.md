@@ -1,9 +1,9 @@
 ---
-moreLoc: 1
+moreLoc: 4
 path: Android/Java和JavaScript交互.md
 title: Java和JavaScript交互
-date: 2016-11-03T10:53:00.000Z
-updated: 2016-12-04T14:24:00.000Z
+date: 2016-06-03T10:53:00.000Z
+updated: 2016-06-04T14:24:00.000Z
 tags:
     - Android
 categories:
@@ -11,12 +11,12 @@ categories:
 ---
 
 # 步骤：
-
-<!--more-->
-
 1. WebView开启JavaScript脚本执行  
 2. WebView设置供JavaScript调用的交互接口  
 3. 客户端和网页端编写调用对方的代码。
+
+<!--more-->
+
 
 # JavaScript调用Java
 
