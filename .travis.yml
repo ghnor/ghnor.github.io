@@ -42,4 +42,4 @@ after_script:
 env:
   global:
     - GITHUB_REF: github.com/ghnor/ghnor.github.io.git
-    - CODING_REF: git.coding.net/ghnor/ghnor.coding.me.git
+    - CODING_REF: git.dev.tencent.com/ghnor/ghnor.coding.me.git
