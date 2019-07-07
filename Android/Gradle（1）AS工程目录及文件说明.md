@@ -1,25 +1,26 @@
 ## Gradle 和 Android Studio 工程目录：
 
-|  |  |  |
-| :--- | :--- | :--- |
-| app |  | Android App目录 |
-|  | app.iml | AS识别项目的配置文件 |
-|  | build | 模块构建输出目录（代码编译后生成的文件存放的位置、生成的Apk文件等） |
-|  | build.gradle | module构建脚本 |
-|  | libs | 相关库文件目录 |
-|  | proguard-rules.pro | proguard混淆配置 |
-|  | src | 源代码，资源等 |
-| build |  | 构建输出目录 |
-|  | generated |  |
-|  | intermediates |  |
-| build.gradle |  | 工程构建文件 |
-| gradle |  |  |
-|  | wrapper |  |
-| gradle.properties |  | gradle相关的全局属性设置 |
-| gradlew |  | Linux下的gradle wrapper可执行文件 |
-| gradlew.bat |  | windows下的gradle wrapper可执行文件 |
-| local.properties |  | 配置Androod SDK位置文件 |
-| settings.gradle |  | 工程配置 |
+```
+/── app/                                # app module目录
+│   ├── build/                          # 模块构建输出目录，如生成的Apk文件等
+│   │   ├── generated/
+│   │   └── intermediates/
+│   ├── libs/                           # 相关库文件目录
+│   ├── src/                            # 源代码，资源等
+│   ├── app.iml                         # AS识别项目的配置文件
+│   ├── build.gradle                    # module构建配置文件
+│   └── proguard-rules.pro              # proguard混淆配置
+├── gradle/
+│   └── wrapper/
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties   # gradle自身的配置文件，如gradle版本，缓存目录等
+├── build.gradle                        # project构建配置文件
+├── gradle.properties                   # gradle相关的全局属性设置
+├── gradlew                             # Linux下的gradle wrapper可执行文件
+├── gradlew.bat                         # windows下的gradle wrapper可执行文件
+├── local.properties                    # 配置Androod SDK位置文件
+└── settings.gradle                     # 工程配置
+```
 
 * **build.gradle #project构建文件**
 
