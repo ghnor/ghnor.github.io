@@ -1,45 +1,5 @@
 -
   moreLoc: 6
-  path: Android/Android内存泄露总结.md
-  title: Android内存泄露总结
-  date: 2016-06-26 22:19:00
-  updated: 2016-11-15 09:51:00
-  tags:
-    - Android
-  categories:
-    - Android
--
-  moreLoc: 3
-  path: Android/Android异常之ANR.md
-  title: Android异常之ANR
-  date: 2016-07-03 13:36:00
-  updated: 2016-07-03 13:36:00
-  tags:
-    - Android
-  categories:
-    - Android
--
-  moreLoc: 5
-  path: Android/Android异常之FC.md
-  title: Android异常之FC
-  date: 2016-07-03 13:38:00
-  updated: 2016-07-03 13:38:00
-  tags:
-    - Android
-  categories:
-    - Android
--
-  moreLoc: 2
-  path: Android/Broadcast Receiver.md
-  title: Broadcast Receiver
-  date: 2016-08-14 22:29:00
-  updated: 2016-08-14 22:29:00
-  tags:
-    - Android
-  categories:
-    - Android
--
-  moreLoc: 6
   path: Android/CoordinatorLayout与Behavior的一己之见.md
   title: CoordinatorLayout与Behavior的一己之见
   date: 2017-11-10 20:11:00
@@ -94,26 +54,6 @@
   title: Gradle（4）常用配置
   date: 2017-12-03 15:27:03
   updated: 2017-12-03 15:27:03
-  tags:
-    - Android
-  categories:
-    - Android
--
-  moreLoc: 4
-  path: Android/Java和JavaScript交互.md
-  title: Java和JavaScript交互
-  date: 2016-06-03 10:53:00
-  updated: 2016-06-04 14:24:00
-  tags:
-    - Android
-  categories:
-    - Android
--
-  moreLoc: 2
-  path: Android/Manifest中meta-data元素的配置与获取.md
-  title: Manifest中meta-data元素的配置与获取
-  date: 2016-11-18 19:36:00
-  updated: 2016-11-18 19:36:00
   tags:
     - Android
   categories:
@@ -184,26 +124,6 @@
   title: Material Design（7）DrawerLayout、NavigationView
   date: 2017-09-28 15:24:06
   updated: 2017-09-28 15:24:06
-  tags:
-    - Android
-  categories:
-    - Android
--
-  moreLoc: 2
-  path: Android/inPreferredConfig参数.md
-  title: inPreferredConfig参数
-  date: 2017-03-30 14:27:00
-  updated: 2017-03-30 14:27:00
-  tags:
-    - Android
-  categories:
-    - Android
--
-  moreLoc: 3
-  path: Android/数字，日期格式化.md
-  title: 数字，日期格式化
-  date: 2016-09-14 22:29:00
-  updated: 2016-09-14 22:29:00
   tags:
     - Android
   categories:
